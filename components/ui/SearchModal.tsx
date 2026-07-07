@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } fr
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { LuSearch } from "@/components/icons";
+import { candyButtonClasses } from "./candy-button";
 
 type SearchResult = {
   id: number | string;
@@ -197,107 +198,126 @@ export default function SearchModal({
 
   return (
     <div
-      className="fixed inset-0 z-120 overflow-y-auto bg-black/40 backdrop-blur-sm"
+      className="fixed inset-0 z-120 overflow-y-auto bg-black/50 backdrop-blur-sm p-4 sm:p-6"
       onClick={handleOverlayClick}
       role="dialog"
       aria-modal="true"
       aria-label={title}
     >
-      <div className="mx-auto mt-16 w-full max-w-3xl px-4 sm:px-6 pb-8">
-        <div className="relative overflow-hidden rounded-xl border border-hairline bg-canvas shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
-          <div className="relative z-10">
-            <div className="flex items-center justify-between gap-3 border-b border-hairline px-4 py-4 sm:px-6">
-              <h2 className="text-title-md text-ink">
-                {title}
-              </h2>
-              <button
-                type="button"
-                onClick={onClose}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-hairline bg-canvas text-ink transition-colors hover:bg-surface-card"
-                aria-label="Close search"
-              >
-                <X className="h-4 w-4" strokeWidth={2} />
-              </button>
+      <div className="mx-auto mt-12 sm:mt-20 w-full max-w-2xl">
+        <div className="relative overflow-hidden rounded-2xl border border-hairline bg-canvas shadow-[0_16px_48px_-12px_rgba(0,0,0,0.25)]">
+          {/* Header */}
+          <div className="flex items-center justify-between gap-3 px-5 py-4 sm:px-6">
+            <h2 className="text-title-lg text-ink">{title}</h2>
+            <button
+              type="button"
+              onClick={onClose}
+              className={candyButtonClasses("white", "h-9 w-9 rounded-lg p-0")}
+              aria-label="Close search"
+            >
+              <X className="h-4 w-4" strokeWidth={2.25} />
+            </button>
+          </div>
+
+          {/* Search field */}
+          <div className="px-5 pb-4 sm:px-6">
+            <div className="relative">
+              <LuSearch
+                className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted"
+                aria-hidden
+              />
+              <input
+                ref={inputRef}
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder={placeholder}
+                className="w-full rounded-xl border border-hairline bg-surface-soft py-3 pl-12 pr-16 text-body-md text-ink placeholder:text-muted outline-none transition focus:border-ink focus:bg-canvas focus:ring-4 focus:ring-ink/5"
+              />
+              <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 rounded-md border border-hairline bg-canvas px-2 py-0.5 text-[11px] font-medium text-muted">
+                ESC
+              </kbd>
             </div>
+          </div>
 
-            <div className="p-4 sm:p-6">
-              <div className="relative">
-                <LuSearch
-                  className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-muted"
-                  aria-hidden
-                />
-                <input
-                  ref={inputRef}
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  placeholder={placeholder}
-                  className="w-full rounded-md border border-hairline bg-canvas py-2.5 pl-11 pr-4 text-body-md text-ink placeholder:text-muted outline-none transition focus:border-ink"
-                />
-              </div>
-
-              <div className="relative mt-4 max-h-[60vh] overflow-hidden rounded-lg border border-hairline bg-canvas">
-                <div className="relative max-h-[60vh] overflow-y-auto">
-                  {!trimmedQuery ? (
-                    <div className="flex flex-col items-center justify-center gap-3 px-6 py-12 text-center">
-                      <span className="inline-flex rounded-lg border border-hairline bg-surface-card p-3">
-                        <LuSearch className="h-7 w-7 text-muted" aria-hidden />
-                      </span>
-                      <p className="text-body-sm text-muted">
-                        Start typing to search products.
-                      </p>
-                    </div>
-                  ) : results.length === 0 && !loading ? (
-                    <p className="px-6 py-12 text-center text-body-sm text-muted">
-                      No products found for &ldquo;{trimmedQuery}&rdquo;.
-                    </p>
-                  ) : (
-                    <ul className="divide-y divide-hairline">
-                      {results.map((item) => (
-                        <li key={`${item.id}-${item.slug}`}>
-                          <button
-                            type="button"
-                            onClick={() => handleItemClick(item.url)}
-                            className="group flex w-full items-center gap-4 px-4 py-3.5 text-left transition-colors hover:bg-surface-card sm:px-5"
-                          >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="h-14 w-14 shrink-0 rounded-md border border-hairline bg-surface-card object-cover"
-                              loading="lazy"
-                            />
-                            <div className="min-w-0 flex-1">
-                              <p className="truncate text-title-sm text-ink sm:text-base">
-                                {item.name}
-                              </p>
-                              {item.category ? (
-                                <p className="truncate text-body-sm text-muted">
-                                  {item.category}
-                                </p>
-                              ) : null}
-                            </div>
-                            <span className="shrink-0 text-caption text-muted opacity-0 transition-opacity group-hover:opacity-100">
-                              View
-                            </span>
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
+          {/* Results */}
+          <div className="max-h-[min(60vh,28rem)] overflow-y-auto border-t border-hairline px-2.5 py-2.5">
+            {!trimmedQuery ? (
+              <div className="flex flex-col items-center justify-center gap-3 px-6 py-14 text-center">
+                <span
+                  className={candyButtonClasses(
+                    "white",
+                    "h-12 w-12 rounded-xl p-0"
                   )}
-
-                  {loading ? (
-                    <div className="flex items-center justify-center gap-2 border-t border-hairline px-4 py-4 text-body-sm text-muted">
-                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-hairline border-t-ink" />
-                      <span>Searching products…</span>
-                    </div>
-                  ) : null}
-
-                  {trimmedQuery && hasMore ? (
-                    <div ref={loadMoreRef} className="h-1 w-full" />
-                  ) : null}
-                </div>
+                >
+                  <LuSearch className="h-6 w-6" aria-hidden />
+                </span>
+                <p className="text-body-sm text-muted">
+                  Start typing to search products.
+                </p>
               </div>
-            </div>
+            ) : results.length === 0 && !loading ? (
+              <div className="flex flex-col items-center justify-center gap-3 px-6 py-14 text-center">
+                <span
+                  className={candyButtonClasses(
+                    "white",
+                    "h-12 w-12 rounded-xl p-0"
+                  )}
+                >
+                  <LuSearch className="h-6 w-6" aria-hidden />
+                </span>
+                <p className="text-body-sm text-muted">
+                  No products found for{" "}
+                  <span className="font-semibold text-ink">
+                    &ldquo;{trimmedQuery}&rdquo;
+                  </span>
+                  .
+                </p>
+              </div>
+            ) : (
+              <ul className="flex flex-col gap-1">
+                {results.map((item) => (
+                  <li key={`${item.id}-${item.slug}`}>
+                    <button
+                      type="button"
+                      onClick={() => handleItemClick(item.url)}
+                      className="group flex w-full items-center gap-4 rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-surface-card"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="h-12 w-12 shrink-0 rounded-lg border border-hairline bg-surface-card object-cover"
+                        loading="lazy"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-title-sm text-ink">
+                          {item.name}
+                        </p>
+                        {item.category ? (
+                          <p className="truncate text-body-sm text-muted">
+                            {item.category}
+                          </p>
+                        ) : null}
+                      </div>
+                      <span className="shrink-0 text-caption text-muted opacity-0 transition-opacity group-hover:opacity-100">
+                        View →
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {loading ? (
+              <div className="flex items-center justify-center gap-2 px-4 py-4 text-body-sm text-muted">
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-hairline border-t-ink" />
+                <span>Searching products…</span>
+              </div>
+            ) : null}
+
+            {trimmedQuery && hasMore ? (
+              <div ref={loadMoreRef} className="h-1 w-full" />
+            ) : null}
           </div>
         </div>
       </div>
