@@ -63,6 +63,7 @@ export { LuTrash as LuTrash } from "./LuTrash";
 export { LuShoppingCart as LuShoppingCart } from "./LuShoppingCart";
 export { LuArrowRight as LuArrowRight } from "./LuArrowRight";
 export { LuSearch as LuSearch } from "./LuSearch";
+export { TbBrandWhatsapp as TbBrandWhatsapp } from "./TbBrandWhatsapp";
 
 
 
