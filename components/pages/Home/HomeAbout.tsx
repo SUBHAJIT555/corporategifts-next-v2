@@ -9,7 +9,7 @@ const aboutImage = "/assets/images/Home-page-image/About-image-home.webp";
 const HomeAbout = () => {
   return (
     <section className="w-full bg-canvas">
-      <RevealSection className="relative mx-auto max-w-7xl border-x border-hairline px-5 py-10 sm:px-6 sm:py-12 lg:py-14">
+      <RevealSection className="relative mx-auto max-w-7xl border-x border-hairline px-5 py-3 sm:px-6 sm:py-4 lg:py-6">
         <Reveal animationNum={0} className="max-w-3xl">
           <span className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-3 py-1 text-caption font-medium text-body shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.12)] dark:shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.35)]">
             <Briefcase className="h-3.5 w-3.5 text-brand-accent" />
@@ -21,7 +21,7 @@ const HomeAbout = () => {
           </h2>
         </Reveal>
 
-        <div className="mt-6 grid grid-cols-1 items-center gap-8 sm:mt-8 lg:grid-cols-12 lg:gap-12">
+        <div className="mt-2 grid grid-cols-1 items-center gap-4 sm:mt-3 lg:grid-cols-12 lg:gap-6">
           <Reveal animationNum={1} className="lg:col-span-5">
             <div className="group relative overflow-hidden rounded-2xl border border-hairline bg-surface-card">
               <Image

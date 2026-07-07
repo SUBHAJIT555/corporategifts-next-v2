@@ -151,7 +151,7 @@ const Stats = () => {
 
   return (
     <section className="w-full bg-canvas">
-      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-10 sm:px-6 sm:py-12 lg:py-14">
+      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-3 sm:px-6 sm:py-4 lg:py-6">
         {/* Desktop / tablet grid */}
         <Reveal animationNum={0}>
           <div className="hidden overflow-hidden rounded-2xl border border-hairline bg-canvas sm:block">
@@ -160,7 +160,7 @@ const Stats = () => {
               {stats.map((stat, index) => (
                 <div
                   key={`top-${stat.label}`}
-                  className={`flex flex-col items-center justify-center px-4 py-8 text-center md:py-10 ${
+                  className={`flex flex-col items-center justify-center px-3 py-4 text-center md:py-5 ${
                     index > 0 ? "border-l border-hairline" : ""
                   }`}
                 >
@@ -223,7 +223,7 @@ const Stats = () => {
         </Reveal>
 
         <Reveal animationNum={1}>
-          <p className="mx-auto mt-6 max-w-4xl text-center text-2xl font-medium leading-relaxed text-muted sm:mt-8 sm:text-3xl lg:mt-10">
+          <p className="mx-auto mt-2 max-w-4xl text-center text-2xl font-medium leading-relaxed text-muted sm:mt-3 sm:text-3xl lg:mt-5">
             From startups to corporate teams, Baharnani supports bulk corporate
             gifts in Dubai with practical product choices, customisation options,
             and reliable delivery coordination.
@@ -231,7 +231,7 @@ const Stats = () => {
         </Reveal>
 
         <Reveal animationNum={2}>
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:items-center">
+          <div className="mt-3 flex flex-col justify-center gap-3 sm:flex-row sm:items-center">
             <NoPrefetchLink
               href="/products"
               className={candyDarkButtonClasses("group w-full sm:w-auto")}

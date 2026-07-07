@@ -45,14 +45,14 @@ export default function SectionDivider({
 }: SectionDividerProps) {
   return (
     <div
-      className={`relative flex h-5 w-full items-center bg-canvas ${className}`}
+      className={`relative z-10 flex h-6 w-full items-center overflow-visible bg-canvas ${className}`}
       aria-hidden="true"
     >
       {/* Continuous full-width hairline */}
       <div className="h-px w-full bg-hairline" />
 
-      {/* Rail-aligned plus ticks */}
-      <div className="pointer-events-none absolute inset-0">
+      {/* Rail-aligned plus ticks — need h-6 container + visible overflow */}
+      <div className="pointer-events-none absolute inset-0 overflow-visible">
         <div className={`relative mx-auto h-full ${maxWidth}`}>
           <PlusMark side="left" />
           <PlusMark side="right" />
