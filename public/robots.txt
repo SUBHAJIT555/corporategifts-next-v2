@@ -1,0 +1,26 @@
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: *
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+
+Disallow: /checkout/
+Disallow: /quote/
+Disallow: /tag/
+Disallow: /feed/
+Disallow: /page/
+
+Disallow: /*?s=
+Disallow: /*?p=
+Disallow: /*?add-to-cart=
+Disallow: /*?orderby=
+Disallow: /*?rating_filter=
+
+Sitemap: https://corporategiftsdubaii.ae/sitemap.xml

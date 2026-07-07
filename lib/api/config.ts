@@ -1,0 +1,7 @@
+import {
+  WP_CUSTOM_API_BASE_URL,
+  WP_FLUENTFORM_FORM3_URL,
+} from "@/lib/config/site";
+
+export const API_BASE_URL = WP_CUSTOM_API_BASE_URL;
+export const FLUENTFORM_FORM3_URL = WP_FLUENTFORM_FORM3_URL;

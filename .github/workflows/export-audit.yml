@@ -1,0 +1,53 @@
+name: Static Export Audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  export-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build static export
+        run: npm run build
+        env:
+          # Build pulls WooCommerce data — configure in repo secrets if needed.
+          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+          NEXT_PUBLIC_WP_ORIGIN: ${{ secrets.NEXT_PUBLIC_WP_ORIGIN }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+
+      - name: Run export audit
+        run: npm run audit:export
+        env:
+          CI: true
+          AUDIT_LINK_CONCURRENCY: 30
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: export-audit-report
+          path: |
+            reports/export-audit.json
+            reports/export-audit.md
+            reports/playwright-html/

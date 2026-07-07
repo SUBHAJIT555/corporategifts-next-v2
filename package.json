@@ -1,0 +1,52 @@
+{
+  "name": "corporate-gifts-next",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "generate:shop-redirects": "npx tsx scripts/generate-shop-category-redirects.ts",
+    "build": "npm run generate:shop-redirects && cross-env NEXT_PUBLIC_ENV=production next build",
+    "start": "next start",
+    "lint": "eslint",
+    "preview": "npx serve -s out",
+    "audit:collect-routes": "tsx scripts/export-audit/collect-routes.ts",
+    "audit:merge-report": "tsx scripts/export-audit/merge-report.ts",
+    "audit:root-cause": "tsx scripts/export-audit/diagnostics/root-cause-analysis.ts",
+    "audit:export": "tsx scripts/export-audit/collect-routes.ts && playwright test",
+    "audit:export:ci": "npm run build && npm run audit:export"
+  },
+  "dependencies": {
+    "@studio-freight/lenis": "^1.0.42",
+    "clsx": "^2.1.1",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
+    "framer-motion": "^12.34.3",
+    "gsap": "^3.14.2",
+    "lenis": "^1.3.17",
+    "lucide-react": "^0.575.0",
+    "motion": "^12.34.3",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-hook-form": "^7.71.2",
+    "react-image-gallery": "^2.1.2",
+    "swiper": "^12.1.2",
+    "tailwind-merge": "^3.5.0",
+    "zustand": "^5.0.12"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.51.1",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "broken-link-checker": "^0.7.8",
+    "cross-env": "^10.1.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "serve": "^14.2.4",
+    "tailwindcss": "^4",
+    "tsx": "^4.19.3",
+    "typescript": "^5"
+  }
+}
