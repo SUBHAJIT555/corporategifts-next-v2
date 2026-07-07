@@ -24,7 +24,7 @@ import { buildSiteUrl } from "@/lib/config/site";
 import SearchModal from "./SearchModal";
 import { LuSearch } from "@/components/icons";
 import ThemeToggle from "./ThemeToggle";
-import { candyButtonClasses } from "./candy-button";
+import { candyAccentIconClasses, candyDarkButtonClasses } from "./candy-button";
 
 type MenuItem = {
   key: number;
@@ -47,49 +47,49 @@ const PRODUCT_CATEGORIES: NavbarProductCategory[] = [
     title: "Premium gift sets",
     link: "/product-category/premium-gift-sets",
     description: "Curated luxury hampers & gift boxes",
-    icon: <Gift className="w-4.5 h-4.5" />,
+    icon: <Gift className={candyAccentIconClasses} />,
   },
   {
     id: "2",
     title: "Luxury corporate gifts",
     link: "/product-category/luxury-corporate-gifts-dubai",
     description: "High-end executive gifting",
-    icon: <Gem className="w-4.5 h-4.5" />,
+    icon: <Gem className={candyAccentIconClasses} />,
   },
   {
     id: "3",
     title: "Apparel and accessories",
     link: "/product-category/apparel-and-accessories",
     description: "Branded clothing & wearables",
-    icon: <Shirt className="w-4.5 h-4.5" />,
+    icon: <Shirt className={candyAccentIconClasses} />,
   },
   {
     id: "4",
     title: "Bags and travel",
     link: "/product-category/bags-and-travel",
     description: "Custom bags, backpacks & travel kits",
-    icon: <Briefcase className="w-4.5 h-4.5" />,
+    icon: <Briefcase className={candyAccentIconClasses} />,
   },
   {
     id: "5",
     title: "Office and stationary",
     link: "/product-category/office-and-stationary",
     description: "Notebooks, pens & desk essentials",
-    icon: <NotebookPen className="w-4.5 h-4.5" />,
+    icon: <NotebookPen className={candyAccentIconClasses} />,
   },
   {
     id: "6",
     title: "Technology and accessories",
     link: "/product-category/technology-and-accessories",
     description: "Smart gadgets & tech giveaways",
-    icon: <Laptop className="w-4.5 h-4.5" />,
+    icon: <Laptop className={candyAccentIconClasses} />,
   },
   {
     id: "7",
     title: "Eating and drinking",
     link: "/product-category/eating-and-drinking",
     description: "Drinkware, mugs & kitchen gifts",
-    icon: <CupSoda className="w-4.5 h-4.5" />,
+    icon: <CupSoda className={candyAccentIconClasses} />,
   },
 
   {
@@ -97,14 +97,14 @@ const PRODUCT_CATEGORIES: NavbarProductCategory[] = [
     title: "Sports and recreation",
     link: "/product-category/sports-and-recreation",
     description: "Fitness & outdoor branded gear",
-    icon: <Dumbbell className="w-4.5 h-4.5" />,
+    icon: <Dumbbell className={candyAccentIconClasses} />,
   },
   {
     id: "9",
     title: "Eco friendly",
     link: "/product-category/eco-friendly",
     description: "Sustainable & reusable gifts",
-    icon: <Leaf className="w-4.5 h-4.5" />,
+    icon: <Leaf className={candyAccentIconClasses} />,
   },
 ];
 
@@ -203,7 +203,7 @@ const Navbar = () => {
             <NoPrefetchLink
               href="/contact-us"
               onClick={closeMenu}
-              className={candyButtonClasses("dark", "group h-9 px-4 py-0")}
+              className={candyDarkButtonClasses("group h-9 px-4")}
             >
               Contact
               <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -317,7 +317,7 @@ const Navbar = () => {
           <NoPrefetchLink
             href="/contact-us"
             onClick={closeMenu}
-            className={candyButtonClasses("dark", "mt-6 h-12 w-full text-base")}
+            className={candyDarkButtonClasses("mt-6 h-12 w-full text-base")}
           >
             Contact
             <ArrowRight className="w-4 h-4" />

@@ -1,45 +1,72 @@
 "use client";
 
 import { memo, useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
+import {
+  Briefcase,
+  CupSoda,
+  Dumbbell,
+  Gem,
+  Gift,
+  Laptop,
+  Leaf,
+  NotebookPen,
+  Shirt,
+  Sparkles,
+  type LucideIcon,
+} from "lucide-react";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
-import CTAButton from "@/components/ui/CTAButton";
+import { candyDarkButtonClasses, candyWhiteButtonClasses } from "@/components/ui/candy-button";
 
-const SLIDES = [
+const SLIDES: {
+  image: string;
+  title: string;
+  icon: LucideIcon;
+}[] = [
   {
     image: "/assets/images/Home-page-hero-images/Apparel-&-accessories.webp",
     title: "Apparel & Accessories",
+    icon: Shirt,
   },
   {
     image: "/assets/images/Home-page-hero-images/Bags-&-travel.webp",
     title: "Bags & Travel",
+    icon: Briefcase,
   },
   {
     image: "/assets/images/Home-page-hero-images/Office-&-stationary.webp",
     title: "Office & Stationary",
+    icon: NotebookPen,
   },
   {
     image: "/assets/images/Home-page-hero-images/Technology-&-accessories.webp",
     title: "Technology & Accessories",
+    icon: Laptop,
   },
   {
     image: "/assets/images/Home-page-hero-images/Eating-&-drinking.webp",
     title: "Eating & Drinking",
+    icon: CupSoda,
   },
   {
     image: "/assets/images/Home-page-hero-images/Premiums-gift-sets.webp",
     title: "Premium Gift Sets",
+    icon: Gift,
   },
   {
     image: "/assets/images/Home-page-hero-images/Sports-&-recreation.webp",
     title: "Sports & Recreation",
+    icon: Dumbbell,
   },
   {
     image: "/assets/images/Home-page-hero-images/Eco-friendly.webp",
     title: "Eco Friendly",
+    icon: Leaf,
   },
   {
     image: "/assets/images/Home-page-hero-images/Luxury-corporate-gifts.webp",
     title: "Luxury Corporate Gifts",
+    icon: Gem,
   },
 ];
 
@@ -103,124 +130,122 @@ export const GradientBars: React.FC = memo(() => {
 
 GradientBars.displayName = "GradientBars";
 
-type RotatingHeroTitleProps = {
-  slides: typeof SLIDES;
+type HeroShowcaseCardProps = {
+  index: number;
 };
 
-const RotatingHeroTitle = memo(({ slides }: RotatingHeroTitleProps) => {
+// Product showcase card — cross-fades through the category images.
+const HeroShowcaseCard = memo(({ index }: HeroShowcaseCardProps) => {
+  const activeSlide = SLIDES[index];
+  const CategoryIcon = activeSlide.icon;
+
+  return (
+    <div className="relative mx-auto w-full max-w-md rounded-2xl border border-hairline bg-canvas p-2.5 shadow-[0_24px_64px_-24px_rgba(0,0,0,0.28)] sm:p-3 lg:max-w-none">
+      <div className="relative aspect-4/3 w-full overflow-hidden rounded-xl bg-surface-card">
+        {SLIDES.map((slide, i) => (
+          <Image
+            key={slide.title}
+            src={slide.image}
+            alt={slide.title}
+            fill
+            sizes="(min-width: 1024px) 44vw, (min-width: 640px) 28rem, 92vw"
+            priority={i === 0}
+            className={`object-cover transition-opacity duration-700 ease-out ${
+              i === index ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        ))}
+
+        {/* Category label chip */}
+        <div className="absolute bottom-3 left-3">
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/40 bg-white/25 px-3 py-1.5 text-caption font-medium text-warning shadow-[0_2px_10px_rgba(0,0,0,0.12)] ring-1 ring-white/20 backdrop-blur-md dark:border-white/15 dark:bg-white/10">
+            <CategoryIcon className="h-3.5 w-3.5 shrink-0 text-warning" />
+            | {activeSlide.title}
+          </span>
+        </div>
+      </div>
+
+      {/* Progress dots */}
+      <div className="mt-3 flex items-center justify-center gap-1.5">
+        {SLIDES.map((slide, i) => (
+          <span
+            key={slide.title}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              i === index ? "w-5 bg-ink" : "w-1.5 bg-surface-strong"
+            }`}
+            aria-hidden="true"
+          />
+        ))}
+      </div>
+    </div>
+  );
+});
+
+HeroShowcaseCard.displayName = "HeroShowcaseCard";
+
+export default function HeroSection() {
   const [index, setIndex] = useState(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     timeoutRef.current = setTimeout(() => {
-      setIndex((prev) => (prev + 1) % slides.length);
+      setIndex((prev) => (prev + 1) % SLIDES.length);
     }, AUTO_ADVANCE);
 
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [index, slides]);
+  }, [index]);
 
   return (
-    <>
-      <div className="relative h-14 sm:h-18 md:h-24 lg:h-28 xl:h-32 mb-3 sm:mb-4 flex items-center justify-center md:justify-start w-full max-w-full overflow-hidden">
-        {slides.map((slide, i) => (
-          <h2
-            key={slide.title}
-            className={`absolute inset-0 flex items-center justify-center md:justify-center text-[#A8DDF0] text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-semibold font-sentient tracking-tight transition-all duration-500 ease-out hero-3d-heading ${i === index
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-10"
-              }`}
-          >
-            {slide.title}
-          </h2>
-        ))}
-      </div>
+    <section className="relative w-full bg-canvas">
+      <div className="relative mx-auto max-w-7xl border-x border-hairline px-5 pt-24 pb-14 sm:px-6 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-28">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
+          {/* Copy */}
+          <div className="text-center lg:col-span-6 lg:text-left">
+            {/* Static eyebrow badge */}
+            <div className="mb-5 flex justify-center lg:justify-start">
+              <span className="inline-flex items-center gap-1.5 rounded-lg border border-hairline  border-dashed bg-surface-card px-3 py-1 text-caption font-medium text-body">
+                <Sparkles className="h-3.5 w-3.5 text-brand-accent" />
+                | Corporate Gifts in Dubai &amp; UAE
+              </span>
+            </div>
 
-      {/* <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-30">
-        {slides.map((slide, i) => (
-          <button
-            key={slide.title}
-            onClick={() => goToSlide(i)}
-            className={`transition-all duration-300 ${
-              i === index
-                ? "w-10 h-3 rounded-full bg-[#0F5C85]"
-                : "w-3 h-3 rounded-full bg-[#D9D9D9] hover:bg-[#C0C0C0]"
-            }`}
-            aria-label={`Go to ${slide.title}`}
-          />
-        ))}
-      </div> */}
-    </>
-  );
-});
+            <h1 className="text-display-lg text-ink">
+              Corporate Gifts Supplier in Dubai for Custom, Luxury &amp;
+              Promotional Gifts
+            </h1>
 
-RotatingHeroTitle.displayName = "RotatingHeroTitle";
+            <p className="mx-auto mt-5 max-w-xl text-body-md text-muted sm:mt-6 lg:mx-0">
+              Baharnani Advertising helps UAE businesses choose custom corporate
+              gifts in Dubai for clients, employees, events, and brand awareness.
+              We provide a wide range of smart corporate gifts, premium hampers,
+              affordable corporate gifts, branded stationery, bags, drinkware,
+              and apparel. Practical gifts with logo printing, packaging and bulk
+              delivery support in Dubai and the UAE.
+            </p>
 
-export default function HeroSection() {
-  return (
-    <section
-      className="relative min-h-screen w-full overflow-hidden flex items-center justify-center bg-neutral-100 py-16 sm:py-20 md:py-24"
-    >
-      {/* Flat background */}
-      <div className="absolute inset-0 bg-neutral-100 z-0" />
+            <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row sm:items-center lg:justify-start">
+              <NoPrefetchLink
+                href="/products"
+                className={candyDarkButtonClasses(
+                  "group w-full sm:w-auto"
+                )}
+              >
+                Explore Corporate Gifts
+              </NoPrefetchLink>
+              <NoPrefetchLink
+                href="/contact-us"
+                className={candyWhiteButtonClasses("w-full sm:w-auto")}
+              >
+                Get Bulk Quote
+              </NoPrefetchLink>
+            </div>
+          </div>
 
-      {/* Gradient bars background with subtle parallax */}
-      <div className="absolute inset-0 z-0 opacity-80" aria-hidden="true">
-        <GradientBars />
-      </div>
-
-      {/* Content */}
-      <div className="relative z-20 text-center px-4 sm:px-6 max-w-6xl animate-fade-up mx-auto">
-        <div className="flex flex-col items-center justify-center text-center select-none px-2 sm:px-4 md:px-8 lg:px-12">
-          <h1 className="inline-flex items-center gap-2 text-textcolor text-xs sm:text-sm md:text-base font-sentient mb-3 sm:mb-4 border border-neutral-300 px-3 sm:px-4 py-1.5 sm:py-2 rounded-2xl bg-white/80 backdrop-blur-sm ring-1 ring-neutral-300 ring-offset-2 md:ring-offset-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#0F5C85"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="shrink-0 rotate-20"
-              aria-hidden="true"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M3 9a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1l0 -2" />
-              <path d="M12 8l0 13" />
-              <path d="M19 12v7a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-7" />
-              <path d="M7.5 8a2.5 2.5 0 0 1 0 -5a4.8 8 0 0 1 4.5 5a4.8 8 0 0 1 4.5 -5a2.5 2.5 0 0 1 0 5" />
-            </svg>
-            <span>
-            Corporate Gifts Supplier in Dubai for Custom, Luxury & Promotional Gifts
-            </span>
-          </h1>
-
-          <RotatingHeroTitle slides={SLIDES} />
-
-          <p className="text-neutral-800 text-xs sm:text-sm md:text-lg lg:text-xl xl:text-2xl font-medium font-switzer mb-5 sm:mb-7 max-w-4xl animate-fade-up delay-200">
-          Baharnani Advertising helps UAE businesses choose custom corporate gifts in Dubai for clients, employees, events, and brand awareness. We provide a wide range of smart corporate gifts, premium hampers, affordable corporate gifts, branded stationery, bags, drinkware, and apparel. Practical gifts with logo printing, packaging and bulk delivery support in Dubai and the UAE.
-
-          </p>
-
-          <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 animate-fade-up delay-300">
-            <NoPrefetchLink href="/products">
-              <CTAButton
-                label="Explore Corporate Gifts"
-                variant="light"
-                className="w-full sm:w-auto max-w-xs mx-auto text-xs sm:text-sm md:text-base font-sentient font-medium  cursor-pointer bg-linear-to-r! from-neutral-100! to-neutral-300! ring-1! ring-neutral-300! ring-offset-2! md:ring-offset-4!"
-              />
-            </NoPrefetchLink>
-
-            <NoPrefetchLink href="/contact-us">
-              <CTAButton
-                label="Get Bulk Quote"
-                variant="default"
-                className="w-full sm:w-auto max-w-xs mx-auto text-xs sm:text-sm md:text-base font-sentient font-medium  cursor-pointer bg-linear-to-r! from-neutral-700! to-neutral-300! ring-1! ring-neutral-300! ring-offset-2! md:ring-offset-4!"
-              />
-            </NoPrefetchLink>
+          {/* Showcase */}
+          <div className="lg:col-span-6">
+            <HeroShowcaseCard index={index} />
           </div>
         </div>
       </div>

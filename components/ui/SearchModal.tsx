@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } fr
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { LuSearch } from "@/components/icons";
-import { candyButtonClasses } from "./candy-button";
+import { candyIconButtonClasses, candyNavIconClasses } from "./candy-button";
 
 type SearchResult = {
   id: number | string;
@@ -212,10 +212,10 @@ export default function SearchModal({
             <button
               type="button"
               onClick={onClose}
-              className={candyButtonClasses("white", "h-9 w-9 rounded-lg p-0")}
+              className={candyIconButtonClasses("white", "sm")}
               aria-label="Close search"
             >
-              <X className="h-4 w-4" strokeWidth={2.25} />
+              <X className={candyNavIconClasses} strokeWidth={2.25} />
             </button>
           </div>
 
@@ -243,13 +243,8 @@ export default function SearchModal({
           <div className="max-h-[min(60vh,28rem)] overflow-y-auto border-t border-hairline px-2.5 py-2.5">
             {!trimmedQuery ? (
               <div className="flex flex-col items-center justify-center gap-3 px-6 py-14 text-center">
-                <span
-                  className={candyButtonClasses(
-                    "white",
-                    "h-12 w-12 rounded-xl p-0"
-                  )}
-                >
-                  <LuSearch className="h-6 w-6" aria-hidden />
+                <span className={candyIconButtonClasses("white", "sm")}>
+                  <LuSearch className="h-4 w-4 text-muted" aria-hidden />
                 </span>
                 <p className="text-body-sm text-muted">
                   Start typing to search products.
@@ -257,13 +252,8 @@ export default function SearchModal({
               </div>
             ) : results.length === 0 && !loading ? (
               <div className="flex flex-col items-center justify-center gap-3 px-6 py-14 text-center">
-                <span
-                  className={candyButtonClasses(
-                    "white",
-                    "h-12 w-12 rounded-xl p-0"
-                  )}
-                >
-                  <LuSearch className="h-6 w-6" aria-hidden />
+                <span className={candyIconButtonClasses("white", "sm")}>
+                  <LuSearch className="h-4 w-4 text-muted" aria-hidden />
                 </span>
                 <p className="text-body-sm text-muted">
                   No products found for{" "}

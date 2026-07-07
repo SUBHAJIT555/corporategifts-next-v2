@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
-import { candyButtonClasses } from "./candy-button";
+import { candyIconButtonClasses, candyAccentIconClasses } from "./candy-button";
 
 export type NavbarProductCategory = {
   id: string;
@@ -118,12 +118,7 @@ const ProductsDropdown = memo(function ProductsDropdown({
                     className="group/item flex items-center gap-3 rounded-xl p-2.5 transition-colors hover:bg-surface-card"
                     onClick={handleCategoryClick}
                   >
-                    <span
-                      className={candyButtonClasses(
-                        "white",
-                        "h-10 w-10 shrink-0 rounded-lg p-0"
-                      )}
-                    >
+                    <span className={candyIconButtonClasses("white", "sm")}>
                       {category.icon}
                     </span>
                     <span className="min-w-0 py-0.5">

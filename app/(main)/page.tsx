@@ -15,6 +15,7 @@ import FeatureBrand from "@/components/pages/Home/feature-brand/FeatureBrand";
 import TopSaver from "@/components/pages/Home/top-saver/TopSaver";
 import BestSelling from "@/components/pages/Home/best-selling/BestSelling";
 import WhyChooseUs, { type FeatureCard } from "@/components/ui/WhyChooseUs";
+import SectionDivider from "@/components/ui/SectionDivider";
 
 interface FAQItem {
   id: number;
@@ -169,63 +170,22 @@ const homeFaqData: FAQItem[] = [
 export default function Home() {
   return (
     <main className="relative min-h-screen w-full overflow-hidden">
-      {/* Dashed Center Fade Grid (sticky background) */}
-      <div
-        className="pointer-events-none fixed inset-0 z-0"
-        style={{
-          backgroundImage: `
-        linear-gradient(to right, #e7e5e4 1px, transparent 1px),
-        linear-gradient(to bottom, #e7e5e4 1px, transparent 1px)
-      `,
-          backgroundSize: "5px 5px",
-          backgroundPosition: "0 0, 0 0",
-          maskImage: `
-       repeating-linear-gradient(
-              to right,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            repeating-linear-gradient(
-              to bottom,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-          radial-gradient(ellipse 60% 60% at 50% 50%, #000 30%, transparent 70%)
-      `,
-          WebkitMaskImage: `
- repeating-linear-gradient(
-              to right,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            repeating-linear-gradient(
-              to bottom,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-          radial-gradient(ellipse 60% 60% at 50% 50%, #000 30%, transparent 70%)
-      `,
-          maskComposite: "intersect",
-          WebkitMaskComposite: "source-in",
-        }}
-      />
+      
 
       {/* Page content - above fixed grid */}
       <div className="relative z-10">
         <HeroSection />
+        <SectionDivider />
         <HomeAbout />
+        <SectionDivider />
         <Stats />
+        <SectionDivider />
         <ProductGridHome />
+        <SectionDivider />
         <FeatureBrand />
+        <SectionDivider />
         <TopSaver />
+        <SectionDivider />
         <BestSelling />
         <WhyChooseUs
           features={homeFeatures}

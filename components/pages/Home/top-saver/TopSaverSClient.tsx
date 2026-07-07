@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback, useMemo } from "react";
+import { ChevronLeft, ChevronRight, Tag } from "lucide-react";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
-// import { motion, useInView } from "framer-motion";
 import useInView from "@/hooks/useInView";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
@@ -12,391 +12,326 @@ import { useQuote } from "@/contexts/QuoteContext";
 import { Product } from "@/lib/api/types";
 import Image from "next/image";
 import { TypewriterInfinite as TypewriterEffect } from "@/components/ui/Typewriter";
+import {
+  candyAccentButtonClasses,
+  candyCarouselNavClasses,
+  candySquareIconClasses,
+  candyWhiteButtonClasses,
+} from "@/components/ui/candy-button";
+import { cn } from "@/lib/utilts";
 
 interface Props {
-    products: Product[];
-    videoUrl?: string;
+  products: Product[];
+  videoUrl?: string;
 }
 
 export default function TopSaverClient({
-    products,
-    videoUrl = "/assets/video/GIFMaker_mezeeyand.webm",
+  products,
+  videoUrl = "/assets/video/GIFMaker_mezeeyand.webm",
 }: Props) {
-    const safeProducts = useMemo(
-        () => (Array.isArray(products) ? products : []),
-        [products],
-    );
-    const { addToQuote, isInQuote } = useQuote();
-    const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const autoplayRef = useRef(
-        Autoplay({
-            delay: 4000,
-            stopOnInteraction: false,
-            stopOnMouseEnter: false,
-        }),
-    );
-    const [emblaRef, emblaApi] = useEmblaCarousel(
-        {
-            align: "start",
-            loop: true,
-        },
-        [autoplayRef.current],
-    );
-    const { ref: carouselRef, inView: swiperInView } =
-        useInView<HTMLDivElement>();
+  const safeProducts = useMemo(
+    () => (Array.isArray(products) ? products : []),
+    [products]
+  );
+  const { addToQuote, isInQuote } = useQuote();
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const autoplayRef = useRef(
+    Autoplay({
+      delay: 4000,
+      stopOnInteraction: false,
+      stopOnMouseEnter: false,
+    })
+  );
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      align: "start",
+      loop: true,
+    },
+    [autoplayRef.current]
+  );
+  const { ref: carouselRef, inView: swiperInView } =
+    useInView<HTMLDivElement>();
 
-    const { ref: headingRef, inView: headingInView } =
-        useInView<HTMLDivElement>();
-    const videoContainerRef = useRef<HTMLDivElement>(null);
+  const { ref: headingRef, inView: headingInView } =
+    useInView<HTMLDivElement>();
+  const videoContainerRef = useRef<HTMLDivElement>(null);
 
-    // const [displayedText, setDisplayedText] = useState("");
-    const [isVideoVisible, setIsVideoVisible] = useState(false);
+  const [isVideoVisible, setIsVideoVisible] = useState(false);
 
-    // Equalize card heights
-    const equalizeHeights = useCallback(() => {
-        if (cardRefs.current.length === 0) return;
+  const words = useMemo(
+    () => [{ text: "Need 100+ or 500+ pieces?" }],
+    []
+  );
 
-        // Reset heights to auto to get natural heights
-        cardRefs.current.forEach((card) => {
-            if (card) {
-                card.style.height = "auto";
-                card.style.minHeight = "auto";
-            }
-        });
+  const syncCarouselState = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
 
-        // Wait for layout recalculation - use double RAF for accuracy
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                // Calculate max height from all cards
-                let maxHeight = 0;
-                cardRefs.current.forEach((card) => {
-                    if (card) {
-                        // Get the actual rendered height - getBoundingClientRect includes padding and border
-                        const height = card.getBoundingClientRect().height;
+  useEffect(() => {
+    if (!videoContainerRef.current) return;
 
-                        if (height > maxHeight) {
-                            maxHeight = height;
-                        }
-                    }
-                });
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsVideoVisible(true);
+        observer.disconnect();
+      }
+    });
 
-                // Apply max height to all cards
-                if (maxHeight > 0) {
-                    cardRefs.current.forEach((card) => {
-                        if (card) {
-                            card.style.height = `${maxHeight}px`;
-                        }
-                    });
-                }
-            });
-        });
-    }, []);
+    observer.observe(videoContainerRef.current);
 
+    return () => observer.disconnect();
+  }, []);
 
-    const words = useMemo(
-        () => [{ text: "Need 100+ or 500+ pieces?" }],
-        [],
-    );
+  useEffect(() => {
+    if (!emblaApi) return;
 
-    /*
-     |--------------------------------------------------------------------------
-     | Lazy video load
-     |--------------------------------------------------------------------------
-     */
+    const rafId = requestAnimationFrame(syncCarouselState);
+    emblaApi.on("select", syncCarouselState);
+    emblaApi.on("reInit", syncCarouselState);
 
-    useEffect(() => {
-        if (!videoContainerRef.current) return;
+    return () => {
+      cancelAnimationFrame(rafId);
+      emblaApi.off("select", syncCarouselState);
+      emblaApi.off("reInit", syncCarouselState);
+    };
+  }, [emblaApi, syncCarouselState]);
 
-        const observer = new IntersectionObserver(([entry]) => {
-            if (entry.isIntersecting) {
-                setIsVideoVisible(true);
-                observer.disconnect();
-            }
-        });
+  const slideLabel = String(selectedIndex + 1).padStart(2, "0");
+  const totalLabel = String(safeProducts.length).padStart(2, "0");
 
-        observer.observe(videoContainerRef.current);
+  return (
+    <section className="w-full overflow-x-hidden bg-canvas">
+      <div className="mx-auto max-w-7xl border-x border-hairline px-5 py-16 sm:px-6 sm:py-20 lg:py-24">
+        {/* Heading */}
+        <div
+          ref={headingRef}
+          className={`mb-10 grid grid-cols-1 gap-6 transition-all duration-700 ease-out sm:mb-12 lg:grid-cols-12 lg:gap-10 ${
+            headingInView
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div className="lg:col-span-5">
+            <span className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-3 py-1 text-caption font-medium text-body shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.12)] dark:shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.35)]">
+              <Tag className="h-3.5 w-3.5 text-brand-accent" />
+              Top Saver
+            </span>
 
-        return () => observer.disconnect();
-    }, []);
+            <h2 className="mt-4 text-display-md text-ink">
+              Affordable Corporate Gifts in Dubai for Bulk Orders.
+            </h2>
+          </div>
 
-    useEffect(() => {
-        if (!emblaApi) return;
+          <div className="flex items-end lg:col-span-7">
+            <p className="text-body-md text-muted lg:text-[17px] lg:leading-7">
+              Searching for cheap corporate gifts but don&apos;t want to skimp on
+              presentation? Find cheap promotional gifts, personalised drinkware,
+              stationery, bags and tech accessories perfect for buying in bulk,
+              giveaways at events, employee packs and customer campaigns across
+              Dubai and the UAE.
+            </p>
+          </div>
+        </div>
 
-        const runEqualize = () => {
-            requestAnimationFrame(equalizeHeights);
-        };
+        <div
+          ref={carouselRef}
+          className={`transition-opacity duration-700 ease-out ${
+            swiperInView ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-stretch lg:gap-8">
+            {/* Product carousel */}
+            <div className="flex flex-col lg:col-span-9">
+              <div className="flex h-full flex-1 flex-col overflow-hidden rounded-2xl border border-hairline bg-canvas">
+                {/* Toolbar */}
+                <div className="flex items-center justify-between gap-4 border-b border-hairline px-4 py-3 sm:px-5">
+                  <p className="text-caption font-medium uppercase tracking-[0.14em] text-muted">
+                    <span className="text-ink">{slideLabel}</span>
+                    <span className="mx-1.5 text-muted-soft">/</span>
+                    {totalLabel}
+                  </p>
 
-        runEqualize();
-        emblaApi.on("select", runEqualize);
-        emblaApi.on("reInit", runEqualize);
-        emblaApi.on("resize", runEqualize);
-
-        return () => {
-            emblaApi.off("select", runEqualize);
-            emblaApi.off("reInit", runEqualize);
-            emblaApi.off("resize", runEqualize);
-        };
-    }, [emblaApi, equalizeHeights, safeProducts]);
-
-    return (
-        <section className="w-full py-6 sm:py-8 md:py-12 lg:py-16 xl:py-20 2xl:py-24 overflow-x-hidden">
-            <div className="w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1920px] mx-auto">
-                {/* Heading */}
-                <div
-                    ref={headingRef}
-                    className={`mb-8 sm:mb-10 md:mb-12 lg:mb-16 transition-all duration-700 ease-out ${headingInView
-                        ? "opacity-100 translate-y-0"
-                        : "opacity-0 translate-y-10"
-                        }`}
-                >
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor leading-tight mb-3 sm:mb-4 md:mb-5 lg:mb-6">
-                        <span className="inline-flex items-center gap-2">
-                            <span>Affordable Corporate Gifts 
-                            </span>
-                            <span className="inline-flex border border-neutral-300 rounded-lg p-0.5 sm:p-1 ring ring-neutral-300 ring-offset-2 rotate-6 bg-neutral-100">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-[#0F5C85]"
-                                    aria-hidden="true"
-                                >
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M9 15l6 -6" />
-                                    <path d="M9 9.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" />
-                                    <path d="M14 14.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" />
-                                    <path d="M5 7.2a2.2 2.2 0 0 1 2.2 -2.2h1a2.2 2.2 0 0 0 1.55 -.64l.7 -.7a2.2 2.2 0 0 1 3.12 0l.7 .7a2.2 2.2 0 0 0 1.55 .64h1a2.2 2.2 0 0 1 2.2 2.2v1a2.2 2.2 0 0 0 .64 1.55l.7 .7a2.2 2.2 0 0 1 0 3.12l-.7 .7a2.2 2.2 0 0 0 -.64 1.55v1a2.2 2.2 0 0 1 -2.2 2.2h-1a2.2 2.2 0 0 0 -1.55 .64l-.7 .7a2.2 2.2 0 0 1 -3.12 0l-.7 -.7a2.2 2.2 0 0 0 -1.55 -.64h-1a2.2 2.2 0 0 1 -2.2 -2.2v-1a2.2 2.2 0 0 0 -.64 -1.55l-.7 -.7a2.2 2.2 0 0 1 0 -3.12l.7 -.7a2.2 2.2 0 0 0 .64 -1.55v-1" />
-                                </svg>
-                            </span>
-                        </span>
-
-                        <span>{" "}in Dubai for Bulk Orders.</span>
-                    </h2>
-                    <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-switzer tracking-widest sm:tracking-wider md:tracking-widest text-textcolor font-medium">
-                    Searching for cheap corporate gifts but don’t want to skimp on presentation? Find cheap promotional gifts, personalised drinkware, stationery, bags and tech accessories perfect for buying in bulk, giveaways at events, employee packs and customer campaigns across Dubai and the UAE.
-
-                    </p>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => emblaApi?.scrollPrev()}
+                      className={candyCarouselNavClasses("prev")}
+                      aria-label="Previous slide"
+                    >
+                      <ChevronLeft
+                        className={candySquareIconClasses}
+                        strokeWidth={2.25}
+                      />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => emblaApi?.scrollNext()}
+                      className={candyCarouselNavClasses("next")}
+                      aria-label="Next slide"
+                    >
+                      <ChevronRight
+                        className={candySquareIconClasses}
+                        strokeWidth={2.25}
+                      />
+                    </button>
+                  </div>
                 </div>
 
+                {/* Slides */}
                 <div
-                    ref={carouselRef}
-                    className={`w-full transition-opacity duration-700 ease-out ${swiperInView ? "opacity-100" : "opacity-0"
-                        }`}
+                  className="top-saver-swiper cursor-grab overflow-hidden p-4 active:cursor-grabbing sm:p-5"
+                  ref={emblaRef}
                 >
-                    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 xl:gap-10">
-                        {/* Left: Swiper */}
-                        <div className="w-full lg:w-9/12 relative">
-                            <div className="flex justify-end items-center gap-4 sm:gap-8 mb-6 sm:mb-8 md:mb-10">
-                                {/* Previous Button */}
-                                <button
-                                    onClick={() => emblaApi?.scrollPrev()}
-                                    className="inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 text-textcolor font-switzer text-xs sm:text-sm border! border-neutral-200! rounded-xl bg-neutral-100! hover:bg-white!"
-                                    aria-label="Previous slide"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="#0F5C85"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className="size-4 sm:size-5"
-                                        aria-hidden="true"
-                                    >
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M5 12h6m3 0h1.5m3 0h.5" />
-                                        <path d="M5 12l6 6" />
-                                        <path d="M5 12l6 -6" />
-                                    </svg>
-                                    <span className="hidden sm:inline text-textcolor font-switzer font-semibold">
-                                        Previous
-                                    </span>
-                                </button>
-
-                                {/* Next Button */}
-                                <button
-                                    onClick={() => emblaApi?.scrollNext()}
-                                    className="inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 text-textcolor font-switzer text-xs sm:text-sm border! border-neutral-200! rounded-xl bg-neutral-100! hover:bg-white!"
-                                    aria-label="Next slide"
-                                >
-                                    <span className="hidden sm:inline text-textcolor font-switzer font-semibold">
-                                        Next
-                                    </span>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="#0F5C85"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className="size-4 sm:size-5"
-                                        aria-hidden="true"
-                                    >
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M5 12h.5m3 0h1.5m3 0h6" />
-                                        <path d="M13 18l6 -6" />
-                                        <path d="M13 6l6 6" />
-                                    </svg>
-                                </button>
+                  <div className="-mx-2 flex items-stretch sm:-mx-2.5">
+                    {safeProducts.map((product, index) => (
+                      <div
+                        key={product.id}
+                        className="flex h-auto flex-[0_0_100%] px-2 sm:flex-[0_0_50%] sm:px-2.5 lg:flex-[0_0_33.333%]"
+                      >
+                        <article
+                          className={`group relative flex h-full min-h-[360px] w-full flex-col overflow-hidden rounded-xl border border-hairline bg-canvas p-4 transition-all duration-700 ease-out sm:min-h-[380px] sm:p-5 ${
+                            swiperInView
+                              ? "opacity-100 translate-y-0"
+                              : "opacity-0 translate-y-8"
+                          }`}
+                          style={{ transitionDelay: `${index * 100}ms` }}
+                        >
+                          <NoPrefetchLink
+                            href={getProductUrl(product)}
+                            className="block shrink-0"
+                          >
+                            <div className="relative mb-4 flex h-40 w-full items-center justify-center overflow-hidden rounded-xl border border-hairline bg-canvas sm:mb-5 sm:h-44">
+                              <div
+                                aria-hidden
+                                className="bg-crosshatch pointer-events-none absolute inset-0 opacity-[0.35] dark:opacity-[0.2]"
+                              />
+                              <Image
+                                width={500}
+                                height={500}
+                                src={product.image}
+                                alt={product.name}
+                                className="relative z-10 h-full w-full object-contain p-4 transition-transform duration-500 ease-out group-hover:scale-105"
+                              />
                             </div>
+                          </NoPrefetchLink>
 
-                            {/* Embla */}
-                            <div className="top-saver-swiper overflow-hidden cursor-grab active:cursor-grabbing" ref={emblaRef}>
-                                <div className="flex -mx-1.5 sm:-mx-2.5 md:-mx-2.5 lg:-mx-3 xl:-mx-3.5 2xl:-mx-4">
-                                    {safeProducts.map((product, index) => (
-                                        <div
-                                            key={product.id}
-                                            className="px-1.5 sm:px-2.5 md:px-2.5 lg:px-3 xl:px-3.5 2xl:px-4 flex-[0_0_100%] sm:flex-[0_0_50%] md:flex-[0_0_33.333%] lg:flex-[0_0_33.333%] xl:flex-[0_0_25%] 2xl:flex-[0_0_25%]"
-                                        >
-                                            <div
-                                                ref={(el) => {
-                                                    cardRefs.current[index] = el;
-                                                }}
-                                                className={`h-full w-full transition-all duration-700 ease-out ${swiperInView
-                                                    ? "opacity-100 translate-y-0"
-                                                    : "opacity-0 translate-y-8"
-                                                    }`}
-                                                style={{ transitionDelay: `${index * 100}ms` }}
-                                            >
-                                                <div className="bg-bg border border-neutral-300 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
-                                                    <NoPrefetchLink
-                                                        href={getProductUrl(product)}
-                                                        className="block cursor-pointer"
-                                                    >
-                                                        {/* Product Image */}
-                                                        <div className="relative w-full h-48 sm:h-52 md:h-56 lg:h-60 overflow-hidden bg-gray-200">
-                                                            <Image
-                                                                width={500}
-                                                                height={500}
-                                                                src={product.image}
-                                                                alt={product.name}
-                                                                className="w-full h-full object-cover"
-                                                            />
-                                                        </div>
-                                                    </NoPrefetchLink>
-                                                    {/* Product Content */}
-                                                    <div className="p-4 sm:p-5 md:p-6 flex flex-col grow">
-                                                        {/* Category Badge */}
-                                                        <span className="text-xs font-switzer text-[#0f5c85] mb-2 uppercase tracking-wide line-clamp-1 overflow-hidden text-ellipsis">
-                                                            {product.categories[0]}
-                                                        </span>
+                          <div className="flex min-h-0 flex-1 flex-col">
+                            {product.categories[0] ? (
+                              <span className="mb-2 inline-flex w-fit max-w-full items-center rounded-md border border-dashed border-hairline bg-surface-soft px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.14em] text-brand-accent">
+                                {product.categories[0]}
+                              </span>
+                            ) : (
+                              <span className="mb-2 block h-[22px]" aria-hidden />
+                            )}
 
-                                                        <NoPrefetchLink href={getProductUrl(product)}>
-                                                            {/* Product Title */}
-                                                            <h3 className="text-base font-switzer font-bold text-textcolor mb-4 grow line-clamp-1 overflow-hidden text-ellipsis">
-                                                                {product.name}
-                                                            </h3>
-                                                        </NoPrefetchLink>
-
-                                                        {/* Add to Quote Button */}
-                                                        <button
-                                                            disabled={isInQuote(product.id)}
-                                                            className={`group relative cursor-pointer w-full font-switzer  py-2.5 sm:py-3 px-4 rounded-xl transition-colors duration-200 text-sm sm:text-base overflow-hidden ${isInQuote(product.id)
-                                                                ? "bg-[#0f5c85] text-white cursor-not-allowed opacity-60"
-                                                                : "bg-[#0f5c85] hover:bg-[#0f5c85]/70 text-white"
-                                                                }`}
-                                                            onClick={() => addToQuote(product, 1)}
-                                                        >
-                                                            <span
-                                                                className={`inline-block transition-all duration-300 ease-in-out ${isInQuote(product.id)
-                                                                    ? ""
-                                                                    : "group-hover:-translate-y-full group-hover:opacity-0"
-                                                                    }`}
-                                                            >
-                                                                {isInQuote(product.id)
-                                                                    ? "Added to Quote"
-                                                                    : "Add to Quote"}
-                                                            </span>
-                                                            {!isInQuote(product.id) && (
-                                                                <BsCart4
-                                                                    className={`absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 translate-y-full opacity-0 transition-all duration-300 ease-in-out group-hover:-translate-y-1/2 group-hover:opacity-100`}
-                                                                />
-                                                            )}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Right: Video */}
-                        <div className="w-full lg:w-3/12 shrink-0 h-[400px] sm:h-[480px]">
-                            <div
-                                ref={videoContainerRef}
-                                className={`relative w-full h-full rounded-xl overflow-hidden transition-all duration-700 ease-out border border-neutral-300 ring ring-neutral-300 ring-offset-4 md:ring-offset-6 shadow-lg ${swiperInView
-                                    ? "opacity-100 translate-x-0"
-                                    : "opacity-0 translate-x-8"
-                                    }`}
-                                style={{ transitionDelay: "400ms" }}
+                            <NoPrefetchLink
+                              href={getProductUrl(product)}
+                              className="mb-4 block min-h-11 sm:min-h-12"
                             >
-                                {isVideoVisible ? (
-                                    <video
-                                        className="w-full h-full object-cover"
-                                        autoPlay
-                                        loop
-                                        muted
-                                        playsInline
-                                        preload="none"
-                                        width="640"
-                                        height="360"
-                                    >
-                                        <source src={videoUrl} type="video/webm" />
-                                        Your browser does not support the video tag.
-                                    </video>
-                                ) : (
-                                    <div className="w-full h-full animate-pulse" />
+                              <h3 className="line-clamp-2 text-base font-semibold leading-snug text-ink sm:text-[17px]">
+                                {product.name}
+                              </h3>
+                            </NoPrefetchLink>
+
+                            <button
+                              type="button"
+                              disabled={isInQuote(product.id)}
+                              className={cn(
+                                candyAccentButtonClasses(
+                                  "group/btn mt-auto w-full text-sm sm:text-base"
+                                ),
+                                isInQuote(product.id) && "opacity-60"
+                              )}
+                              onClick={() => addToQuote(product, 1)}
+                            >
+                              <span
+                                className={cn(
+                                  "inline-block transition-all duration-300 ease-in-out",
+                                  !isInQuote(product.id) &&
+                                    "group-hover/btn:-translate-y-full group-hover/btn:opacity-0"
                                 )}
-                                {/* Overlay for better text readability */}
-                                <div className="absolute inset-0 bg-linear-to-t from-transparent via-black/80 to-transparent pointer-events-none" />
-
-                                {/* Text Content Overlay */}
-                                <div className="absolute inset-0 flex flex-col items-center justify-center p-4 sm:p-5 md:p-6 lg:p-4 xl:p-5 2xl:p-6 z-10">
-                                    {/* Heading with blue band background */}
-                                    <div className="w-full flex justify-center mb-4 sm:mb-5 md:mb-6">
-                                        <div className="px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-lg">
-                                            <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-sentient font-bold text-bg text-center">
-                                                <TypewriterEffect
-                                                    words={words}
-                                                    className="text-inherit font-inherit"
-                                                    cursorClassName="bg-bg"
-                                                />
-                                            </h3>
-                                        </div>
-                                    </div>
-
-                                    {/* Paragraph text */}
-                                    <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-sentient font-bold text-bg text-center mb-6 sm:mb-8 md:mb-10 max-w-md tracking-wide">
-                                    Request a bulk quote today.
-
-                                    </p>
-
-                                    {/* Contact Us Button */}
-                                    <NoPrefetchLink href="/contact-us" className="inline-block">
-                                        <button className="font-switzer py-2 sm:py-2 md:py-2 px-8 sm:px-10 md:px-12 rounded-xl transition-colors duration-200 text-base sm:text-sm md:text-xl bg-[#0f5c85] hover:bg-[#0f5c85]/90 text-white shadow-lg ring ring-neutral-300 ring-offset-3 cursor-pointer">
-                                            Contact Us Now
-                                        </button>
-                                    </NoPrefetchLink>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                              >
+                                {isInQuote(product.id)
+                                  ? "Added to Quote"
+                                  : "Add to Quote"}
+                              </span>
+                              {!isInQuote(product.id) && (
+                                <BsCart4 className="absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 translate-y-full opacity-0 transition-all duration-300 ease-in-out group-hover/btn:-translate-y-1/2 group-hover/btn:opacity-100" />
+                              )}
+                            </button>
+                          </div>
+                        </article>
+                      </div>
+                    ))}
+                  </div>
                 </div>
+              </div>
             </div>
-        </section>
-    );
+
+            {/* Video CTA panel */}
+            <div className="relative flex min-h-[420px] lg:col-span-3 lg:min-h-0">
+              <div
+                ref={videoContainerRef}
+                className={`relative flex h-full min-h-[420px] w-full flex-1 flex-col overflow-hidden border border-hairline bg-surface-dark transition-all duration-700 ease-out lg:min-h-full ${
+                  swiperInView
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 translate-x-8"
+                }`}
+                style={{ transitionDelay: "400ms" }}
+              >
+                <div className="absolute inset-0 overflow-hidden">
+                  {isVideoVisible ? (
+                    <video
+                      className="absolute inset-0 h-full w-full scale-110 object-cover object-center"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      preload="none"
+                      width="640"
+                      height="360"
+                    >
+                      <source src={videoUrl} type="video/webm" />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
+                    <div className="absolute inset-0 animate-pulse bg-surface-card" />
+                  )}
+                </div>
+
+                <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/90 via-black/60 to-black/25" />
+
+                <div className="relative z-10 flex flex-1 flex-col justify-between p-5 text-center sm:p-6">
+                  <h3 className="pt-1 text-2xl font-semibold leading-tight text-white sm:text-3xl">
+                    <TypewriterEffect
+                      words={words}
+                      className="text-inherit font-inherit"
+                      cursorClassName="bg-white"
+                    />
+                  </h3>
+
+                  <div className="flex w-full flex-col items-center pb-1">
+                    <p className="max-w-[220px] text-base font-medium leading-snug text-white/90 sm:text-lg">
+                      Request a bulk quote today.
+                    </p>
+
+                    <NoPrefetchLink
+                      href="/contact-us"
+                      className={cn(
+                        candyWhiteButtonClasses("mt-4 w-full max-w-[220px]"),
+                        "pointer-events-auto"
+                      )}
+                    >
+                      Contact Us Now
+                    </NoPrefetchLink>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }

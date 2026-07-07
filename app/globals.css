@@ -187,7 +187,7 @@ body::-webkit-scrollbar {
 .text-display-xl {
   font-family: var(--font-geist-stack);
   font-weight: 600;
-  font-size: clamp(2.5rem, 5vw, 4rem); /* 40 → 64px */
+  font-size: clamp(2rem, 6vw, 4rem); /* 32 → 64px */
   line-height: 1.05;
   letter-spacing: -0.03em;
 }
@@ -312,33 +312,13 @@ body::-webkit-scrollbar {
   display: none !important;
 }
 
-/* Custom Navigation Buttons */
+/* Legacy swiper nav hooks — keep sizing hooks only; candy-button owns visuals */
 .swiper-button-prev-custom-style,
 .swiper-button-next-custom-style,
 .swiper-button-prev-product-grid,
 .swiper-button-next-product-grid {
-  min-width: auto !important;
-  height: 40px !important;
-  /* background: #e1e1e1 !important; */
-  /* border-radius: 20px !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important; */
-  border: none !important;
   cursor: pointer !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  color: #4a4a4a !important;
-  transition: all 0.3s ease !important;
-  padding: 8px 16px !important;
-  margin: 0 !important;
-  /* font-family: var(--font-switzer) !important; */
-  font-size: 14px !important;
-  font-weight: 500 !important;
-  white-space: nowrap !important;
-  background: transparent !important;
 }
-
-
 
 .swiper-button-prev-custom-style:disabled,
 .swiper-button-next-custom-style:disabled,
@@ -616,6 +596,16 @@ html.image-gallery-fullscreen footer {
     }
   }
 
+  /* Hero marquee (seamless horizontal scroll of two duplicated sets) */
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
   /* Hero gradient bars animation */
   @keyframes pulseBar {
     0% {
@@ -635,6 +625,10 @@ html.image-gallery-fullscreen footer {
 }
 
 @layer utilities {
+  .animate-marquee {
+    animation: marquee 55s linear infinite;
+  }
+
   .animate-shop-fade-up {
     animation: shop-fade-up 0.6s ease-out both;
   }
@@ -642,6 +636,25 @@ html.image-gallery-fullscreen footer {
   .animate-product-list-in {
     opacity: 0;
     animation: product-list-in 0.4s ease-out forwards;
+  }
+
+  .bg-crosshatch {
+    background-image:
+      repeating-linear-gradient(
+        45deg,
+        var(--cal-hairline) 0,
+        var(--cal-hairline) 1px,
+        transparent 0,
+        transparent 50%
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        var(--cal-hairline) 0,
+        var(--cal-hairline) 1px,
+        transparent 0,
+        transparent 50%
+      );
+    background-size: 5px 5px;
   }
 }
 
