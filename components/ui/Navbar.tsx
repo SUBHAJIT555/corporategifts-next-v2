@@ -1,4 +1,19 @@
-import { AlignJustify, X, ChevronDown, ChevronUp, } from "lucide-react";
+import {
+  AlignJustify,
+  X,
+  ChevronDown,
+  ChevronUp,
+  ArrowRight,
+  Gift,
+  Gem,
+  Shirt,
+  Briefcase,
+  NotebookPen,
+  Laptop,
+  CupSoda,
+  Dumbbell,
+  Leaf,
+} from "lucide-react";
 import logo from "@/public/logo.svg"
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback } from "react";
@@ -8,6 +23,8 @@ import ProductsDropdown, { type NavbarProductCategory } from "./ProductsDropdown
 import { buildSiteUrl } from "@/lib/config/site";
 import SearchModal from "./SearchModal";
 import { LuSearch } from "@/components/icons";
+import ThemeToggle from "./ThemeToggle";
+import { candyButtonClasses } from "./candy-button";
 
 type MenuItem = {
   key: number;
@@ -22,7 +39,6 @@ const MENU_ITEMS: MenuItem[] = [
   { key: 3, name: "Products", href: "/products", hasDropdown: true },
   { key: 4, name: "Shop", href: "/shop" },
   { key: 5, name: "Blog", href: buildSiteUrl("/blog") },
-  { key: 6, name: "Contact", href: "/contact-us" },
 ];
 
 const PRODUCT_CATEGORIES: NavbarProductCategory[] = [
@@ -30,47 +46,65 @@ const PRODUCT_CATEGORIES: NavbarProductCategory[] = [
     id: "1",
     title: "Premium gift sets",
     link: "/product-category/premium-gift-sets",
+    description: "Curated luxury hampers & gift boxes",
+    icon: <Gift className="w-4.5 h-4.5" />,
   },
   {
     id: "2",
     title: "Luxury corporate gifts",
     link: "/product-category/luxury-corporate-gifts-dubai",
+    description: "High-end executive gifting",
+    icon: <Gem className="w-4.5 h-4.5" />,
   },
   {
     id: "3",
     title: "Apparel and accessories",
     link: "/product-category/apparel-and-accessories",
+    description: "Branded clothing & wearables",
+    icon: <Shirt className="w-4.5 h-4.5" />,
   },
   {
     id: "4",
     title: "Bags and travel",
     link: "/product-category/bags-and-travel",
+    description: "Custom bags, backpacks & travel kits",
+    icon: <Briefcase className="w-4.5 h-4.5" />,
   },
   {
     id: "5",
     title: "Office and stationary",
     link: "/product-category/office-and-stationary",
+    description: "Notebooks, pens & desk essentials",
+    icon: <NotebookPen className="w-4.5 h-4.5" />,
   },
   {
     id: "6",
     title: "Technology and accessories",
     link: "/product-category/technology-and-accessories",
+    description: "Smart gadgets & tech giveaways",
+    icon: <Laptop className="w-4.5 h-4.5" />,
   },
   {
     id: "7",
     title: "Eating and drinking",
     link: "/product-category/eating-and-drinking",
+    description: "Drinkware, mugs & kitchen gifts",
+    icon: <CupSoda className="w-4.5 h-4.5" />,
   },
 
   {
     id: "8",
     title: "Sports and recreation",
     link: "/product-category/sports-and-recreation",
+    description: "Fitness & outdoor branded gear",
+    icon: <Dumbbell className="w-4.5 h-4.5" />,
   },
   {
     id: "9",
     title: "Eco friendly",
     link: "/product-category/eco-friendly",
+    description: "Sustainable & reusable gifts",
+    icon: <Leaf className="w-4.5 h-4.5" />,
   },
 ];
 
@@ -110,180 +144,130 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="flex justify-center w-full overflow-x-hidden">
-        {/* Navbar */}
-        <nav
-          className="fixed top-0 w-11/12 mx-auto xl:w-full z-30 max-w-full"
-        >
-          <div className="max-w-7xl mx-auto flex justify-between items-center px-5 py-4 rounded-xl mt-4 bg-white/10 backdrop-blur-sm">
-            <div className="mr-auto">
+      {/* Top navigation — cal.com style: white/translucent canvas, hairline border */}
+      <nav className="fixed top-0 inset-x-0 z-30 w-full max-w-full border-b border-hairline bg-canvas/80 backdrop-blur-md supports-backdrop-filter:bg-canvas/70">
+        <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-5 sm:px-6">
+          <div className="mr-auto">
+            <NoPrefetchLink href="/">
+              <Image
+                width={160}
+                height={160}
+                src={logo}
+                alt="Corporate Gifts Dubai"
+                className="w-32 dark:brightness-0 dark:invert"
+              />
+            </NoPrefetchLink>
+          </div>
 
-              <NoPrefetchLink href="/">
-                <Image
-                  width={160}
-                  height={160}
-                  src={logo}
-                  alt="Corporate Gifts Dubai"
-                  className="w-40 "
-                />
-              </NoPrefetchLink>
-            </div>
+          <ul className="hidden lg:flex items-center gap-1 list-none">
+            {MENU_ITEMS.map((item) => (
+              <li key={item.key} className="relative">
+                {item.hasDropdown ? (
+                  <ProductsDropdown
+                    href={item.href}
+                    name={item.name}
+                    categories={PRODUCT_CATEGORIES}
+                    onCloseMenu={closeMenu}
+                  />
+                ) : item.name === "Blog" ? (
+                  <a
+                    href={item.href}
+                    onClick={closeMenu}
+                    className="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-body transition-colors hover:bg-surface-soft hover:text-ink"
+                  >
+                    {item.name}
+                  </a>
+                ) : (
+                  <NoPrefetchLink
+                    href={item.href}
+                    onClick={closeMenu}
+                    className="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-body transition-colors hover:bg-surface-soft hover:text-ink"
+                  >
+                    {item.name}
+                  </NoPrefetchLink>
+                )}
+              </li>
+            ))}
+          </ul>
 
-            <ul className="hidden lg:flex space-x-8 list-none">
-              {MENU_ITEMS.map((item) => (
-                <li
-                  key={item.key}
-                  className="relative text-xl font-sentient text-[#0F5C85]  font-semibold hover:text-[#A8DDF0]! transition-colors group"
-                >
-                  {item.hasDropdown ? (
-                    <ProductsDropdown
-                      href={item.href}
-                      name={item.name}
-                      categories={PRODUCT_CATEGORIES}
-                      onCloseMenu={closeMenu}
-                    />
-                  ) : item.name === "Blog" ? (
-                    <a
-                      href={item.href}
-                      onClick={closeMenu}
-                      className="inline-block transition-transform duration-150 active:scale-95"
-                    >
-                      {item.name}
-                      {/* Top border animation */}
-                      <span className="absolute top-0 left-0 w-0 h-px bg-[#0F5C85] transition-all duration-300 group-hover:w-full"></span>
-                      {/* Bottom border animation */}
-                      <span className="absolute bottom-0 right-0 w-0 h-px bg-[#0F5C85] transition-all duration-300 group-hover:w-full"></span>
-                    </a>
-                  ) : (
-                    <NoPrefetchLink
-                      href={item.href}
-                      onClick={closeMenu}
-                      className="inline-block transition-transform duration-150 active:scale-95"
-                    >
-                      {item.name}
-                      {/* Top border animation */}
-                      <span className="absolute top-0 left-0 w-0 h-px bg-[#0F5C85] transition-all duration-300 group-hover:w-full"></span>
-                      {/* Bottom border animation */}
-                      <span className="absolute bottom-0 right-0 w-0 h-px bg-[#0F5C85] transition-all duration-300 group-hover:w-full"></span>
-                    </NoPrefetchLink>
-                  )}
-                </li>
-              ))}
-            </ul>
-
+          <div className="hidden lg:flex items-center gap-2 ml-4">
             <button
               type="button"
               onClick={() => setIsSearchOpen(true)}
-              className="hidden lg:inline-flex items-center justify-center rounded-full border border-neutral-300 bg-white/20 backdrop-blur-sm p-2 text-[#0F5C85] transition hover:bg-neutral-100 ml-4 font-sentient text-base px-4 cursor-pointer"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-hairline bg-canvas text-ink transition-colors hover:bg-surface-card cursor-pointer"
               aria-label="Open search"
             >
-              <LuSearch className="w-5 h-5 text-[#0F5C85]" /> <span>&nbsp; | &nbsp; Search... </span>
+              <LuSearch className="w-4 h-4" />
+            </button>
+            <ThemeToggle />
+            <NoPrefetchLink
+              href="/contact-us"
+              onClick={closeMenu}
+              className={candyButtonClasses("dark", "group h-9 px-4 py-0")}
+            >
+              Contact
+              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+            </NoPrefetchLink>
+          </div>
+
+          {/* Hamburger icon for mobile view */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <button
+              type="button"
+              onClick={() => setIsSearchOpen(true)}
+              className="inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-md border border-hairline bg-canvas text-ink transition-colors hover:bg-surface-card"
+              aria-label="Open search"
+            >
+              <LuSearch className="h-4 w-4" />
             </button>
 
-            {/* Hamburger icon for mobile view */}
-            <div className="flex items-center gap-2 lg:hidden">
-              <button
-                type="button"
-                onClick={() => setIsSearchOpen(true)}
-                className="inline-flex h-6 w-6 md:h-10 md:w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-neutral-300 bg-white p-1 text-[#0F5C85] ring ring-neutral-300 ring-offset-2"
-                aria-label="Open search"
-              >
-                <LuSearch className="h-3.5 w-3.5 md:h-6 md:w-6" />
-              </button>
+            <ThemeToggle className="rounded-md" />
 
+            <button
+              type="button"
+              onClick={toggleMenu}
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              className="inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-md border border-hairline bg-canvas text-ink transition-colors hover:bg-surface-card"
+            >
               {isMenuOpen ? (
-                <X
-                  onClick={toggleMenu}
-                  className="w-6 h-6 md:w-10 md:h-10 cursor-pointer text-[#0F5C85] border border-neutral-300 rounded-lg p-1 ring ring-neutral-300 ring-offset-2 bg-white"
-                />
+                <X className="w-4 h-4" />
               ) : (
-                <AlignJustify
-                  onClick={toggleMenu}
-                  className="w-6 h-6 md:w-10 md:h-10 cursor-pointer text-[#0F5C85] border border-neutral-300 rounded-lg p-1 ring ring-neutral-300 ring-offset-2 bg-white"
-                />
+                <AlignJustify className="w-4 h-4" />
               )}
-            </div>
+            </button>
           </div>
-        </nav>
-      </div>
-      {/* Menu panel that slides up from below */}
+        </div>
+      </nav>
+      {/* Mobile menu panel — cal.com style: full-width sheet, left-aligned list */}
       <motion.div
         initial={{ y: "100vh" }}
         animate={isMenuOpen ? { y: "calc(100dvh - 110%)" } : { y: "100vh" }}
-        transition={{ duration: 1, ease: "easeInOut" }}
-        className="fixed bottom-0 left-0 right-0 z-100 bg-white shadow-xl rounded-t-3xl border border-neutral-300 overflow-y-auto"
-        style={{ height: "calc(100dvh - 15dvh)" }}
+        transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
+        className="fixed bottom-0 left-0 right-0 z-100 bg-canvas shadow-xl rounded-t-2xl border-t border-hairline overflow-y-auto lg:hidden"
+        style={{ height: "calc(100dvh - 12dvh)" }}
       >
-        {/* Dashed Top Fade Grid */}
-        <div
-          className="absolute inset-0 z-0 pointer-events-none"
-          style={{
-            backgroundImage: `
-        linear-gradient(to right, #e7e5e4 1px, transparent 1px),
-        linear-gradient(to bottom, #e7e5e4 1px, transparent 1px)
-      `,
-            backgroundSize: "5px 5px",
-            backgroundPosition: "0 0, 0 0",
-            maskImage: `
-        repeating-linear-gradient(
-              to right,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            repeating-linear-gradient(
-              to bottom,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)
-      `,
-            WebkitMaskImage: `
- repeating-linear-gradient(
-              to right,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            repeating-linear-gradient(
-              to bottom,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)
-      `,
-            maskComposite: "intersect",
-            WebkitMaskComposite: "source-in",
-          }}
-        />
+        {/* Grabber */}
+        <div className="sticky top-0 z-10 flex items-center justify-center bg-canvas pt-3 pb-2">
+          <span className="h-1.5 w-10 rounded-full bg-surface-strong" aria-hidden="true" />
+        </div>
 
-        {/* Scrollable menu items */}
-        <div className="relative z-10 min-h-full flex flex-col justify-center items-center py-8 px-4">
-          <ul className="space-y-8 text-center w-full">
+        <div className="relative z-0 flex flex-col px-5 pb-8 pt-2">
+          <ul className="flex flex-col divide-y divide-hairline">
             {MENU_ITEMS.map((item) => (
-              <li
-                key={item.key}
-                className="w-full flex justify-center transition-transform duration-300 hover:scale-105 active:scale-95"
-              >
+              <li key={item.key} className="w-full">
                 {item.hasDropdown ? (
-                  <div className="flex flex-col items-center">
-                    <div className="flex items-center justify-center gap-2">
+                  <div className="flex flex-col">
+                    <div className="flex items-center justify-between">
                       <NoPrefetchLink
                         href={item.href}
                         onClick={closeMenu}
-                        className="text-2xl text-[#0F5C85] font-sentient font-medium hover:text-[#0F5C85] transition-colors"
+                        className="flex-1 py-4 text-lg font-medium text-ink transition-colors active:text-muted"
                       >
                         {item.name}
                       </NoPrefetchLink>
                       <button
                         onClick={toggleMobileProducts}
-                        className="text-[#0F5C85] font-sentient! hover:text-[#0F5C85] transition-colors"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-card hover:text-ink"
                         aria-label="Toggle products menu"
                       >
                         {isMobileProductsOpen ? (
@@ -299,18 +283,15 @@ const Navbar = () => {
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="mt-4 space-y-4 overflow-hidden border-t border-b border-neutral-300  p-4 w-full max-w-xs"
+                          transition={{ duration: 0.25 }}
+                          className="overflow-hidden pb-2"
                         >
                           {PRODUCT_CATEGORIES.map((category) => (
-                            <li
-                              key={category.id}
-                              className="text-center transition-transform duration-200 hover:scale-105 active:scale-95"
-                            >
+                            <li key={category.id}>
                               <NoPrefetchLink
                                 href={category.link}
                                 onClick={handleMobileCategoryClick}
-                                className="text-lg text-[#0F5C85] font-sentient font-medium hover:text-[#0F5C85] transition-colors"
+                                className="block rounded-md px-3 py-2.5 text-base font-medium text-body transition-colors hover:bg-surface-card hover:text-ink"
                               >
                                 {category.title}
                               </NoPrefetchLink>
@@ -324,7 +305,7 @@ const Navbar = () => {
                   <NoPrefetchLink
                     href={item.href}
                     onClick={closeMenu}
-                    className="text-2xl text-[#0F5C85] font-sentient font-medium hover:text-[#0F5C85] transition-colors"
+                    className="block py-4 text-lg font-medium text-ink transition-colors active:text-muted"
                   >
                     {item.name}
                   </NoPrefetchLink>
@@ -332,6 +313,15 @@ const Navbar = () => {
               </li>
             ))}
           </ul>
+
+          <NoPrefetchLink
+            href="/contact-us"
+            onClick={closeMenu}
+            className={candyButtonClasses("dark", "mt-6 h-12 w-full text-base")}
+          >
+            Contact
+            <ArrowRight className="w-4 h-4" />
+          </NoPrefetchLink>
         </div>
       </motion.div>
       <SearchModal

@@ -29,51 +29,6 @@ type SearchModalProps = {
 
 const DEBOUNCE_MS = 800;
 
-const dashedGridStyle = {
-  backgroundImage: `
-        linear-gradient(to right, #e7e5e4 1px, transparent 1px),
-        linear-gradient(to bottom, #e7e5e4 1px, transparent 1px)
-      `,
-  backgroundSize: "5px 5px",
-  backgroundPosition: "0 0, 0 0",
-  maskImage: `
-       repeating-linear-gradient(
-              to right,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            repeating-linear-gradient(
-              to bottom,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-          radial-gradient(ellipse 60% 60% at 50% 50%, #000 30%, transparent 70%)
-      `,
-  WebkitMaskImage: `
- repeating-linear-gradient(
-              to right,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            repeating-linear-gradient(
-              to bottom,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-          radial-gradient(ellipse 60% 60% at 50% 50%, #000 30%, transparent 70%)
-      `,
-  maskComposite: "intersect",
-  WebkitMaskComposite: "source-in",
-} as const;
-
 export default function SearchModal({
   isOpen,
   onClose,
@@ -242,39 +197,33 @@ export default function SearchModal({
 
   return (
     <div
-      className="fixed inset-0 z-120 overflow-y-auto bg-neutral-900/40 backdrop-blur-sm"
+      className="fixed inset-0 z-120 overflow-y-auto bg-black/40 backdrop-blur-sm"
       onClick={handleOverlayClick}
       role="dialog"
       aria-modal="true"
       aria-label={title}
     >
       <div className="mx-auto mt-16 w-full max-w-3xl px-4 sm:px-6 pb-8">
-        <div className="relative overflow-hidden rounded-2xl border border-neutral-300 bg-white shadow-xl ring ring-neutral-300 ring-offset-2 md:ring-offset-4 ">
-          <div
-            className="pointer-events-none absolute inset-0 z-0"
-            style={dashedGridStyle}
-            aria-hidden="true"
-          />
-
+        <div className="relative overflow-hidden rounded-xl border border-hairline bg-canvas shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
           <div className="relative z-10">
-            <div className="flex items-center justify-between gap-3 border-b border-neutral-300 px-4 py-4 sm:px-6">
-              <h2 className="text-[#0F5C85] text-lg sm:text-xl font-sentient font-bold border border-neutral-300 ring ring-neutral-300 ring-offset-2 px-3 py-1 rounded-xl bg-neutral-100">
+            <div className="flex items-center justify-between gap-3 border-b border-hairline px-4 py-4 sm:px-6">
+              <h2 className="text-title-md text-ink">
                 {title}
               </h2>
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex items-center justify-center rounded-lg border border-neutral-300 bg-neutral-100 p-2 text-[#0F5C85] ring ring-neutral-300 ring-offset-2 transition-colors hover:bg-neutral-200 hover:text-[#0F5C85]"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-hairline bg-canvas text-ink transition-colors hover:bg-surface-card"
                 aria-label="Close search"
               >
-                <X className="h-5 w-5" strokeWidth={2} />
+                <X className="h-4 w-4" strokeWidth={2} />
               </button>
             </div>
 
             <div className="p-4 sm:p-6">
               <div className="relative">
                 <LuSearch
-                  className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#0F5C85]"
+                  className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-muted"
                   aria-hidden
                 />
                 <input
@@ -282,58 +231,52 @@ export default function SearchModal({
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder={placeholder}
-                  className="w-full rounded-full border border-neutral-300 bg-neutral-100 py-3.5 pl-12 pr-4 font-switzer text-base text-neutral-800 placeholder:text-neutral-500 outline-none ring ring-neutral-300 ring-offset-2 transition focus:border-[#0F5C85] focus:ring-[#0F5C85]/30"
+                  className="w-full rounded-md border border-hairline bg-canvas py-2.5 pl-11 pr-4 text-body-md text-ink placeholder:text-muted outline-none transition focus:border-ink"
                 />
               </div>
 
-              <div className="relative mt-4 max-h-[60vh] overflow-hidden rounded-xl border border-neutral-300 bg-white ring ring-neutral-200 ring-offset-2">
-                <div
-                  className="pointer-events-none absolute inset-0 opacity-40"
-                  style={dashedGridStyle}
-                  aria-hidden="true"
-                />
-
+              <div className="relative mt-4 max-h-[60vh] overflow-hidden rounded-lg border border-hairline bg-canvas">
                 <div className="relative max-h-[60vh] overflow-y-auto">
                   {!trimmedQuery ? (
                     <div className="flex flex-col items-center justify-center gap-3 px-6 py-12 text-center">
-                      <span className="inline-flex rounded-xl border border-neutral-300 bg-neutral-100 p-3 ring ring-neutral-300 ring-offset-2">
-                        <LuSearch className="h-8 w-8 text-[#0F5C85]" aria-hidden />
+                      <span className="inline-flex rounded-lg border border-hairline bg-surface-card p-3">
+                        <LuSearch className="h-7 w-7 text-muted" aria-hidden />
                       </span>
-                      <p className="font-switzer text-sm sm:text-base font-medium text-neutral-700">
+                      <p className="text-body-sm text-muted">
                         Start typing to search products.
                       </p>
                     </div>
                   ) : results.length === 0 && !loading ? (
-                    <p className="px-6 py-12 text-center font-switzer text-sm sm:text-base font-medium text-neutral-700">
+                    <p className="px-6 py-12 text-center text-body-sm text-muted">
                       No products found for &ldquo;{trimmedQuery}&rdquo;.
                     </p>
                   ) : (
-                    <ul className="divide-y divide-neutral-200">
+                    <ul className="divide-y divide-hairline">
                       {results.map((item) => (
                         <li key={`${item.id}-${item.slug}`}>
                           <button
                             type="button"
                             onClick={() => handleItemClick(item.url)}
-                            className="group flex w-full items-center gap-4 px-4 py-3.5 text-left transition-colors hover:bg-[#A8DDF0]/25 sm:px-5"
+                            className="group flex w-full items-center gap-4 px-4 py-3.5 text-left transition-colors hover:bg-surface-card sm:px-5"
                           >
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={item.image}
                               alt={item.name}
-                              className="h-14 w-14 shrink-0 rounded-lg border border-neutral-200 bg-neutral-100 object-cover ring ring-neutral-200 ring-offset-1"
+                              className="h-14 w-14 shrink-0 rounded-md border border-hairline bg-surface-card object-cover"
                               loading="lazy"
                             />
                             <div className="min-w-0 flex-1">
-                              <p className="truncate font-sentient text-sm font-semibold text-[#0F5C85] transition-colors group-hover:text-[#0F5C85] sm:text-base">
+                              <p className="truncate text-title-sm text-ink sm:text-base">
                                 {item.name}
                               </p>
                               {item.category ? (
-                                <p className="truncate font-switzer text-xs text-neutral-600 sm:text-sm">
+                                <p className="truncate text-body-sm text-muted">
                                   {item.category}
                                 </p>
                               ) : null}
                             </div>
-                            <span className="shrink-0 font-switzer text-xs font-medium text-[#0F5C85] opacity-0 transition-opacity group-hover:opacity-100">
+                            <span className="shrink-0 text-caption text-muted opacity-0 transition-opacity group-hover:opacity-100">
                               View
                             </span>
                           </button>
@@ -343,8 +286,8 @@ export default function SearchModal({
                   )}
 
                   {loading ? (
-                    <div className="flex items-center justify-center gap-2 border-t border-neutral-200 px-4 py-4 font-switzer text-sm font-medium text-neutral-700">
-                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-neutral-300 border-t-[#0F5C85]" />
+                    <div className="flex items-center justify-center gap-2 border-t border-hairline px-4 py-4 text-body-sm text-muted">
+                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-hairline border-t-ink" />
                       <span>Searching products…</span>
                     </div>
                   ) : null}

@@ -1,37 +1,20 @@
 @import "tailwindcss";
 
-/* fonts import */
-@font-face {
-  font-family: "Khand";
-  src: url("/assets/fonts/Khand-Variable.woff") format("woff");
-  font-style: normal;
-  font-display: swap;
-}
+/* Enable class-based dark mode (toggled via `.dark` on <html>) */
+@custom-variant dark (&:where(.dark, .dark *));
 
-@font-face {
-  font-family: "Switzer";
-  src: url("/assets/fonts/Switzer-Variable.woff") format("woff");
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Tanker";
-  src: url("/assets/fonts/Tanker-Regular.woff") format("woff");
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Sentient";
-  src: url("/assets/fonts/Sentient-Variable.woff2") format("woff2");
-  font-style: normal;
-  font-display: swap;
-}
+/* Fonts: the whole site uses Geist (loaded via next/font in app/layout.tsx).
+   All custom font-faces (Cal Sans, Sentient, Switzer, Tanker, Khand) were
+   removed; the font tokens below all resolve to Geist. */
 
 @layer base {
   :root {
-    /* Primary Colors */
+    /* Geist font stack (real CSS var so it resolves at runtime).
+       --font-geist-sans is provided by next/font in app/layout.tsx. */
+    --font-geist-stack: var(--font-geist-sans), -apple-system,
+      BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+    /* Primary Colors (legacy — retained during redesign transition) */
     /* --bg: #ffffe3; */
     --bg: #ffffff;
     --textcolor: #404040;
@@ -43,20 +26,110 @@
     --highlight: #0f5c85;
     --black: #000000;
     --white: #fffbfa;
+
+    /* ── Cal.com design system tokens (light) ───────────────────── */
+    --cal-primary: #111111;
+    --cal-primary-active: #242424;
+    --cal-primary-disabled: #e5e7eb;
+    --cal-ink: #111111;
+    --cal-body: #374151;
+    --cal-muted: #6b7280;
+    --cal-muted-soft: #898989;
+    --cal-hairline: #e5e7eb;
+    --cal-hairline-soft: #f3f4f6;
+    --cal-canvas: #ffffff;
+    --cal-surface-soft: #f8f9fa;
+    --cal-surface-card: #f5f5f5;
+    --cal-surface-strong: #e5e7eb;
+    --cal-surface-dark: #101010;
+    --cal-surface-dark-elevated: #1a1a1a;
+    --cal-on-primary: #ffffff;
+    --cal-on-dark: #ffffff;
+    --cal-on-dark-soft: #a1a1aa;
+    --cal-brand-accent: #3b82f6;
+    --cal-success: #10b981;
+    --cal-warning: #f59e0b;
+    --cal-error: #ef4444;
+    --cal-badge-orange: #fb923c;
+    --cal-badge-pink: #ec4899;
+    --cal-badge-violet: #8b5cf6;
+    --cal-badge-emerald: #34d399;
+  }
+
+  .dark {
+    /* ── Cal.com design system tokens (dark) ────────────────────── */
+    --cal-primary: #ffffff;
+    --cal-primary-active: #e5e5e5;
+    --cal-primary-disabled: #2a2a2a;
+    --cal-ink: #f5f5f5;
+    --cal-body: #d4d4d8;
+    --cal-muted: #a1a1aa;
+    --cal-muted-soft: #71717a;
+    --cal-hairline: #262626;
+    --cal-hairline-soft: #1c1c1c;
+    --cal-canvas: #0b0b0b;
+    --cal-surface-soft: #151515;
+    --cal-surface-card: #171717;
+    --cal-surface-strong: #262626;
+    --cal-surface-dark: #050505;
+    --cal-surface-dark-elevated: #171717;
+    --cal-on-primary: #111111;
+    --cal-on-dark: #ffffff;
+    --cal-on-dark-soft: #a1a1aa;
   }
 }
 
 /* theme variables */
 
-@theme {
-  --font-khand: "Khand", sans-serif;
-  --font-switzer: "Switzer", sans-serif;
-  --font-tanker: "Tanker", sans-serif;
-  --font-sentient: "Sentient", sans-serif;
+@theme inline {
+  /* Every font token resolves to Geist (legacy classes kept working) */
+  --font-khand: var(--font-geist-stack);
+  --font-switzer: var(--font-geist-stack);
+  --font-tanker: var(--font-geist-stack);
+  --font-sentient: var(--font-geist-stack);
+
+  /* Design system fonts (both map to Geist) */
+  --font-sans: var(--font-geist-stack);
+  --font-display: var(--font-geist-stack);
 
   --color-bg: var(--bg);
   --color-textcolor: var(--textcolor);
   --color-highlight: var(--highlight);
+
+  /* Cal.com design system color utilities (dark-mode aware) */
+  --color-primary: var(--cal-primary);
+  --color-primary-active: var(--cal-primary-active);
+  --color-primary-disabled: var(--cal-primary-disabled);
+  --color-ink: var(--cal-ink);
+  --color-body: var(--cal-body);
+  --color-muted: var(--cal-muted);
+  --color-muted-soft: var(--cal-muted-soft);
+  --color-hairline: var(--cal-hairline);
+  --color-hairline-soft: var(--cal-hairline-soft);
+  --color-canvas: var(--cal-canvas);
+  --color-surface-soft: var(--cal-surface-soft);
+  --color-surface-card: var(--cal-surface-card);
+  --color-surface-strong: var(--cal-surface-strong);
+  --color-surface-dark: var(--cal-surface-dark);
+  --color-surface-dark-elevated: var(--cal-surface-dark-elevated);
+  --color-on-primary: var(--cal-on-primary);
+  --color-on-dark: var(--cal-on-dark);
+  --color-on-dark-soft: var(--cal-on-dark-soft);
+  --color-brand-accent: var(--cal-brand-accent);
+  --color-success: var(--cal-success);
+  --color-warning: var(--cal-warning);
+  --color-error: var(--cal-error);
+  --color-badge-orange: var(--cal-badge-orange);
+  --color-badge-pink: var(--cal-badge-pink);
+  --color-badge-violet: var(--cal-badge-violet);
+  --color-badge-emerald: var(--cal-badge-emerald);
+
+  /* Cal.com radius scale */
+  --radius-cal-xs: 4px;
+  --radius-cal-sm: 6px;
+  --radius-cal-md: 8px;
+  --radius-cal-lg: 12px;
+  --radius-cal-xl: 16px;
 
   --animate-fade-up: fadeUp 0.8s ease-out forwards;
   --animate-fade-up2: fadeUp2 0.8s ease-out forwards;
@@ -79,11 +152,16 @@ html::-webkit-scrollbar {
 }
 
 body {
-  background-color: var(--color-bg);
+  background-color: var(--cal-canvas);
+  color: var(--cal-body);
+  font-family: var(--font-geist-stack);
   overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
   position: relative;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.2s ease, color 0.2s ease;
   /* Hide scrollbar */
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
@@ -94,13 +172,86 @@ body::-webkit-scrollbar {
 }
 /* Selection color styling */
 ::selection {
-  background-color: var(--color-highlight);
-  color: var(--color-bg);
+  background-color: var(--cal-ink);
+  color: var(--cal-canvas);
 }
 
 ::-moz-selection {
-  background-color: var(--color-highlight);
-  color: var(--color-bg);
+  background-color: var(--cal-ink);
+  color: var(--cal-canvas);
+}
+
+/* ── Cal.com typography scale ─────────────────────────────────────
+   Display sizes use Cal Sans with negative tracking (brand voice).
+   Titles/body use Inter. Sizes are responsive-friendly via clamp. */
+.text-display-xl {
+  font-family: var(--font-geist-stack);
+  font-weight: 600;
+  font-size: clamp(2.5rem, 5vw, 4rem); /* 40 → 64px */
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.text-display-lg {
+  font-family: var(--font-geist-stack);
+  font-weight: 600;
+  font-size: clamp(2rem, 4vw, 3rem); /* 32 → 48px */
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+.text-display-md {
+  font-family: var(--font-geist-stack);
+  font-weight: 600;
+  font-size: clamp(1.75rem, 3vw, 2.25rem); /* 28 → 36px */
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+.text-display-sm {
+  font-family: var(--font-geist-stack);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 2.5vw, 1.75rem); /* 24 → 28px */
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.text-title-lg {
+  font-family: var(--font-geist-stack);
+  font-weight: 600;
+  font-size: 1.375rem; /* 22px */
+  line-height: 1.3;
+  letter-spacing: -0.013em;
+}
+.text-title-md {
+  font-family: var(--font-geist-stack);
+  font-weight: 600;
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.4;
+}
+.text-title-sm {
+  font-family: var(--font-geist-stack);
+  font-weight: 600;
+  font-size: 1rem; /* 16px */
+  line-height: 1.4;
+}
+.text-body-md {
+  font-family: var(--font-geist-stack);
+  font-weight: 400;
+  font-size: 1rem; /* 16px */
+  line-height: 1.5;
+}
+.text-body-sm {
+  font-family: var(--font-geist-stack);
+  font-weight: 400;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.5;
+}
+.text-caption {
+  font-family: var(--font-geist-stack);
+  font-weight: 500;
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.4;
+}
+.font-display {
+  font-family: var(--font-geist-stack);
+  letter-spacing: -0.02em;
 }
 
 /* Prevent horizontal overflow globally */

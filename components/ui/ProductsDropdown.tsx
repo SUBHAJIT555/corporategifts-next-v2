@@ -2,11 +2,14 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
+import { candyButtonClasses } from "./candy-button";
 
 export type NavbarProductCategory = {
   id: string;
   title: string;
   link: string;
+  description?: string;
+  icon?: React.ReactNode;
 };
 
 type ProductsDropdownProps = {
@@ -84,39 +87,55 @@ const ProductsDropdown = memo(function ProductsDropdown({
       onMouseEnter={openDropdown}
       onMouseLeave={closeDropdown}
     >
-      <div className="flex items-center gap-1">
-        <NoPrefetchLink href={href} className="flex items-center gap-1">
-          {name}
-        </NoPrefetchLink>
-        <span className="pointer-events-none">
+      <NoPrefetchLink
+        href={href}
+        className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-body transition-colors hover:bg-surface-soft hover:text-ink"
+      >
+        {name}
+        <span className="pointer-events-none text-muted">
           {isProductsDropdownOpen ? (
-            <ChevronUp className="w-4 h-4" />
+            <ChevronUp className="w-3.5 h-3.5" />
           ) : (
-            <ChevronDown className="w-4 h-4" />
+            <ChevronDown className="w-3.5 h-3.5" />
           )}
         </span>
-      </div>
-      <span className="absolute top-0 left-0 w-0 h-px bg-[#0F5C85] transition-all duration-300 group-hover:w-full"></span>
-      <span className="absolute bottom-0 right-0 w-0 h-px bg-[#0F5C85] transition-all duration-300 group-hover:w-full"></span>
+      </NoPrefetchLink>
 
       <AnimatePresence>
         {isProductsDropdownOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-neutral-300 ring ring-neutral-300 ring-offset-2 overflow-hidden z-50"
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.16 }}
+            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[640px] max-w-[calc(100vw-2rem)] bg-canvas rounded-2xl border border-hairline shadow-[0_4px_24px_rgba(0,0,0,0.1)] overflow-hidden z-50"
           >
-            <ul className="py-2">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1 p-2.5">
               {categories.map((category) => (
                 <li key={category.id}>
                   <NoPrefetchLink
                     href={category.link}
-                    className="block px-4 py-2 text-neutral-800 hover:bg-neutral-100 border-b border-t border-neutral-100 hover:text-[#0F5C85] transition-colors text-base font-sentient"
+                    className="group/item flex items-center gap-3 rounded-xl p-2.5 transition-colors hover:bg-surface-card"
                     onClick={handleCategoryClick}
                   >
-                    {category.title}
+                    <span
+                      className={candyButtonClasses(
+                        "white",
+                        "h-10 w-10 shrink-0 rounded-lg p-0"
+                      )}
+                    >
+                      {category.icon}
+                    </span>
+                    <span className="min-w-0 py-0.5">
+                      <span className="block text-sm font-semibold text-ink leading-6">
+                        {category.title}
+                      </span>
+                      {category.description ? (
+                        <span className="mt-px block text-[13px] leading-snug text-muted">
+                          {category.description}
+                        </span>
+                      ) : null}
+                    </span>
                   </NoPrefetchLink>
                 </li>
               ))}
