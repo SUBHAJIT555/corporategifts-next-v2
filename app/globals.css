@@ -673,6 +673,31 @@ html.image-gallery-fullscreen footer {
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
+  .cal-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--cal-muted-soft) transparent;
+  }
+
+  .cal-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .cal-scrollbar::-webkit-scrollbar-track {
+    margin-block: 4px;
+    background: transparent;
+  }
+
+  .cal-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--cal-surface-strong);
+    border: 2px solid transparent;
+    border-radius: 9999px;
+    background-clip: padding-box;
+  }
+
+  .cal-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--cal-muted-soft);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

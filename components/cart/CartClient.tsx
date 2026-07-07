@@ -1,84 +1,122 @@
 "use client";
 
 import { useRef } from "react";
+import { ShoppingBag } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useQuote } from "@/contexts/QuoteContext";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { LuArrowLeft, LuTrash, HiPlus, HiMinus, BsCart4 } from "@/components/icons";
+import { LuArrowLeft, LuTrash, BsCart4 } from "@/components/icons";
 import Image from "next/image";
 import { cn } from "@/lib/utilts";
 import { getProductUrl } from "@/lib/getProductsUrl";
-import { GradientBars } from "@/components/pages/Home/Hero";
-import CTAButton from "@/components/ui/CTAButton";
+import { QuantitySelector } from "@/lib/quantitySelector";
+import {
+  candyAccentButtonClasses,
+  candyDarkButtonClasses,
+  candyWhiteButtonClasses,
+} from "@/components/ui/candy-button";
+import SectionDivider from "@/components/ui/SectionDivider";
+import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 
 const EmptyCartHero = () => {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
-
   return (
-    <section
-      ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center px-4 py-20 sm:py-24 pt-28 sm:pt-32 md:pt-36"
-    >
-      <motion.div
-        style={{ y: backgroundY }}
-        className="absolute inset-0 z-0 mix-blend-multiply pointer-events-none"
-        aria-hidden
-      >
-        <GradientBars />
-      </motion.div>
+    <section className="w-full bg-canvas">
+      <RevealSection className="mx-auto flex min-h-[70vh] max-w-7xl flex-col items-center justify-center border-x border-hairline px-5 py-24 text-center sm:px-6 sm:py-28">
+        <Reveal animationNum={0} className="flex justify-center">
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-3 py-1 text-caption font-medium text-body">
+            <BsCart4 className="h-3.5 w-3.5 text-brand-accent" />
+            Quote cart
+          </span>
+        </Reveal>
 
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="relative z-20 w-full max-w-lg text-center"
-      >
-        <div className="inline-flex items-center gap-2 text-textcolor text-xs sm:text-sm font-sentient mb-5 sm:mb-6 border border-neutral-300 px-3 sm:px-4 py-1.5 sm:py-2 rounded-2xl bg-white/85 backdrop-blur-sm ring-1 ring-neutral-300 ring-offset-2 md:ring-offset-4 shadow-sm">
-          <BsCart4 className="shrink-0 w-5 h-5 text-[#0F5C85]" aria-hidden />
-          <span>Your quote cart is ready for great picks</span>
-        </div>
-
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-sentient font-semibold text-textcolor mb-2 sm:mb-3 tracking-tight hero-3d-heading px-1">
-          Your cart is empty
-        </h2>
-        <p
-          className="text-lg sm:text-xl md:text-2xl font-sentient font-medium mb-2 bg-clip-text text-transparent animate-hero-gradient-shift px-2"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, #A8DDF0, #0F5C85, #A8DDF0)",
-            backgroundSize: "200% auto",
-          }}
+        <Reveal
+          as="h1"
+          animationNum={1}
+          className="mt-4 text-display-md text-ink sm:text-display-lg"
         >
-          Let&apos;s fill it with corporate gifts
-        </p>
-        <p className="text-sm sm:text-base font-switzer text-neutral-700 max-w-md mx-auto mb-8 sm:mb-10 leading-relaxed">
-          Browse the shop and add products - your selections sync here for a
-          single quotation request.
-        </p>
+          Your cart is empty
+        </Reveal>
 
-        <div className="flex justify-center">
-          <NoPrefetchLink href="/shop">
-            <CTAButton
-              label="Back To Shop"
-              variant="light"
-              className="w-full sm:w-auto max-w-xs mx-auto text-xs sm:text-sm md:text-base font-sentient font-medium cursor-pointer bg-linear-to-r! from-neutral-100! to-neutral-300! ring-1! ring-neutral-300! ring-offset-2! md:ring-offset-4!"
-            />
+        <Reveal
+          as="p"
+          animationNum={2}
+          className="mx-auto mt-4 max-w-md text-body-md text-muted"
+        >
+          Browse the shop and add products. Your selections sync here for a
+          single quotation request.
+        </Reveal>
+
+        <Reveal animationNum={3} className="mt-8">
+          <NoPrefetchLink
+            href="/shop"
+            className={cn(candyDarkButtonClasses("w-full sm:w-auto"))}
+          >
+            Back to shop
           </NoPrefetchLink>
-        </div>
-      </motion.div>
+        </Reveal>
+      </RevealSection>
     </section>
+  );
+};
+
+const CartHero = ({ itemCount, totalUnits }: { itemCount: number; totalUnits: number }) => {
+  return (
+    <section className="w-full bg-canvas">
+      <RevealSection className="relative mx-auto max-w-7xl overflow-hidden border-x border-hairline px-3 pt-20 pb-8 sm:px-4 sm:pt-24 sm:pb-10 md:px-6 md:pt-32 md:pb-12 lg:pt-36">
+        <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              opacity: 0.14,
+              pointerEvents: "none",
+              backgroundImage:
+                "repeating-linear-gradient(0deg, transparent 0px, transparent 3px, var(--primary) 3px, var(--primary) 4px)",
+              maskImage: "linear-gradient(to bottom, #000 0%, transparent 75%)",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, #000 0%, transparent 75%)",
+            }}
+          />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-4xl text-center">
+          <Reveal animationNum={0} className="flex justify-center">
+            <span className="inline-flex max-w-full items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-2.5 py-1 text-[11px] font-medium text-body shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.12)] sm:px-3 sm:text-caption dark:shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.35)]">
+              <ShoppingBag className="h-3 w-3 shrink-0 text-brand-accent sm:h-3.5 sm:w-3.5" />
+              Quote cart
+            </span>
+          </Reveal>
+
+          <Reveal
+            as="h1"
+            animationNum={1}
+            className="mt-4 text-display-lg text-ink sm:mt-5 md:text-display-xl"
+          >
+            Review your{" "}
+            <span className="text-brand-accent">cart</span>
+          </Reveal>
+
+          <Reveal
+            as="p"
+            animationNum={2}
+            className="mx-auto mt-4 max-w-2xl text-body-md text-muted sm:mt-6 sm:text-[17px] sm:leading-7"
+          >
+            {itemCount} {itemCount === 1 ? "product" : "products"} · {totalUnits}{" "}
+            {totalUnits === 1 ? "unit" : "units"} ready for quotation
+          </Reveal>
+        </div>
+      </RevealSection>
+      
+    </section>
+    
   );
 };
 
 const CartClient = () => {
   const { items, removeFromQuote, updateQuantity } = useQuote();
   const router = useRouter();
+  const contentRef = useRef<HTMLDivElement>(null);
 
   if (items.length === 0) {
     return <EmptyCartHero />;
@@ -88,159 +126,167 @@ const CartClient = () => {
     router.push("/request-quotation");
   };
 
-  const totalItems = items.reduce(
-    (total, item) => total + item.quantity,
-    0,
-  );
+  const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
   return (
-    <div className="min-h-screen">
-      <section className="border-b border-neutral-200 ">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 md:pt-32 pb-8 sm:pb-10">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-sentient font-light text-textcolor leading-tight mb-2">
-            <span className="block">Shopping</span>
-            <span
-              className="block mt-0.5 bg-clip-text text-transparent font-sentient animate-hero-gradient-shift"
-              style={{
-                backgroundImage:
-                  "linear-gradient(to right, #A8DDF0, #0F5C85, #A8DDF0)",
-                backgroundSize: "200% auto",
-              }}
-            >
-              Cart
-            </span>
-          </h1>
-          <p className="text-base sm:text-lg font-switzer text-textcolor/80 max-w-xl">
-            Review your items and proceed to request a quotation.
-          </p>
-        </div>
-      </section>
+    <div className="w-full bg-canvas">
+      <CartHero itemCount={items.length} totalUnits={totalItems} />
+      <SectionDivider />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10 lg:items-start">
-          <div className="lg:col-span-2 space-y-4">
-            <div className="rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-sm p-5 sm:p-6 shadow-sm ring-1 ring-neutral-200/70 ring-offset-4 ">
-              <h2 className="text-xl sm:text-2xl font-sentient font-semibold text-textcolor mb-5">
-                Cart items ({items.length})
-              </h2>
-              <div className="space-y-4">
-                <AnimatePresence mode="popLayout">
-                  {items.map((item) => (
-                    <motion.div
-                      key={item.id}
-                      layout
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, x: -16 }}
-                      transition={{ duration: 0.2 }}
-                      className="rounded-xl border border-neutral-200 bg-white p-4 sm:p-5 shadow-sm hover:border-neutral-300/90 transition-colors"
-                    >
-                      <div className="flex gap-4">
-                        <NoPrefetchLink
-                          href={getProductUrl(item)}
-                          className="relative w-20 h-20 sm:w-24 sm:h-24 shrink-0 rounded-lg overflow-hidden bg-neutral-100 ring-1 ring-neutral-200"
-                        >
-                          <Image
-                            width={200}
-                            height={200}
-                            src={item.image}
-                            alt={item.name}
-                            className="w-full h-full object-cover"
-                          />
-                        </NoPrefetchLink>
-                        <div className="flex-1 min-w-0">
+      <section ref={contentRef} className="w-full bg-canvas">
+        <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-6 sm:px-6 sm:py-4 lg:py-4">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-8 lg:items-start">
+            <div className="lg:col-span-7 xl:col-span-8">
+              <div className="overflow-hidden rounded-2xl border border-hairline bg-surface-soft p-4 sm:p-5">
+                <div className="mb-4 flex items-center justify-between gap-3 border-b border-hairline pb-4">
+                  <h2 className="text-base font-semibold text-ink sm:text-lg">
+                    Cart items
+                  </h2>
+                  <span className="text-xs tabular-nums text-muted sm:text-sm">
+                    {items.length} {items.length === 1 ? "product" : "products"}
+                  </span>
+                </div>
+
+                <div className="space-y-3">
+                  <AnimatePresence mode="popLayout">
+                    {items.map((item, index) => (
+                      <motion.article
+                        key={item.id}
+                        layout
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, x: -12 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden rounded-xl border border-hairline bg-canvas"
+                      >
+                        <div className="flex items-start gap-3 p-4 sm:gap-4">
+                          <span className="mt-1 shrink-0 text-xs font-medium tabular-nums text-muted">
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+
                           <NoPrefetchLink
                             href={getProductUrl(item)}
-                            className="font-switzer font-semibold text-textcolor text-base sm:text-lg line-clamp-2 hover:text-highlight transition-colors"
+                            className="relative size-20 shrink-0 overflow-hidden rounded-lg border border-hairline bg-surface-card sm:size-24"
                           >
-                            {item.name}
+                            <Image
+                              width={200}
+                              height={200}
+                              src={item.image}
+                              alt={item.name}
+                              className="size-full object-contain p-2"
+                            />
                           </NoPrefetchLink>
-                          {/* {item.short_desc && (
-                            <p className="text-sm font-switzer text-textcolor/65 mt-1 line-clamp-2 leading-snug">
-                              {item.short_desc}
-                            </p>
-                          )} */}
-                          <div className="mt-3 inline-flex items-center rounded-lg border border-neutral-200 bg-white overflow-hidden ring-1 ring-neutral-200/60 select-none">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity - 1)
-                              }
-                              className="w-9 h-9 flex items-center justify-center text-textcolor hover:bg-neutral-100 transition-colors disabled:opacity-40"
-                              aria-label="Decrease quantity"
-                            >
-                              <HiMinus className="w-4 h-4" />
-                            </button>
-                            <span className="min-w-9 px-2 text-center font-switzer text-sm font-medium text-textcolor border-x border-neutral-200">
-                              {item.quantity}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity + 1)
-                              }
-                              className="w-9 h-9 flex items-center justify-center text-textcolor hover:bg-neutral-100 transition-colors"
-                              aria-label="Increase quantity"
-                            >
-                              <HiPlus className="w-4 h-4" />
-                            </button>
+
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-start gap-2">
+                              <NoPrefetchLink
+                                href={getProductUrl(item)}
+                                className="line-clamp-2 min-w-0 flex-1 text-sm font-semibold leading-snug text-ink transition-colors hover:text-brand-accent sm:text-[15px]"
+                              >
+                                {item.name}
+                              </NoPrefetchLink>
+
+                              <button
+                                type="button"
+                                onClick={() => removeFromQuote(item.id)}
+                                className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-transparent text-muted transition-colors hover:border-hairline hover:bg-surface-soft hover:text-red-500 sm:size-9"
+                                aria-label={`Remove ${item.name}`}
+                              >
+                                <LuTrash className="size-4" />
+                              </button>
+                            </div>
+
+                            <div className="mt-3 max-w-44">
+                              <QuantitySelector
+                                quantity={item.quantity}
+                                onQuantityChange={(qty) =>
+                                  updateQuantity(item.id, qty)
+                                }
+                                variant="cal"
+                              />
+                            </div>
                           </div>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => removeFromQuote(item.id)}
-                          className="self-start p-2 rounded-lg text-textcolor/50 hover:text-white hover:bg-red-600 transition-colors shrink-0 ring-1 ring-neutral-200/60 ring-offset-2 bg-red-50 cursor-pointer"
-                          aria-label="Remove item"
-                        >
-                          <LuTrash className="w-5 h-5" />
-                        </button>
-                      </div>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
+                      </motion.article>
+                    ))}
+                  </AnimatePresence>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="lg:col-span-1">
-            <div className="rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-sm p-5 sm:p-6 shadow-sm ring-1 ring-neutral-200/70 ring-offset-4 lg:sticky lg:top-28">
-              <h2 className="text-xl sm:text-2xl font-sentient font-semibold text-textcolor mb-5">
-                Order summary
-              </h2>
-              <div className="space-y-3 mb-6 font-switzer text-textcolor">
-                <div className="flex justify-between items-center text-sm sm:text-base">
-                  <span className="text-textcolor/75">Unique products</span>
-                  <span className="font-medium">{items.length}</span>
+            <aside className="lg:col-span-5 xl:col-span-4">
+              <div className="overflow-hidden rounded-2xl border border-hairline bg-canvas lg:sticky lg:top-28">
+                <div className="border-b border-hairline px-4 py-4 sm:px-5">
+                  <h2 className="text-base font-semibold text-ink sm:text-lg">
+                    Order summary
+                  </h2>
+                  <p className="mt-1 text-xs text-muted sm:text-sm">
+                    Serial list of products and quantities
+                  </p>
                 </div>
-                <div className="flex justify-between items-center text-sm sm:text-base">
-                  <span className="text-textcolor/75">Total units</span>
-                  <span className="font-medium">{totalItems}</span>
+
+                <ol className="divide-y divide-hairline">
+                  {items.map((item, index) => (
+                    <li
+                      key={item.id}
+                      className="flex items-start gap-3 px-4 py-3 sm:px-5"
+                    >
+                      <span className="w-7 shrink-0 pt-0.5 text-xs font-semibold tabular-nums text-brand-accent">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="line-clamp-2 text-sm leading-snug text-ink">
+                          {item.name}
+                        </p>
+                      </div>
+                      <span className="shrink-0 rounded-md border border-hairline bg-surface-soft px-2 py-0.5 text-xs font-medium tabular-nums text-ink">
+                        Qty {item.quantity}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+
+                <div className="space-y-2 border-t border-hairline px-4 py-4 sm:px-5">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted">Unique products</span>
+                    <span className="font-medium tabular-nums text-ink">
+                      {items.length}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted">Total units</span>
+                    <span className="font-semibold tabular-nums text-ink">
+                      {totalItems}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2 border-t border-hairline p-4 sm:p-5">
+                  <button
+                    type="button"
+                    onClick={handleCheckout}
+                    className={candyAccentButtonClasses("w-full text-sm")}
+                  >
+                    Proceed to checkout
+                  </button>
+                  <NoPrefetchLink
+                    href="/shop"
+                    className={cn(
+                      candyWhiteButtonClasses(
+                        "w-full gap-2 text-sm px-4!",
+                      ),
+                    )}
+                  >
+                    <LuArrowLeft className="size-4 shrink-0" />
+                    Continue shopping
+                  </NoPrefetchLink>
                 </div>
               </div>
-              <div className="border-t border-neutral-200 pt-5 space-y-4">
-                <button
-                  type="button"
-                  onClick={handleCheckout}
-                  className="w-full flex items-center justify-center gap-2 bg-highlight hover:bg-highlight/90 text-white font-switzer font-semibold py-3.5 px-6 rounded-xl transition-colors shadow-sm"
-                >
-                  Proceed to checkout
-                </button>
-                <NoPrefetchLink
-                  href="/shop"
-                  className={cn(
-                    "w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-switzer font-semibold transition-colors",
-                    "border border-neutral-300 bg-white text-textcolor hover:bg-neutral-50",
-                    "ring-1 ring-neutral-200 ring-offset-2 ring-offset-bg",
-                  )}
-                >
-                  <LuArrowLeft className="w-5 h-5 shrink-0" />
-                  Continue shopping
-                </NoPrefetchLink>
-              </div>
-            </div>
+            </aside>
           </div>
-        </div>
-      </div>
+        </RevealSection>
+        <SectionDivider />
+      </section>
     </div>
   );
 };
