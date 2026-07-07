@@ -1,42 +1,42 @@
 'use client';
-import CommonHero from "@/components/ui/CommonHero";
-import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
+
+import LegalHero from "@/components/pages/Legal/LegalHero";
+import LegalPageContent from "@/components/pages/Legal/LegalPageContent";
+import SectionDivider from "@/components/ui/SectionDivider";
 
 const TermsAndConditionClient = () => {
     return (
-        <div>
-            <CommonHero
+        <>
+            <LegalHero
                 title="Terms and Conditions"
-                titlesuffix=""
                 subtitle="These Legal Terms constitute a legally binding agreement made between you and Baharnani Advertising L.L.C. Please read these terms carefully before using our services."
-                // imageUrl="/assets/images/Hero-images/Terms-and-Condition-hero.webp"
-                buttonLink="/contact-us"
-                buttonText="Get in Touch"
+                ctaHref="/contact-us"
+                ctaLabel="Get in Touch"
             />
-            <RevealSection className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-12 md:py-16 lg:py-20">
-                <Reveal animationNum={0}>
-                <div className="prose prose-lg max-w-none">
+            <SectionDivider />
+            <LegalPageContent>
+                <div className="max-w-none">
                     {/* Last Updated */}
-                    <p className="text-sm md:text-base text-textcolor/70 font-switzer mb-8 border border-neutral-300 bg-neutral-100 w-fit px-4 py-2 rounded-xl ring ring-neutral-200 ring-offset-2">
+                    <p className="mb-8 w-fit rounded-lg border border-dashed border-hairline bg-surface-card px-4 py-2 text-sm text-muted">
                         <strong>Last Updated:</strong> September 16, 2024
                     </p>
 
-                    <div className="border border-neutral-300  p-6 md:p-8 rounded-xl ring ring-neutral-200 ring-offset-2 md:ring-offset-4 bg-white">
+                    <div className="divide-y divide-hairline">
                         {/* Agreement to Our Legal Terms */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 AGREEMENT TO OUR LEGAL TERMS
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 We are <strong>Baharnani Advertising L.L.C</strong> (&quot;Company,&quot;
                                 &quot;we,&quot; &quot;us,&quot; &quot;our&quot;), a company registered in the United Arab
                                 Emirates at Al Quoz – Al Quoz 3 – Dubai, Dubai, إمارة دبيّ 49757.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 We operate the website{" "}
                                 <a
                                     href="https://corporategiftsdubaii.ae"
-                                    className="text-[#0f5c85] hover:underline "
+                                    className="text-brand-accent underline-offset-2 hover:underline "
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
@@ -46,7 +46,7 @@ const TermsAndConditionClient = () => {
                                 that refer or link to these legal terms (the &quot;Legal Terms&quot;)
                                 (collectively, the &quot;Services&quot;).
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 Baharnani Gifts offers a wide range of corporate gifts in Dubai,
                                 specializing in personalized and branded products. Their
                                 collection includes luxury gift items such as customized
@@ -58,19 +58,19 @@ const TermsAndConditionClient = () => {
                                 product meets the client&apos;s specifications for unique and impactful
                                 gifting experiences.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 You can contact us by phone at <strong>(+971) 4 380 5587 </strong>,
                                 email at{" "}
                                 <a
                                     href="mailto:info@baharnani.com"
-                                    className="text-[#0f5c85] hover:underline "
+                                    className="text-brand-accent underline-offset-2 hover:underline "
                                 >
                                     info@baharnani.com
                                 </a>
                                 , or by mail to Al Quoz – Al Quoz 3 – Dubai, Dubai, إمارة دبيّ
                                 49757, United Arab Emirates.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 These Legal Terms constitute a legally binding agreement made
                                 between you, whether personally or on behalf of an entity (&quot;you&quot;),
                                 and Baharnani Advertising L.L.C, concerning your access to and use
@@ -83,7 +83,7 @@ const TermsAndConditionClient = () => {
                                     DISCONTINUE USE IMMEDIATELY.
                                 </strong>
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 We will provide you with prior notice of any scheduled changes to
                                 the Services you are using. The modified Legal Terms will become
                                 effective upon posting or notifying you by info@baharnani.com, as
@@ -91,7 +91,7 @@ const TermsAndConditionClient = () => {
                                 after the effective date of any changes, you agree to be bound by
                                 the modified terms.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 All users who are minors in the jurisdiction in which they reside
                                 (generally under the age of 18) must have the permission of, and
                                 be directly supervised by, their parent or guardian to use the
@@ -99,18 +99,18 @@ const TermsAndConditionClient = () => {
                                 guardian read and agree to these Legal Terms prior to you using
                                 the Services.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 We recommend that you print a copy of these Legal Terms for your
                                 records.
                             </p>
                         </section>
 
                         {/* Section 1: Our Services */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 1. OUR SERVICES
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 The information provided when using the Services is not intended
                                 for distribution to or use by any person or entity in any
                                 jurisdiction or country where such distribution or use would be
@@ -124,14 +124,14 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 2: Intellectual Property Rights */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 2. INTELLECTUAL PROPERTY RIGHTS
                             </h2>
-                            <h3 className="text-xl sm:text-2xl md:text-3xl font-sentient font-semibold text-textcolor mb-3 md:mb-4 mt-4">
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-ink mb-3 md:mb-4 mt-4">
                                 Our intellectual property
                             </h3>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 We are the owner or the licensee of all intellectual property
                                 rights in our Services, including all source code, databases,
                                 functionality, software, website designs, audio, video, text,
@@ -139,37 +139,37 @@ const TermsAndConditionClient = () => {
                                 &quot;Content&quot;), as well as the trademarks, service marks, and logos
                                 contained therein (the &quot;Marks&quot;).
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 Our Content and Marks are protected by copyright and trademark
                                 laws (and various other intellectual property rights and unfair
                                 competition laws) and treaties in the United States and around the
                                 world.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 The Content and Marks are provided in or through the Services &quot;AS
                                 IS&quot; for your personal, non-commercial use or internal business
                                 purpose only.
                             </p>
-                            <h3 className="text-xl sm:text-2xl md:text-3xl font-sentient font-semibold text-textcolor mb-3 md:mb-4 mt-6">
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-ink mb-3 md:mb-4 mt-6">
                                 Your use of our Services
                             </h3>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 Subject to your compliance with these Legal Terms, including the
                                 &quot;PROHIBITED ACTIVITIES&quot; section below, we grant you a
                                 non-exclusive, non-transferable, revocable license to:
                             </p>
-                            <ul className="list-disc list-inside space-y-2 text-base md:text-lg font-switzer text-textcolor leading-relaxed ml-4 mb-4">
+                            <ul className="mb-4 ml-4 list-inside list-disc space-y-2 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 <li>access the Services; and</li>
                                 <li>
                                     download or print a copy of any portion of the Content to which
                                     you have properly gained access.
                                 </li>
                             </ul>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 solely for your personal, non-commercial use or internal business
                                 purpose.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 Except as set out in this section or elsewhere in our Legal Terms,
                                 no part of the Services and no Content or Marks may be copied,
                                 reproduced, aggregated, republished, uploaded, posted, publicly
@@ -177,13 +177,13 @@ const TermsAndConditionClient = () => {
                                 licensed, or otherwise exploited for any commercial purpose
                                 whatsoever, without our express prior written permission.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 If you wish to make any use of the Services, Content, or Marks
                                 other than as set out in this section or elsewhere in our Legal
                                 Terms, please address your request to:{" "}
                                 <a
                                     href="mailto:info@baharnani.com"
-                                    className="text-[#0f5c85] hover:underline "
+                                    className="text-brand-accent underline-offset-2 hover:underline "
                                 >
                                     info@baharnani.com
                                 </a>
@@ -194,25 +194,25 @@ const TermsAndConditionClient = () => {
                                 appears or is visible on posting, reproducing, or displaying our
                                 Content.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 We reserve all rights not expressly granted to you in and to the
                                 Services, Content, and Marks.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 Any breach of these Intellectual Property Rights will constitute a
                                 material breach of our Legal Terms and your right to use our
                                 Services will terminate immediately.
                             </p>
-                            <h3 className="text-xl sm:text-2xl md:text-3xl font-sentient font-semibold text-textcolor mb-3 md:mb-4 mt-6">
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-ink mb-3 md:mb-4 mt-6">
                                 Your submissions and contributions
                             </h3>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 Please review this section and the &quot;PROHIBITED ACTIVITIES&quot; section
                                 carefully prior to using our Services to understand the (a) rights
                                 you give us and (b) obligations you have when you post or upload
                                 any content through the Services.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 <strong>Submissions:</strong> By directly sending us any question,
                                 comment, suggestion, idea, feedback, or other information about
                                 the Services (&quot;Submissions&quot;), you agree to assign to us all
@@ -221,7 +221,7 @@ const TermsAndConditionClient = () => {
                                 and dissemination for any lawful purpose, commercial or otherwise,
                                 without acknowledgment or compensation to you.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 <strong>Contributions:</strong> The Services may invite you to
                                 chat, contribute to, or participate in blogs, message boards,
                                 online forums, and other functionality during which you may
@@ -233,11 +233,11 @@ const TermsAndConditionClient = () => {
                                 (&quot;Contributions&quot;). Any Submission that is publicly posted shall
                                 also be treated as a Contribution.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 You understand that Contributions may be viewable by other users
                                 of the Services.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 <strong>
                                     When you post Contributions, you grant us a license (including
                                     use of your name, trademarks, and logos):
@@ -255,20 +255,20 @@ const TermsAndConditionClient = () => {
                                 section. Our use and distribution may occur in any media formats
                                 and through any media channels.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 This license includes our use of your name, company name, and
                                 franchise name, as applicable, and any of the trademarks, service
                                 marks, trade names, logos, and personal and commercial images you
                                 provide.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 <strong>You are responsible for what you post or upload:</strong>{" "}
                                 By sending us Submissions and/or posting Contributions through any
                                 part of the Services or making Contributions accessible through
                                 the Services by linking your account through the Services to any
                                 of your social networking accounts, you:
                             </p>
-                            <ul className="list-disc list-inside space-y-2 text-base md:text-lg font-switzer text-textcolor leading-relaxed ml-4 mb-4">
+                            <ul className="mb-4 ml-4 list-inside list-disc space-y-2 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 <li>
                                     confirm that you have read and agree with our &quot;PROHIBITED
                                     ACTIVITIES&quot; and will not post, send, publish, upload, or
@@ -294,14 +294,14 @@ const TermsAndConditionClient = () => {
                                     do not constitute confidential information.
                                 </li>
                             </ul>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 You are solely responsible for your Submissions and/or
                                 Contributions and you expressly agree to reimburse us for any and
                                 all losses that we may suffer because of your breach of (a) this
                                 section, (b) any third party&apos;s intellectual property rights, or
                                 (c) applicable law.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 <strong>We may remove or edit your Content:</strong> Although we
                                 have no obligation to monitor any Contributions, we shall have the
                                 right to remove or edit any Contributions at any time without
@@ -313,11 +313,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 3: User Representations */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 3. USER REPRESENTATIONS
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 By using the Services, you represent and warrant that: (1) all
                                 registration information you submit will be true, accurate,
                                 current, and complete; (2) you will maintain the accuracy of such
@@ -331,7 +331,7 @@ const TermsAndConditionClient = () => {
                                 any illegal or unauthorized purpose; and (7) your use of the
                                 Services will not violate any applicable law or regulation.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 If you provide any information that is untrue, inaccurate, not
                                 current, or incomplete, we have the right to suspend or terminate
                                 your account and refuse any and all current or future use of the
@@ -340,11 +340,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 4: User Registration */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 4. USER REGISTRATION
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 You may be required to register to use the Services. You agree to
                                 keep your password confidential and will be responsible for all
                                 use of your account and password. We reserve the right to remove,
@@ -355,20 +355,20 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 5: Prohibited Activities */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 5. PROHIBITED ACTIVITIES
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 You may not access or use the Services for any purpose other than
                                 that for which we make the Services available. The Services may
                                 not be used in connection with any commercial endeavors except
                                 those that are specifically endorsed or approved by us.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 As a user of the Services, you agree not to:
                             </p>
-                            <ul className="list-disc list-inside space-y-2 text-base md:text-lg font-switzer text-textcolor leading-relaxed ml-4">
+                            <ul className="list-disc list-inside space-y-2 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7 ml-4">
                                 <li>
                                     Systematically retrieve data or other content from the Services
                                     to create or compile, directly or indirectly, a collection,
@@ -490,11 +490,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 6: User Generated Contributions */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 6. USER GENERATED CONTRIBUTIONS
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 The Services may invite you to chat, contribute to, or participate
                                 in blogs, message boards, online forums, and other functionality,
                                 and may provide you with the opportunity to create, submit, post,
@@ -509,7 +509,7 @@ const TermsAndConditionClient = () => {
                                 available any Contributions, you thereby represent and warrant
                                 that:
                             </p>
-                            <ul className="list-disc list-inside space-y-2 text-base md:text-lg font-switzer text-textcolor leading-relaxed ml-4">
+                            <ul className="list-disc list-inside space-y-2 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7 ml-4">
                                 <li>
                                     The creation, distribution, transmission, public display, or
                                     performance, and the accessing, downloading, or copying of your
@@ -578,7 +578,7 @@ const TermsAndConditionClient = () => {
                                     applicable law or regulation.
                                 </li>
                             </ul>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mt-4">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7 mt-4">
                                 Any use of the Services in violation of the foregoing violates
                                 these Legal Terms and may result in, among other things,
                                 termination or suspension of your rights to use the Services.
@@ -586,11 +586,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 7: Contribution License */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 7. CONTRIBUTION LICENSE
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 By posting your Contributions to any part of the Services, you
                                 automatically grant, and you represent and warrant that you have
                                 the right to grant, to us an unrestricted, unlimited, irrevocable,
@@ -606,7 +606,7 @@ const TermsAndConditionClient = () => {
                                 foregoing. The use and distribution may occur in any media formats
                                 and through any media channels.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 This license will apply to any form, media, or technology now
                                 known or hereafter developed, and includes our use of your name,
                                 company name, and franchise name, as applicable, and any of the
@@ -615,7 +615,7 @@ const TermsAndConditionClient = () => {
                                 Contributions, and you warrant that moral rights have not
                                 otherwise been asserted in your Contributions.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 We do not assert any ownership over your Contributions. You retain
                                 full ownership of all of your Contributions and any intellectual
                                 property rights or other proprietary rights associated with your
@@ -626,7 +626,7 @@ const TermsAndConditionClient = () => {
                                 and all responsibility and to refrain from any legal action
                                 against us regarding your Contributions.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 We have the right, in our sole and absolute discretion, (1) to
                                 edit, redact, or otherwise change any Contributions; (2) to
                                 re-categorize any Contributions to place them in more appropriate
@@ -637,11 +637,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 8: Guidelines for Reviews */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 8. GUIDELINES FOR REVIEWS
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 We may provide you areas on the Services to leave reviews or
                                 ratings. When posting a review, you must comply with the following
                                 criteria: (1) you should have firsthand experience with the
@@ -657,7 +657,7 @@ const TermsAndConditionClient = () => {
                                 statements; and (8) you may not organize a campaign encouraging
                                 others to post reviews, whether positive or negative.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 We may accept, reject, or remove reviews in our sole discretion.
                                 We have absolutely no obligation to screen reviews or to delete
                                 reviews, even if anyone considers reviews objectionable or
@@ -674,11 +674,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 9: Services Management */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 9. SERVICES MANAGEMENT
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 We reserve the right, but not the obligation, to: (1) monitor the
                                 Services for violations of these Legal Terms; (2) take appropriate
                                 legal action against anyone who, in our sole discretion, violates
@@ -697,16 +697,16 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 10: Privacy Policy */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 10. PRIVACY POLICY
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 We care about data privacy and security. Please review our Privacy
                                 Policy:{" "}
                                 <a
                                     href="https://corporategiftsdubaii.ae/privacy-policy/"
-                                    className="text-[#0f5c85] hover:underline "
+                                    className="text-brand-accent underline-offset-2 hover:underline "
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
@@ -726,11 +726,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 11: Term and Termination */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 11. TERM AND TERMINATION
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 These Legal Terms shall remain in full force and effect while you
                                 use the Services.{" "}
                                 <strong>
@@ -746,7 +746,7 @@ const TermsAndConditionClient = () => {
                                     WITHOUT WARNING, IN OUR SOLE DISCRETION.
                                 </strong>
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 If we terminate or suspend your account for any reason, you are
                                 prohibited from registering and creating a new account under your
                                 name, a fake or borrowed name, or the name of any third party,
@@ -758,11 +758,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 12: Modifications and Interruptions */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 12. MODIFICATIONS AND INTERRUPTIONS
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 We reserve the right to change, modify, or remove the contents of
                                 the Services at any time or for any reason at our sole discretion
                                 without notice. However, we have no obligation to update any
@@ -770,7 +770,7 @@ const TermsAndConditionClient = () => {
                                 third party for any modification, price change, suspension, or
                                 discontinuance of the Services.
                             </p>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 We cannot guarantee the Services will be available at all times.
                                 We may experience hardware, software, or other problems or need to
                                 perform maintenance related to the Services, resulting in
@@ -787,11 +787,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 13: Governing Law */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 13. GOVERNING LAW
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 These Legal Terms shall be governed by and defined following the
                                 laws of the United Arab Emirates. Baharnani Advertising L.L.C and
                                 yourself irrevocably consent that the courts of the United Arab
@@ -801,14 +801,14 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 14: Dispute Resolution */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 14. DISPUTE RESOLUTION
                             </h2>
-                            <h3 className="text-xl sm:text-2xl md:text-3xl font-sentient font-semibold text-textcolor mb-3 md:mb-4 mt-4">
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-ink mb-3 md:mb-4 mt-4">
                                 Informal Negotiations
                             </h3>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 To expedite resolution and control the cost of any dispute,
                                 controversy, or claim related to these Legal Terms (each a
                                 &quot;Dispute&quot; and collectively, the &quot;Disputes&quot;) brought by either you
@@ -819,10 +819,10 @@ const TermsAndConditionClient = () => {
                                 informal negotiations commence upon written notice from one Party
                                 to the other Party.
                             </p>
-                            <h3 className="text-xl sm:text-2xl md:text-3xl font-sentient font-semibold text-textcolor mb-3 md:mb-4 mt-6">
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-ink mb-3 md:mb-4 mt-6">
                                 Binding Arbitration
                             </h3>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 Any dispute arising out of or in connection with these Legal
                                 Terms, including any question regarding its existence, validity,
                                 or termination, shall be referred to and finally resolved by the
@@ -836,10 +836,10 @@ const TermsAndConditionClient = () => {
                                 these Legal Terms shall be substantive law of the United Arab
                                 Emirates.
                             </p>
-                            <h3 className="text-xl sm:text-2xl md:text-3xl font-sentient font-semibold text-textcolor mb-3 md:mb-4 mt-6">
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-ink mb-3 md:mb-4 mt-6">
                                 Restrictions
                             </h3>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 The Parties agree that any arbitration shall be limited to the
                                 Dispute between the Parties individually. To the full extent
                                 permitted by law, (a) no arbitration shall be joined with any
@@ -849,10 +849,10 @@ const TermsAndConditionClient = () => {
                                 for any Dispute to be brought in a purported representative
                                 capacity on behalf of the general public or any other persons.
                             </p>
-                            <h3 className="text-xl sm:text-2xl md:text-3xl font-sentient font-semibold text-textcolor mb-3 md:mb-4 mt-6">
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-ink mb-3 md:mb-4 mt-6">
                                 Exceptions to Informal Negotiations and Arbitration
                             </h3>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 The Parties agree that the following Disputes are not subject to
                                 the above provisions concerning informal negotiations binding
                                 arbitration: (a) any Disputes seeking to enforce or protect, or
@@ -870,11 +870,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 15: Corrections */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 15. CORRECTIONS
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 There may be information on the Services that contains
                                 typographical errors, inaccuracies, or omissions, including
                                 descriptions, pricing, availability, and various other
@@ -885,11 +885,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 16: Disclaimer */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 16. DISCLAIMER
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 <strong>
                                     THE SERVICES ARE PROVIDED ON AN AS-IS AND AS-AVAILABLE BASIS.
                                     YOU AGREE THAT YOUR USE OF THE SERVICES WILL BE AT YOUR SOLE
@@ -928,11 +928,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 17: Limitations of Liability */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 17. LIMITATIONS OF LIABILITY
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 <strong>
                                     IN NO EVENT WILL WE OR OUR DIRECTORS, EMPLOYEES, OR AGENTS BE
                                     LIABLE TO YOU OR ANY THIRD PARTY FOR ANY DIRECT, INDIRECT,
@@ -945,11 +945,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 18: Indemnification */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 18. INDEMNIFICATION
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 You agree to defend, indemnify, and hold us harmless, including
                                 our subsidiaries, affiliates, and all of our respective officers,
                                 agents, partners, and employees, from and against any loss,
@@ -972,11 +972,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 19: User Data */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 19. USER DATA
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 We will maintain certain data that you transmit to the Services
                                 for the purpose of managing the performance of the Services, as
                                 well as data relating to your use of the Services. Although we
@@ -990,11 +990,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 20: Electronic Communications, Transactions, and Signatures */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 20. ELECTRONIC COMMUNICATIONS, TRANSACTIONS, AND SIGNATURES
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 Visiting the Services, sending us emails, and completing online
                                 forms constitute electronic communications. You consent to receive
                                 electronic communications, and you agree that all agreements,
@@ -1016,35 +1016,35 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 21: SMS Text Messaging */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 21. SMS TEXT MESSAGING
                             </h2>
-                            <h3 className="text-xl sm:text-2xl md:text-3xl font-sentient font-semibold text-textcolor mb-3 md:mb-4 mt-4">
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-ink mb-3 md:mb-4 mt-4">
                                 Opting Out
                             </h3>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 If at any time you wish to stop receiving SMS messages from us,
                                 simply reply to the text with &quot;STOP.&quot; You may receive an SMS
                                 message confirming your opt out.
                             </p>
-                            <h3 className="text-xl sm:text-2xl md:text-3xl font-sentient font-semibold text-textcolor mb-3 md:mb-4 mt-6">
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-ink mb-3 md:mb-4 mt-6">
                                 Message and Data Rates
                             </h3>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-4">
+                            <p className="mb-4 text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 Please be aware that message and data rates may apply to any SMS
                                 messages sent or received. The rates are determined by your
                                 carrier and the specifics of your mobile plan.
                             </p>
-                            <h3 className="text-xl sm:text-2xl md:text-3xl font-sentient font-semibold text-textcolor mb-3 md:mb-4 mt-6">
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-ink mb-3 md:mb-4 mt-6">
                                 Support
                             </h3>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 If you have any questions or need assistance regarding our SMS
                                 communications, please email us at{" "}
                                 <a
                                     href="mailto:info@baharnani.com"
-                                    className="text-[#0f5c85] hover:underline "
+                                    className="text-brand-accent underline-offset-2 hover:underline "
                                 >
                                     info@baharnani.com
                                 </a>{" "}
@@ -1053,11 +1053,11 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 22: Miscellaneous */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 22. MISCELLANEOUS
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7">
                                 These Legal Terms and any policies or operating rules posted by us
                                 on the Services or in respect to the Services constitute the
                                 entire agreement and understanding between you and us. Our failure
@@ -1083,30 +1083,30 @@ const TermsAndConditionClient = () => {
                         </section>
 
                         {/* Section 23: Contact Us */}
-                        <section className="mb-10 md:mb-12">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor mb-4 md:mb-6">
+                        <section className="py-10 md:py-12">
+                            <h2 className="mb-4 text-xl font-semibold text-ink sm:mb-6 sm:text-2xl md:text-3xl">
                                 23. CONTACT US
                             </h2>
-                            <p className="text-base md:text-lg font-switzer text-textcolor leading-relaxed mb-6">
+                            <p className="text-sm leading-relaxed text-body sm:text-base md:text-[15px] md:leading-7 mb-6">
                                 In order to resolve a complaint regarding the Services or to
                                 receive further information regarding use of the Services, please
                                 contact us at:
                             </p>
-                            <div className=" border bg-neutral-100 border-neutral-300 rounded-lg p-6 md:p-8 ring ring-neutral-200 ring-offset-2 md:ring-offset-4">
-                                <p className="text-lg md:text-xl font-sentient font-semibold text-textcolor mb-4">
+                            <div>
+                                <p className="mb-4 text-lg font-semibold text-ink md:text-xl">
                                     Baharnani Advertising L.L.C
                                 </p>
-                                <p className="text-base md:text-lg font-switzer text-textcolor mb-2">
+                                <p className="mb-2 text-sm text-body sm:text-base">
                                     Al Quoz – Al Quoz 3 – Dubai
                                 </p>
-                                <p className="text-base md:text-lg font-switzer text-textcolor mb-2">
+                                <p className="mb-2 text-sm text-body sm:text-base">
                                     Dubai, إمارة دبيّ 49757
                                 </p>
-                                <p className="text-base md:text-lg font-switzer text-textcolor mb-2">
+                                <p className="mb-2 text-sm text-body sm:text-base">
                                     United Arab Emirates
                                 </p>
-                                <p className="text-base md:text-lg font-switzer text-textcolor mb-2 flex items-center gap-2">
-                                    <span className="inline-flex items-center justify-center align-middle w-8 h-8 text-textcolor border border-neutral-300 bg-neutral-100 ring ring-neutral-200 ring-offset-2 rounded-lg p-1">
+                                <p className="mb-2 text-sm text-body sm:text-base flex items-center gap-2">
+                                    <span className="inline-flex size-8 items-center justify-center rounded-lg border border-hairline bg-surface-soft p-1 text-ink">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-phone-outgoing">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2c-8.072 -.49 -14.51 -6.928 -15 -15a2 2 0 0 1 2 -2" />
@@ -1117,13 +1117,13 @@ const TermsAndConditionClient = () => {
                                     <strong>Phone:</strong>{" "}
                                     <a
                                         href="tel:+97143805587"
-                                        className="text-[#0F5C85] font-semibold hover:underline"
+                                        className="font-semibold text-brand-accent underline-offset-2 hover:underline"
                                     >
                                         (+971) 4 380 5587
                                     </a>
                                 </p>
-                                <p className="text-base md:text-lg font-switzer text-textcolor flex items-center gap-2">
-                                    <span className="inline-flex items-center justify-center align-middle w-8 h-8 text-textcolor border border-neutral-300 bg-neutral-100 ring ring-neutral-200 ring-offset-2 rounded-lg p-1">
+                                <p className="text-base md:text-lg text-body flex items-center gap-2">
+                                    <span className="inline-flex size-8 items-center justify-center rounded-lg border border-hairline bg-surface-soft p-1 text-ink">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-mail-share">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M13 19h-8a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v6" />
@@ -1135,7 +1135,7 @@ const TermsAndConditionClient = () => {
                                     <strong>Email:</strong>{" "}
                                     <a
                                         href="mailto:info@baharnani.com"
-                                        className="text-[#0F5C85] font-semibold hover:underline"
+                                        className="font-semibold text-brand-accent underline-offset-2 hover:underline"
                                     >
                                         info@baharnani.com
                                     </a>
@@ -1145,9 +1145,8 @@ const TermsAndConditionClient = () => {
                     </div>
 
                 </div>
-                </Reveal>
-            </RevealSection>
-        </div>
+            </LegalPageContent>
+        </>
     );
 };
 
