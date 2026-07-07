@@ -20,7 +20,8 @@ const homeFeatures = [
     description:
       "We help businesses design custom corporate gifts in Dubai, featuring logo printing, engraving, embossing, packaging, and product personalization for clients, employees, and special events.",
     icon: <LuPackageSearch className="h-5 w-5" />,
-    iconColor: "#A8DDF0",
+    iconBgClass: "bg-[#A8DDF0] dark:bg-[#A8DDF0]/15",
+    iconClass: "text-ink dark:text-[#A8DDF0]",
   },
   {
     id: 2,
@@ -29,7 +30,8 @@ const homeFeatures = [
     description:
       "Explore luxury corporate gifts, smart corporate gifts, branded giveaways, stationery, bags, drinkware, apparel, and premium gift sets for different budgets and occasions.",
     icon: <LuTicketCheck className="h-5 w-5" />,
-    iconColor: "#F9C46B",
+    iconBgClass: "bg-[#F9C46B] dark:bg-[#F9C46B]/15",
+    iconClass: "text-ink dark:text-[#F9C46B]",
   },
   {
     id: 3,
@@ -38,7 +40,8 @@ const homeFeatures = [
     description:
       "Whether you want inexpensive corporate gifts or high-end executive hampers, our team will help you choose practical options according to your quantity, audience, branding style, and delivery requirements.",
     icon: <LuLeaf className="h-5 w-5" />,
-    iconColor: "#94EBC5",
+    iconBgClass: "bg-[#94EBC5] dark:bg-[#94EBC5]/15",
+    iconClass: "text-ink dark:text-[#94EBC5]",
   },
   {
     id: 4,
@@ -47,7 +50,8 @@ const homeFeatures = [
     description:
       "We know the business gifting needs in Dubai for corporate events, exhibitions, festive campaigns, employee rewards, client appreciation and promotional marketing.",
     icon: <LuUsers className="h-5 w-5" />,
-    iconColor: "#F7B6F7",
+    iconBgClass: "bg-[#F7B6F7] dark:bg-[#F7B6F7]/15",
+    iconClass: "text-ink dark:text-[#F7B6F7]",
   },
 ];
 
@@ -141,10 +145,9 @@ export default function HomeWhyChooseUs() {
                 >
                   <div className="mb-4 flex items-center gap-4">
                     <div
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-hairline text-ink"
-                      style={{ backgroundColor: feature.iconColor }}
+                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-hairline ${feature.iconBgClass}`}
                     >
-                      {feature.icon}
+                      <div className={feature.iconClass}>{feature.icon}</div>
                     </div>
                     <span
                       className="text-3xl font-semibold tracking-tight text-muted-soft sm:text-4xl"
