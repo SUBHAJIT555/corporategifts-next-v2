@@ -1,6 +1,6 @@
 'use client';
 import Image from "next/image";
-import useInView from "@/hooks/useInView";
+import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 
 export interface SeoSection {
   heading: string;
@@ -17,11 +17,6 @@ interface AdditionalForSeoProps {
 }
 
 const AdditionalForSeo = ({ sections }: AdditionalForSeoProps) => {
-  const { ref: sectionRef, inView: sectionInView } = useInView<HTMLDivElement>({
-    once: true,
-    rootMargin: "-100px",
-  });
-
   // Normalize to array
   const sectionsArray = Array.isArray(sections) ? sections : [sections];
 
@@ -88,27 +83,21 @@ const AdditionalForSeo = ({ sections }: AdditionalForSeoProps) => {
   };
 
   return (
-    <section
-      ref={sectionRef}
-      className="w-full py-6 sm:py-8 md:py-12 lg:py-16 xl:py-20 2xl:py-24 overflow-x-hidden"
-    >
-      <div className="w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1920px] mx-auto">
+    <section className="w-full py-6 sm:py-8 md:py-12 lg:py-16 xl:py-20 2xl:py-24 overflow-x-hidden">
+      <RevealSection className="w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1920px] mx-auto">
         {sectionsArray.map((section, index) => {
           const imagePosition = section.imagePosition || "right";
           const hasImage = !!section.image;
           const isLast = index === sectionsArray.length - 1;
 
           return (
-            <article
+            <Reveal
               key={index}
-              className={`transition-all duration-700 ease-out ${sectionInView
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-12"
-                } ${isLast
+              animationNum={index}
+              className={`${isLast
                   ? "mb-8 sm:mb-10 md:mb-12 lg:mb-16"
                   : "mb-10 sm:mb-12 md:mb-14 lg:mb-16"
                 } relative overflow-hidden border border-neutral-300 ring ring-neutral-200 ring-offset-4 md:ring-offset-8 rounded-2xl bg-white backdrop-blur-sm p-5 sm:p-6 md:p-8 lg:p-10`}
-              style={{ transitionDelay: `${index * 120}ms` }}
             >
               <div
                 className="absolute inset-0 z-0 pointer-events-none"
@@ -124,13 +113,7 @@ const AdditionalForSeo = ({ sections }: AdditionalForSeoProps) => {
               <div className="relative z-10">
               {/* Image at top if position is top */}
               {hasImage && imagePosition === "top" && (
-                <div
-                  className={`transition-all duration-700 ${sectionInView
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
-                    } mb-6 sm:mb-8 md:mb-10`}
-                  style={{ transitionDelay: `${index * 120 + 100}ms` }}
-                >
+                <div className="mb-6 sm:mb-8 md:mb-10">
                   <Image
                     width={1200}
                     height={700}
@@ -150,13 +133,7 @@ const AdditionalForSeo = ({ sections }: AdditionalForSeoProps) => {
               >
                 {/* Image on left */}
                 {hasImage && imagePosition === "left" && (
-                  <div
-                    className={`transition-all duration-700 ${sectionInView
-                      ? "opacity-100 translate-x-0"
-                      : "opacity-0 -translate-x-8"
-                      } w-full lg:w-1/2 mb-6 lg:mb-0`}
-                    style={{ transitionDelay: `${index * 120 + 100}ms` }}
-                  >
+                  <div className="w-full lg:w-1/2 mb-6 lg:mb-0">
                     <Image
                       width={1200}
                       height={800}
@@ -185,13 +162,7 @@ const AdditionalForSeo = ({ sections }: AdditionalForSeoProps) => {
                   <div className="h-1.5 w-20  bg-[#0F5C85] mb-5 sm:mb-6 md:mb-7" />
 
                   {/* Content Paragraph */}
-                  <div
-                    className={`transition-all duration-700 ${sectionInView
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-8"
-                      } mb-5 sm:mb-6 md:mb-8`}
-                    style={{ transitionDelay: `${index * 120 + 200}ms` }}
-                  >
+                  <div className="mb-5 sm:mb-6 md:mb-8">
                     <p className="text-base sm:text-lg md:text-xl font-switzer text-textcolor leading-relaxed">
                       {section.content}
                     </p>
@@ -199,13 +170,7 @@ const AdditionalForSeo = ({ sections }: AdditionalForSeoProps) => {
 
                   {/* Highlight Line */}
                   {section.highlightLine && (
-                    <div
-                      className={`transition-all duration-700 ${sectionInView
-                        ? "opacity-100 translate-y-0"
-                        : "opacity-0 translate-y-8"
-                        }`}
-                      style={{ transitionDelay: `${index * 120 + 200}ms` }}
-                    >
+                    <div>
                       <p className="rounded-2xl border border-neutral-300 bg-neutral-100 px-4 sm:px-5 md:px-6 py-4 sm:py-5 md:py-6 text-lg sm:text-xl md:text-2xl font-sentient font-semibold text-textcolor italic leading-relaxed">
                         &quot;{section.highlightLine}&quot;
                       </p>
@@ -215,13 +180,7 @@ const AdditionalForSeo = ({ sections }: AdditionalForSeoProps) => {
 
                 {/* Image on right */}
                 {hasImage && imagePosition === "right" && (
-                  <div
-                    className={`transition-all duration-700 ${sectionInView
-                      ? "opacity-100 translate-x-0"
-                      : "opacity-0 translate-x-8"
-                      } w-full lg:w-1/2 mt-6 lg:mt-0`}
-                    style={{ transitionDelay: `${index * 120 + 100}ms` }}
-                  >
+                  <div className="w-full lg:w-1/2 mt-6 lg:mt-0">
                     <Image
                       width={1200}
                       height={800}
@@ -235,13 +194,7 @@ const AdditionalForSeo = ({ sections }: AdditionalForSeoProps) => {
 
               {/* Image at bottom if position is bottom */}
               {hasImage && imagePosition === "bottom" && (
-                <div
-                  className={`transition-all duration-700 ${sectionInView
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
-                    } mt-6 sm:mt-8 md:mt-10`}
-                  style={{ transitionDelay: `${index * 120 + 500}ms` }}
-                >
+                <div className="mt-6 sm:mt-8 md:mt-10">
                   <Image
                     width={1200}
                     height={700}
@@ -252,10 +205,10 @@ const AdditionalForSeo = ({ sections }: AdditionalForSeoProps) => {
                 </div>
               )}
               </div>
-            </article>
+            </Reveal>
           );
         })}
-      </div>
+      </RevealSection>
     </section>
   );
 };

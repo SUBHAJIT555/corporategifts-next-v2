@@ -1,13 +1,8 @@
 'use client';
-import useInViewOnce from "@/hooks/useInView";
 import CommonHero from "@/components/ui/CommonHero";
+import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 
 const TermsAndConditionClient = () => {
-    const { ref: contentRef, inView: isContentInView } =
-        useInViewOnce<HTMLDivElement>({
-            rootMargin: "-50px",
-        });
-
     return (
         <div>
             <CommonHero
@@ -18,13 +13,8 @@ const TermsAndConditionClient = () => {
                 buttonLink="/contact-us"
                 buttonText="Get in Touch"
             />
-            <div
-                ref={contentRef}
-                className={`max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-12 md:py-16 lg:py-20 transition-all duration-700 ease-out ${isContentInView
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
-                    }`}
-            >
+            <RevealSection className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-12 md:py-16 lg:py-20">
+                <Reveal animationNum={0}>
                 <div className="prose prose-lg max-w-none">
                     {/* Last Updated */}
                     <p className="text-sm md:text-base text-textcolor/70 font-switzer mb-8 border border-neutral-300 bg-neutral-100 w-fit px-4 py-2 rounded-xl ring ring-neutral-200 ring-offset-2">
@@ -1154,9 +1144,9 @@ const TermsAndConditionClient = () => {
                         </section>
                     </div>
 
-                    
                 </div>
-            </div>
+                </Reveal>
+            </RevealSection>
         </div>
     );
 };

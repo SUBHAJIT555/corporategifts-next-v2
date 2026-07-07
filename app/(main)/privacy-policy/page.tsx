@@ -1,15 +1,9 @@
 "use client";
 
 import CommonHero from "@/components/ui/CommonHero";
-import useInView from "@/hooks/useInView";
+import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 
 const PrivacyPolicy = () => {
-  const { ref: contentRef, inView: isContentInView } =
-    useInView<HTMLDivElement>({
-      once: true,
-      rootMargin: "-50px",
-    });
-
   return (
     <main className="relative min-h-screen w-full overflow-hidden">
       {/* Dashed Center Fade Grid (sticky background) */}
@@ -70,12 +64,8 @@ const PrivacyPolicy = () => {
           buttonLink="/contact-us"
           buttonText="Get in Touch"
         />
-        <div
-          ref={contentRef}
-          className={`max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-12 md:py-16 lg:py-20 transition-all duration-700 ease-out transform ${
-            isContentInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <RevealSection className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-12 md:py-16 lg:py-20">
+          <Reveal animationNum={0}>
           <div className="prose prose-lg max-w-none">
             {/* Last Updated */}
             <p className="text-sm md:text-base text-neutral-700 font-switzer mb-8 border border-neutral-300 bg-neutral-100 w-fit ring ring-neutral-200 ring-offset-2 rounded-xl px-4 py-2">
@@ -575,7 +565,8 @@ const PrivacyPolicy = () => {
 
 
           </div>
-        </div>
+          </Reveal>
+        </RevealSection>
       </div>
     </main>
   );

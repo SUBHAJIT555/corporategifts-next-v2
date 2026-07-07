@@ -6,9 +6,19 @@ interface QuantitySelectorProps {
     onQuantityChange: (newQuantity: number) => void;
     min?: number;
     max?: number;
+    className?: string;
+    variant?: "default" | "cal";
 }
 
-export const QuantitySelector = ({ quantity, onQuantityChange, min = 1, max = 999 }: QuantitySelectorProps) => {
+export const QuantitySelector = ({
+    quantity,
+    onQuantityChange,
+    min = 1,
+    max = 999,
+    className,
+    variant = "default",
+}: QuantitySelectorProps) => {
+    const isCal = variant === "cal";
     const handleDecrease = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (quantity > min) onQuantityChange(quantity - 1);
@@ -27,16 +37,25 @@ export const QuantitySelector = ({ quantity, onQuantityChange, min = 1, max = 99
     };
 
     return (
-        <div className="flex items-center rounded-xl bg-neutral-100 overflow-hidden border border-gray-300 select-none">
+        <div
+            className={cn(
+                "flex select-none items-center overflow-hidden border",
+                isCal
+                    ? "rounded-lg border-hairline bg-canvas"
+                    : "rounded-xl border-gray-300 bg-neutral-100",
+                className
+            )}
+        >
             <button
                 onClick={handleDecrease}
                 disabled={quantity <= min}
                 className={cn(
-                    "w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors",
-                    quantity <= min && "opacity-50 cursor-not-allowed"
+                    "flex h-9 w-9 items-center justify-center transition-colors sm:h-10 sm:w-10",
+                    isCal ? "text-ink hover:bg-surface-soft" : "hover:bg-gray-100",
+                    quantity <= min && "cursor-not-allowed opacity-50"
                 )}
             >
-                <HiMinus className="w-4 h-4 text-textcolor" />
+                <HiMinus className={cn("h-4 w-4", isCal ? "text-ink" : "text-textcolor")} />
             </button>
 
             <input
@@ -45,18 +64,24 @@ export const QuantitySelector = ({ quantity, onQuantityChange, min = 1, max = 99
                 onChange={handleInputChange}
                 min={min}
                 max={max}
-                className=" flex-1 text-center font-switzer text-textcolor border-x border-gray-300 no-spinner outline-none focus:outline-none focus:ring-0"
+                className={cn(
+                    "no-spinner flex-1 border-x text-center outline-none focus:outline-none focus:ring-0",
+                    isCal
+                        ? "border-hairline font-medium text-ink"
+                        : "border-gray-300 font-switzer text-textcolor"
+                )}
             />
 
             <button
                 onClick={handleIncrease}
                 disabled={quantity >= max}
                 className={cn(
-                    "w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors",
-                    quantity >= max && "opacity-50 cursor-not-allowed"
+                    "flex h-9 w-9 items-center justify-center transition-colors sm:h-10 sm:w-10",
+                    isCal ? "text-ink hover:bg-surface-soft" : "hover:bg-gray-100",
+                    quantity >= max && "cursor-not-allowed opacity-50"
                 )}
             >
-                <HiPlus className="w-4 h-4 text-textcolor" />
+                <HiPlus className={cn("h-4 w-4", isCal ? "text-ink" : "text-textcolor")} />
             </button>
         </div>
     );

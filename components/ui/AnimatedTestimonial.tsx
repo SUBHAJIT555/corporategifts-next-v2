@@ -1,9 +1,8 @@
 "use client";
-// import { IconArrowLeft, IconArrowRight } from "@/components/icons";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
-// import { BsChatQuote } from "react-icons/bs";
+import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 
 type Testimonial = {
     quote: string;
@@ -39,13 +38,14 @@ export const AnimatedTestimonials = ({
         }
     }, [autoplay, handleNext]);
     return (
-        <div>
-            <div>
+        <RevealSection>
+            <Reveal animationNum={0}>
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor text-center">
                     What  {" "}
                     Our Clients Say
                 </h2>
-            </div>
+            </Reveal>
+            <Reveal animationNum={1}>
             <div className="mx-auto max-w-sm px-4 py-10 font-sans antialiased md:max-w-4xl md:px-8 lg:px-12">
                 <div className="relative grid grid-cols-1 md:gap-20 md:grid-cols-2">
                     <div>
@@ -202,6 +202,7 @@ export const AnimatedTestimonials = ({
                     </div>
                 </div>
             </div>
-        </div>
+            </Reveal>
+        </RevealSection>
     );
 };

@@ -1,129 +1,236 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Gift, HelpCircle } from "lucide-react";
 import { ProductsApi } from "@/lib/api/endpoints";
 import type { PaginatedProductsResponse, ProductCategory } from "@/lib/api/types";
 import ProductGrid from "@/components/common/ProductGrid";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
-import useInView from "@/hooks/useInView";
+import FloatingCategoryMenu from "@/components/ui/FloatingCategoryMenu";
+import {
+  Reveal,
+  RevealSection,
+} from "@/components/ui/timeline-animation";
+import { candyDarkButtonClasses } from "@/components/ui/candy-button";
+import { cn } from "@/lib/utilts";
 
 const PER_PAGE = 12;
 
 function BestSellingHelpCta() {
-    const { ref, inView } = useInView<HTMLDivElement>({ threshold: 0.15 });
-
-    return (
-        <div className="w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 max-w-[1920px] mx-auto pb-8 sm:pb-10 md:pb-12 lg:pb-16">
-            <div
-                ref={ref}
-                className={`relative mx-auto max-w-5xl overflow-hidden rounded-2xl border border-neutral-300 bg-white shadow-lg ring ring-neutral-300 ring-offset-2 md:ring-offset-4 transition-all duration-700 ease-out  ${
-                    inView
-                        ? "opacity-100 translate-y-0"
-                        : "opacity-0 translate-y-8"
-                }`}
-            >
-                <div
-                    className="pointer-events-none absolute inset-0 opacity-50"
-                    style={{
-                        backgroundImage: `
-        linear-gradient(to right, #e7e5e4 1px, transparent 1px),
-        linear-gradient(to bottom, #e7e5e4 1px, transparent 1px)
-      `,
-                        backgroundSize: "5px 5px",
-                    }}
-                    aria-hidden="true"
-                />
-
-                <div className="relative z-10 flex flex-col items-center gap-4 px-5 py-8 text-center sm:gap-5 sm:px-8 sm:py-10 md:gap-6 md:px-10 md:py-12">
-                    <p className="inline-flex w-fit items-center rounded-xl border border-neutral-300 bg-neutral-100 px-3 py-1 font-switzer text-xs font-semibold uppercase tracking-[0.14em] text-[#0F5C85] ring ring-neutral-300 ring-offset-2">
-                        Gift guidance
-                    </p>
-                    <h3 className="font-sentient text-xl font-bold text-textcolor sm:text-2xl md:text-3xl leading-tight">
-                        Not sure what to choose?
-                    </h3>
-                    <p className="max-w-2xl font-switzer text-sm font-medium leading-relaxed text-textcolor/90 sm:text-base md:text-lg">
-                        Our team can recommend smart corporate gifts, luxury gift sets,
-                        affordable promotional gifts, or customized corporate gifts based on
-                        your budget, audience, quantity, and delivery timeline.
-                    </p>
-                    <NoPrefetchLink href="/contact-us" className="mt-1 sm:mt-2">
-                        <button
-                            type="button"
-                            className="cursor-pointer rounded-xl bg-[#0f5c85] px-8 py-3 font-switzer text-sm font-medium tracking-wider text-white shadow-lg transition-colors hover:bg-[#0f5c85]/90 sm:px-10 sm:py-3.5 sm:text-base ring ring-neutral-300 ring-offset-2 md:ring-offset-4"
-                        >
-                            Contact Us Now
-                        </button>
-                    </NoPrefetchLink>
-                </div>
-            </div>
+  return (
+    <div className="mt-10 overflow-hidden border border-hairline border-dotted bg-canvas sm:mt-12">
+      <div className="relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+          <div
+            className="absolute bottom-0 left-1/2 h-[60%] w-[150%] opacity-50"
+            style={{
+              backgroundImage:
+                "linear-gradient(var(--cal-hairline) 1px, transparent 1px), linear-gradient(90deg, var(--cal-hairline) 1px, transparent 1px)",
+              backgroundSize: "40px 25px",
+              transform: "translateX(-50%) perspective(300px) rotateX(45deg)",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, transparent 0%, #000 30%, #000 100%)",
+              maskImage:
+                "linear-gradient(to bottom, transparent 0%, #000 30%, #000 100%)",
+              pointerEvents: "none",
+            }}
+          />
         </div>
-    );
+
+        <div className="relative z-10 grid grid-cols-1 gap-6 p-6 sm:p-8 lg:grid-cols-12 lg:items-center lg:gap-10">
+          <div className="lg:col-span-5">
+            <span className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-3 py-1 text-caption font-medium text-body">
+              <HelpCircle className="h-3.5 w-3.5 text-brand-accent" />
+              Gift guidance
+            </span>
+
+            <h3 className="mt-4 text-display-sm text-ink">
+              Not sure what to choose?
+            </h3>
+          </div>
+
+          <div className="flex flex-col gap-5 lg:col-span-7 lg:items-end">
+            <p className="text-body-md text-muted lg:text-right lg:text-[17px] lg:leading-7">
+              Our team can recommend smart corporate gifts, luxury gift sets,
+              affordable promotional gifts, or customized corporate gifts based on
+              your budget, audience, quantity, and delivery timeline.
+            </p>
+
+            <NoPrefetchLink
+              href="/contact-us"
+              className={cn(candyDarkButtonClasses("w-full sm:w-auto"), "shrink-0")}
+            >
+              Contact Us Now
+            </NoPrefetchLink>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 type Props = {
-    initial: PaginatedProductsResponse;
-    categories: ProductCategory[];
-    byCategory: Record<string, PaginatedProductsResponse>;
+  initial: PaginatedProductsResponse;
+  categories: ProductCategory[];
+  byCategory: Record<string, PaginatedProductsResponse>;
 };
 
-export default function BestSellingClient({ initial, categories, byCategory }: Props) {
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-    const [overrideProductData, setOverrideProductData] = useState<PaginatedProductsResponse | null>(null);
-    const [isLoadingPage, setIsLoadingPage] = useState(false);
+export default function BestSellingClient({
+  initial,
+  categories,
+  byCategory,
+}: Props) {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [overrideProductData, setOverrideProductData] =
+    useState<PaginatedProductsResponse | null>(null);
+  const [isLoadingPage, setIsLoadingPage] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
+  const gridRef = useRef<HTMLDivElement>(null);
 
-    const setCategory = useCallback((slug: string | null) => {
-        setSelectedCategory(slug);
-        setOverrideProductData(null);
-    }, []);
+  const setCategory = useCallback((slug: string | null) => {
+    setSelectedCategory(slug);
+    setOverrideProductData(null);
+  }, []);
 
-    const productData = useMemo(() => {
-        if (overrideProductData) return overrideProductData;
-        if (!selectedCategory) return initial;
-        return byCategory[selectedCategory] ?? { products: [], total: 0, total_pages: 0, page: 1, per_page: PER_PAGE };
-    }, [initial, byCategory, selectedCategory, overrideProductData]);
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
 
-    const onPageChange = useCallback(
-        async (newPage: number) => {
-            if (newPage < 1) return;
-            if (newPage === 1) {
-                setOverrideProductData(null);
-                return;
-            }
-            setIsLoadingPage(true);
-            try {
-                const data = selectedCategory
-                    ? await ProductsApi.byCategory({
-                        categorySlug: selectedCategory,
-                        page: newPage,
-                        per_page: PER_PAGE,
-                    })
-                    : await ProductsApi.all({ page: newPage, per_page: PER_PAGE });
-                setOverrideProductData(data);
-            } catch {
-                setOverrideProductData(null);
-            } finally {
-                setIsLoadingPage(false);
-            }
-        },
-        [selectedCategory]
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setMenuVisible(entry.isIntersecting && entry.intersectionRatio >= 0.2);
+      },
+      {
+        threshold: [0, 0.2, 0.4],
+        rootMargin: "-72px 0px -72px 0px",
+      }
     );
 
+    observer.observe(grid);
+    return () => observer.disconnect();
+  }, []);
+
+  const safeCategories = useMemo(
+    () => (Array.isArray(categories) ? categories : []),
+    [categories]
+  );
+
+  const categoryMenuItems = useMemo(
+    () => [
+      {
+        label: "All",
+        active: selectedCategory === null,
+        onClick: () => setCategory(null),
+      },
+      ...safeCategories.map((category) => ({
+        label: category.name,
+        active: selectedCategory === category.slug,
+        onClick: () => setCategory(category.slug),
+      })),
+    ],
+    [safeCategories, selectedCategory, setCategory]
+  );
+
+  const productData = useMemo(() => {
+    if (overrideProductData) return overrideProductData;
+    if (!selectedCategory) return initial;
     return (
-        <>
-            <ProductGrid
-                productData={productData}
-                categories={categories}
-                isLoading={isLoadingPage}
-                error={null}
-                selectedCategory={selectedCategory}
-                setSelectedCategory={setCategory}
-                onPageChange={onPageChange}
-                title="Best-Selling Customized Corporate Gifts in Dubai."
-                subtitle="Browse our most requested customized corporate gifts in Dubai, including branded pens, notebooks, smart gadgets, drinkware, bags, gift sets, and promotional giveaways. These products are suitable for client gifting, employee welcome kits, trade shows, conferences, festive campaigns, and corporate events."
-                productType="custom"
-                id="best-selling"
-            />
-            <BestSellingHelpCta />
-        </>
+      byCategory[selectedCategory] ?? {
+        products: [],
+        total: 0,
+        total_pages: 0,
+        page: 1,
+        per_page: PER_PAGE,
+      }
     );
+  }, [initial, byCategory, selectedCategory, overrideProductData]);
+
+  const onPageChange = useCallback(
+    async (newPage: number) => {
+      if (newPage < 1) return;
+      if (newPage === 1) {
+        setOverrideProductData(null);
+        return;
+      }
+      setIsLoadingPage(true);
+      try {
+        const data = selectedCategory
+          ? await ProductsApi.byCategory({
+              categorySlug: selectedCategory,
+              page: newPage,
+              per_page: PER_PAGE,
+            })
+          : await ProductsApi.all({ page: newPage, per_page: PER_PAGE });
+        setOverrideProductData(data);
+      } catch {
+        setOverrideProductData(null);
+      } finally {
+        setIsLoadingPage(false);
+      }
+    },
+    [selectedCategory]
+  );
+
+  return (
+    <section
+      id="best-selling"
+      className="relative w-full overflow-x-hidden bg-canvas"
+    >
+      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-16 sm:px-6 sm:py-20 lg:py-24">
+        {/* Header */}
+        <Reveal
+          animationNum={0}
+          className="mb-10 grid grid-cols-1 gap-6 sm:mb-12 lg:grid-cols-12 lg:gap-10"
+        >
+          <div className="lg:col-span-5">
+            <span className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-3 py-1 text-caption font-medium text-body shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.12)] dark:shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.35)]">
+              <Gift className="h-3.5 w-3.5 text-brand-accent" />
+              Best Selling
+            </span>
+
+            <h2 className="mt-4 text-display-md text-ink">
+              Best-Selling Customized Corporate Gifts in Dubai.
+            </h2>
+          </div>
+
+          <div className="flex items-end lg:col-span-7">
+            <p className="text-body-md text-muted lg:text-[17px] lg:leading-7">
+              Browse our most requested customized corporate gifts in Dubai,
+              including branded pens, notebooks, smart gadgets, drinkware, bags,
+              gift sets, and promotional giveaways. These products are suitable
+              for client gifting, employee welcome kits, trade shows,
+              conferences, festive campaigns, and corporate events.
+            </p>
+          </div>
+        </Reveal>
+
+        {/* Product grid panel — filter button only visible while this block is in view */}
+        <Reveal animationNum={1}>
+          <div ref={gridRef} className="relative pb-20 sm:pb-24">
+            <ProductGrid
+              variant="home"
+              productData={productData}
+              categories={categories}
+              isLoading={isLoadingPage}
+              error={null}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setCategory}
+              onPageChange={onPageChange}
+              productType="custom"
+            />
+          </div>
+        </Reveal>
+
+        <Reveal animationNum={2}>
+          <BestSellingHelpCta />
+        </Reveal>
+      </RevealSection>
+
+      <FloatingCategoryMenu
+        visible={menuVisible}
+        items={categoryMenuItems}
+        triggerLabel="Filter"
+      />
+    </section>
+  );
 }

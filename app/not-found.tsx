@@ -1,5 +1,7 @@
+"use client";
 
 import NoPrefetchLink from "../components/ui/NoPrefetchLink";
+import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 
 export default function NotFound() {
   return (
@@ -53,23 +55,27 @@ export default function NotFound() {
       />
 
       <div className="relative z-10 flex min-h-screen items-center justify-center px-4 sm:px-6">
-        <div className="w-full max-w-2xl rounded-2xl border border-neutral-300 bg-white ring ring-neutral-200 ring-offset-2 md:ring-offset-4 p-8 sm:p-10 md:p-12 text-center">
-          <p className="mb-3 text-sm sm:text-base font-switzer font-medium tracking-widest text-[#0F5C85]">
-            ERROR 404
-          </p>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-sentient font-semibold text-textcolor leading-tight mb-4">
+        <RevealSection className="w-full max-w-2xl rounded-2xl border border-neutral-300 bg-white ring ring-neutral-200 ring-offset-2 md:ring-offset-4 p-8 sm:p-10 md:p-12 text-center">
+          <Reveal animationNum={0}>
+            <p className="mb-3 text-sm sm:text-base font-switzer font-medium tracking-widest text-[#0F5C85]">
+              ERROR 404
+            </p>
+          </Reveal>
+          <Reveal as="h1" animationNum={1} className="text-3xl sm:text-4xl md:text-5xl font-sentient font-semibold text-textcolor leading-tight mb-4">
             Page Not Found
-          </h1>
-          <p className="text-base sm:text-lg font-switzer text-textcolor/80 mb-8">
+          </Reveal>
+          <Reveal as="p" animationNum={2} className="text-base sm:text-lg font-switzer text-textcolor/80 mb-8">
             The page you are looking for does not exist or may have been moved.
-          </p>
-          <NoPrefetchLink
-            href="/"
-            className="inline-flex items-center justify-center rounded-xl bg-linear-to-r from-neutral-800 to-neutral-500 px-6 py-3 text-sm sm:text-base font-sentient font-medium text-white border border-neutral-200 ring ring-neutral-300 ring-offset-2 transition-opacity hover:opacity-90"
-          >
-            Back to Home
-          </NoPrefetchLink>
-        </div>
+          </Reveal>
+          <Reveal animationNum={3}>
+            <NoPrefetchLink
+              href="/"
+              className="inline-flex items-center justify-center rounded-xl bg-linear-to-r from-neutral-800 to-neutral-500 px-6 py-3 text-sm sm:text-base font-sentient font-medium text-white border border-neutral-200 ring ring-neutral-300 ring-offset-2 transition-opacity hover:opacity-90"
+            >
+              Back to Home
+            </NoPrefetchLink>
+          </Reveal>
+        </RevealSection>
       </div>
     </main>
   );

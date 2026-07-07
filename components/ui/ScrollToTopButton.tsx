@@ -1,6 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ArrowUp } from "lucide-react";
+import { cn } from "@/lib/utilts";
+import {
+  candyIconButtonClasses,
+  candyNavIconClasses,
+} from "@/components/ui/candy-button";
 
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -29,41 +35,19 @@ const ScrollToTopButton = () => {
 
   return (
     <button
+      type="button"
       onClick={scrollToTop}
       aria-label="Scroll to top"
-      className={`
-        fixed bottom-8 right-4 sm:right-8 z-50
-        p-1 rounded-xl ring ring-neutral-300 ring-offset-2 cursor-pointer
-        bg-neutral-100 backdrop-blur-sm
-        text-neutral-700 border border-neutral-300
-        shadow-lg
-        hover:bg-[#080f0f]
-        transition-all duration-300 ease-out
-        hover:text-[#e1e1e1] hover:border-[#e1e1e1]
-
-        ${isVisible
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-6 pointer-events-none"}
-      `}
+      className={cn(
+        candyIconButtonClasses("white", "md"),
+        "fixed bottom-6 right-4 z-50 sm:right-6",
+        "transition-all duration-300 ease-out",
+        isVisible
+          ? "translate-y-0 opacity-100"
+          : "pointer-events-none translate-y-4 opacity-0"
+      )}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-        className="md:size-7 size-5"
-      >
-        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-        <path d="M12 5v6m0 3v1.5m0 3v.5" />
-        <path d="M18 11l-6 -6" />
-        <path d="M6 11l6 -6" />
-      </svg>
+      <ArrowUp className={candyNavIconClasses} strokeWidth={2.25} />
     </button>
   );
 };

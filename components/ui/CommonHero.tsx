@@ -1,8 +1,8 @@
 "use client";
-import React, { memo } from "react";
+import React from "react";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import CTAButton from "./CTAButton";
-import useInView from "@/hooks/useInView";
+import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 
 interface CommonHeroProps {
   /** First line of the heading */
@@ -27,38 +27,6 @@ interface CommonHeroProps {
   secondaryButtonLink?: string;
   secondaryButtonText?: string;
 }
-
-type RevealOnViewProps = {
-  as: "div" | "h1" | "p";
-  className: string;
-  hiddenClassName: string;
-  visibleClassName: string;
-  children: React.ReactNode;
-};
-
-const RevealOnView = memo(function RevealOnView({
-  as,
-  className,
-  hiddenClassName,
-  visibleClassName,
-  children,
-}: RevealOnViewProps) {
-  const { ref, inView } = useInView<HTMLElement>({
-    threshold: 0.1,
-    once: true,
-  });
-
-  const Component = as;
-
-  return (
-    <Component
-      ref={ref as React.Ref<HTMLDivElement>}
-      className={`${className} ${inView ? visibleClassName : hiddenClassName}`}
-    >
-      {children}
-    </Component>
-  );
-});
 
 const CommonHero: React.FC<CommonHeroProps> = ({
   title,
@@ -141,26 +109,22 @@ const CommonHero: React.FC<CommonHeroProps> = ({
         }}
       />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-12 sm:py-16 md:py-20 lg:py-24 flex flex-col items-center justify-center text-center">
-        {/* Badge / update banner */}
+      <RevealSection className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-12 sm:py-16 md:py-20 lg:py-24 flex flex-col items-center justify-center text-center">
         {badgeText && (
-          <div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-neutral-300 bg-white/80 backdrop-blur-sm mb-8 ring ring-neutral-300 ring-offset-2 md:ring-offset-4 opacity-0 translate-y-6 animate-fade-up3"
-            style={{ animationDelay: "200ms" }}
-          >
-            <div className="size-3 rounded bg-emerald-400 animate-pulse border border-neutral-300" />
-            <span className="text-sm md:text-base font-switzer font-medium text-textcolor">
-              {badgeText}
-            </span>
-          </div>
+          <Reveal animationNum={0} className="mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-neutral-300 bg-white/80 backdrop-blur-sm ring ring-neutral-300 ring-offset-2 md:ring-offset-4">
+              <div className="size-3 rounded bg-emerald-400 animate-pulse border border-neutral-300" />
+              <span className="text-sm md:text-base font-switzer font-medium text-textcolor">
+                {badgeText}
+              </span>
+            </div>
+          </Reveal>
         )}
 
-        {/* Main heading: line 1 + line 2 (optional one gradient word or full gradient suffix) */}
-        <RevealOnView
+        <Reveal
           as="h1"
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-sentient font-light text-textcolor mb-4 sm:mb-6 leading-tight transition-all duration-700 ease-out"
-          visibleClassName="opacity-100 translate-y-0"
-          hiddenClassName="opacity-0 translate-y-10"
+          animationNum={1}
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-sentient font-light text-textcolor mb-4 sm:mb-6 leading-tight"
         >
           <span className="block">{title}</span>
           {titleLine2Highlight != null ? (
@@ -188,24 +152,19 @@ const CommonHero: React.FC<CommonHeroProps> = ({
               {titlesuffix}
             </span>
           ) : null}
-        </RevealOnView>
+        </Reveal>
 
-        {/* Subtitle */}
-        <RevealOnView
+        <Reveal
           as="p"
-          className="text-base sm:text-lg md:text-xl lg:text-2xl text-textcolor font-switzer mb-8 sm:mb-10 md:mb-12 max-w-4xl leading-relaxed transition-all duration-700 ease-out"
-          visibleClassName="opacity-100 translate-y-0"
-          hiddenClassName="opacity-0 translate-y-8"
+          animationNum={2}
+          className="text-base sm:text-lg md:text-xl lg:text-2xl text-textcolor font-switzer mb-8 sm:mb-10 md:mb-12 max-w-4xl leading-relaxed"
         >
           {subtitle}
-        </RevealOnView>
+        </Reveal>
 
-        {/* CTA buttons */}
-        <RevealOnView
-          as="div"
-          className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center justify-center transition-all duration-700 ease-out"
-          visibleClassName="opacity-100 translate-y-0"
-          hiddenClassName="opacity-0 translate-y-8"
+        <Reveal
+          animationNum={3}
+          className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center justify-center"
         >
           <NoPrefetchLink href={primaryHref}>
             <CTAButton
@@ -224,8 +183,8 @@ const CommonHero: React.FC<CommonHeroProps> = ({
               />
             </NoPrefetchLink>
           )}
-        </RevealOnView>
-      </div>
+        </Reveal>
+      </RevealSection>
 
       {/* Local keyframes for animated gradient text */}
       {/* <style>{`

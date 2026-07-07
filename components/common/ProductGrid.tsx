@@ -6,6 +6,13 @@ import Loading from "../ui/Loading";
 import { useQuote } from "@/contexts/QuoteContext";
 import { cn } from "@/lib/utilts";
 import { ProductCard as RawProductCard } from "./ProductCard";
+import {
+  candyCarouselNavClasses,
+  candyDarkButtonClasses,
+  candyNavIconClasses,
+} from "@/components/ui/candy-button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 
 
 interface ProductGridProps {
@@ -31,6 +38,7 @@ interface ProductGridProps {
   | "custom";
 
   id?: string;
+  variant?: "default" | "home";
 }
 
 // ─────────────────────────────────────
@@ -46,14 +54,33 @@ const FilterButton = memo(function FilterButton({
   isAll,
   selectedCategory,
   onSelect,
+  variant = "default",
 }: {
   category: ProductCategory | null;
   isAll?: boolean;
   selectedCategory: string | null;
   onSelect: (slug: string | null) => void;
+  variant?: "default" | "home";
 }) {
   const slug = category?.slug ?? null;
   const active = isAll ? selectedCategory === null : selectedCategory === slug;
+
+  if (variant === "home") {
+    return (
+      <button
+        type="button"
+        onClick={() => onSelect(slug)}
+        className={cn(
+          "cursor-pointer rounded-lg border px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors sm:px-4 sm:py-2",
+          active
+            ? "border-ink bg-ink text-white dark:border-white dark:bg-white dark:text-ink"
+            : "border-hairline bg-surface-soft text-body hover:bg-surface-card"
+        )}
+      >
+        {isAll ? "All" : category?.name}
+      </button>
+    );
+  }
 
   return (
     <button
@@ -84,12 +111,13 @@ const ProductGrid = ({
   selectedCategory,
   setSelectedCategory,
   id,
+  variant = "default",
 }: ProductGridProps) => {
   const { addToQuote, isInQuote, updateQuantity } = useQuote();
 
   // const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
-  const sectionRef = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
   const safeCategories = useMemo(
     () => (Array.isArray(categories) ? categories : []),
@@ -165,6 +193,8 @@ const ProductGrid = ({
   // ─────────────────────────────────────
   // MEMOIZED CATEGORY BUTTONS
   // ─────────────────────────────────────
+  const isHome = variant === "home";
+
   const categoryButtons = useMemo(() => {
     if (!safeCategories.length) return null;
 
@@ -176,6 +206,7 @@ const ProductGrid = ({
           isAll
           selectedCategory={selectedCategory}
           onSelect={handleSelectCategory}
+          variant={variant}
         />
         {safeCategories.map((category: ProductCategory) => (
           <FilterButton
@@ -183,11 +214,12 @@ const ProductGrid = ({
             category={category}
             selectedCategory={selectedCategory}
             onSelect={handleSelectCategory}
+            variant={variant}
           />
         ))}
       </>
     );
-  }, [safeCategories, selectedCategory, handleSelectCategory]);
+  }, [safeCategories, selectedCategory, handleSelectCategory, variant]);
 
   // ─────────────────────────────────────
   // MEMOIZED PRODUCT LIST
@@ -198,7 +230,7 @@ const ProductGrid = ({
         <div
           key={p.id}
           style={{ animationDelay: `${i * 0.03}s` }}
-          className=" rounded-xl overflow-hidden  transition-shadow flex flex-col"
+          className="flex flex-col overflow-hidden rounded-xl"
         >
           <ProductCard
             product={p}
@@ -206,35 +238,100 @@ const ProductGrid = ({
             onAddToQuote={handleAddToQuote}
             isInQuote={isInQuote(p.id)}
             currentQuantity={1}
+            variant={variant}
           />
         </div>
       )),
-    [products, handleAddToQuote, isInQuote]
+    [products, handleAddToQuote, isInQuote, variant]
   );
+
+  const pageLabel = String(paginationInfo?.currentPage ?? 1).padStart(2, "0");
+  const totalPagesLabel = String(paginationInfo?.totalPages ?? 1).padStart(2, "0");
+
+  if (isHome) {
+    return (
+      <div ref={sectionRef as React.RefObject<HTMLDivElement>} id={id}>
+        <div className="overflow-hidden rounded-2xl border border-hairline bg-canvas">
+          {isLoading ? (
+            <div className="flex min-h-[420px] items-center justify-center p-6">
+              <Loading size="md" message="Loading products..." />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 bg-surface-soft p-4 sm:gap-4 sm:p-5 md:grid-cols-3 lg:grid-cols-4">
+              {productList}
+            </div>
+          )}
+
+          {paginationInfo && paginationInfo.totalPages > 1 && (
+            <div className="flex items-center justify-between gap-4 border-t border-hairline px-4 py-3 sm:px-5">
+              <p className="text-caption font-medium uppercase tracking-[0.14em] text-muted">
+                <span className="text-ink">{pageLabel}</span>
+                <span className="mx-1.5 text-muted-soft">/</span>
+                {totalPagesLabel}
+              </p>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => onPageChange?.(paginationInfo.currentPage - 1)}
+                  disabled={paginationInfo.currentPage === 1 || !onPageChange}
+                  className={candyCarouselNavClasses("prev")}
+                  aria-label="Previous page"
+                >
+                  <ChevronLeft className={candyNavIconClasses} strokeWidth={2.25} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onPageChange?.(paginationInfo.currentPage + 1)}
+                  disabled={
+                    paginationInfo.currentPage === paginationInfo.totalPages ||
+                    !onPageChange
+                  }
+                  className={candyCarouselNavClasses("next")}
+                  aria-label="Next page"
+                >
+                  <ChevronRight className={candyNavIconClasses} strokeWidth={2.25} />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <p className="border-t border-hairline px-4 py-3 text-sm text-error sm:px-5">
+              Error: {error.message}
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   // ─────────────────────────────────────
   // RENDER
   // ─────────────────────────────────────
   return (
     <section ref={sectionRef} id={id} className="relative w-full py-6 sm:py-8 md:py-12 lg:py-16">
-      <div className="w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 max-w-[1920px] mx-auto">
+      <RevealSection className="w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 max-w-[1920px] mx-auto">
 
-        {/* TITLE */}
+        <Reveal animationNum={0}>
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient text-textcolor font-semibold mb-4">
           {title}
         </h2>
+        </Reveal>
 
         {subtitle && (
+          <Reveal animationNum={1}>
           <p className="text-xs sm:text-sm md:text-base lg:text-lg font-switzer tracking-widest text-textcolor mb-6">
             {subtitle}
           </p>
+          </Reveal>
         )}
 
         {/* DESKTOP FILTERS */}
         {safeCategories.length > 0 && (
-          <div className="hidden lg:block mb-8">
+          <Reveal animationNum={2} className="hidden lg:block mb-8">
             <div className="flex flex-wrap gap-3">{categoryButtons}</div>
-          </div>
+          </Reveal>
         )}
 
         {/* MOBILE STICKY FILTER */}
@@ -255,6 +352,7 @@ const ProductGrid = ({
         )}
 
         {/* PRODUCT LIST OR LOADING */}
+        <Reveal animationNum={3}>
         {isLoading ? (
           <div className="min-h-[550px] flex items-center justify-center">
             <Loading size="md" message="Loading products..." />
@@ -264,9 +362,11 @@ const ProductGrid = ({
             {productList}
           </div>
         )}
+        </Reveal>
 
         {/* PAGINATION */}
         {paginationInfo && paginationInfo.totalPages > 1 && (
+          <Reveal animationNum={4}>
           <div className="flex items-center justify-center gap-4 mt-8 py-4">
             <button
               onClick={() => onPageChange?.(paginationInfo.currentPage - 1)}
@@ -294,19 +394,21 @@ const ProductGrid = ({
               <IoChevronForward className="w-5 h-5" />
             </button>
           </div>
+          </Reveal>
         )}
 
         {error && <div>Error: {error.message}</div>}
-      </div>
+      </RevealSection>
     </section>
   );
 };
 
 type FloatingFilterButtonProps = {
   targetRef: RefObject<HTMLElement | null>;
+  variant?: "default" | "home";
 };
 
-const FloatingFilterButton = memo(({ targetRef }: FloatingFilterButtonProps) => {
+const FloatingFilterButton = memo(({ targetRef, variant = "default" }: FloatingFilterButtonProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const topSentinelRef = useRef<HTMLDivElement | null>(null);
   const bottomSentinelRef = useRef<HTMLDivElement | null>(null);
@@ -391,7 +493,13 @@ const FloatingFilterButton = memo(({ targetRef }: FloatingFilterButtonProps) => 
         }
       }}
       className={cn(
-        "fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-100 bg-[#0f5c85] hover:bg-[#0f5c85]/90 backdrop-blur-sm text-white px-4 py-2 sm:px-6 sm:py-3 rounded-xl font-switzer font-bold flex items-center gap-2 transition-all duration-200 cursor-pointer ring ring-neutral-300 ring-offset-2 md:ring-offset-4 text-sm sm:text-base",
+        "fixed bottom-4 sm:bottom-6 left-1/2 z-100 flex -translate-x-1/2 items-center gap-2 rounded-xl px-4 py-2 font-semibold transition-all duration-200 sm:px-6 sm:py-3 text-sm sm:text-base cursor-pointer",
+        variant === "home"
+          ? cn(
+              candyDarkButtonClasses("pointer-events-auto gap-2 h-auto! py-2.5 px-4 sm:px-5"),
+              "flex items-center"
+            )
+          : "bg-[#0f5c85] hover:bg-[#0f5c85]/90 backdrop-blur-sm text-white ring ring-neutral-300 ring-offset-2 md:ring-offset-4 font-switzer font-bold",
         isVisible
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 translate-y-8 pointer-events-none",

@@ -1,8 +1,16 @@
 "use client";
 
 import { cn } from "@/lib/utilts";
-import CTAButton from "@/components/ui/CTAButton";
-import useInViewOnce from "@/hooks/useInView";
+import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
+import {
+  Reveal,
+  RevealSection,
+} from "@/components/ui/timeline-animation";
+import {
+  candyAccentButtonClasses,
+  candyDarkButtonClasses,
+  candyWhiteButtonClasses,
+} from "@/components/ui/candy-button";
 
 export interface CallToActionButton {
   text: string;
@@ -11,7 +19,7 @@ export interface CallToActionButton {
   link?: string;
   variant?: "default" | "light" | "dark";
   target?: string;
-  rel?: React.HTMLAttributes<HTMLAnchorElement>['rel'];
+  rel?: React.HTMLAttributes<HTMLAnchorElement>["rel"];
 }
 
 interface CallToActionProps {
@@ -30,11 +38,60 @@ interface CallToActionProps {
   buttons?: CallToActionButton[];
 }
 
-const   CallToAction = ({
+function getButtonClasses(variant: CallToActionButton["variant"] = "default") {
+  if (variant === "dark") return candyDarkButtonClasses();
+  if (variant === "light") return candyWhiteButtonClasses();
+  return candyAccentButtonClasses();
+}
+
+function CtaActionButton({
+  button,
+  index,
+}: {
+  button: CallToActionButton;
+  index: number;
+}) {
+  const classes = cn(
+    "w-full sm:w-auto sm:min-w-[200px]",
+    getButtonClasses(button.variant),
+    button.className
+  );
+
+  if (button.link) {
+    return (
+      <NoPrefetchLink
+        key={index}
+        href={button.link}
+        target={button.target}
+        rel={button.rel}
+        className={classes}
+      >
+        {button.text}
+      </NoPrefetchLink>
+    );
+  }
+
+  return (
+    <button
+      key={index}
+      type="button"
+      onClick={button.onClick}
+      className={classes}
+    >
+      {button.text}
+    </button>
+  );
+}
+
+const CallToAction = ({
   title = "Need Customized Corporate Gifts in Dubai? Get a Bulk Quote",
   subtitle = (
     <>
-      Let us know your budget, quantity, what you need, and branding requirements. Our team will help you shortlist the right corporate gifts in Dubai, whether affordable promotional giveaways, smart gadgets, luxury gift sets or customised corporate gifts for clients, employees and events.
+      Let us know your budget, quantity, what you need, and branding
+      requirements. Our team will help you shortlist the right corporate gifts
+      in Dubai, whether affordable promotional giveaways, smart gadgets, luxury
+      gift sets or customised corporate gifts for clients, employees and
+      events.
     </>
   ),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- accepted for API compat; unused in this layout
@@ -48,170 +105,151 @@ const   CallToAction = ({
     "Timely delivery and exceptional customer service.",
   ],
   buttons = [
-    { text: "Request Bulk Quote", link: "/contact-us", variant: "dark", className: "bg-linear-to-r from-neutral-800 to-neutral-500! text-white! border! border-neutral-200! font-sentient! font-medium! ring-1 ring-neutral-300! ring-offset-3!" as const },
-    { text: "WhatsApp for Gift Ideas", link: "https://wa.me/+971556545950", target: "_blank", rel: "noopener noreferrer", variant: "light", className: "bg-linear-to-r from-neutral-100 to-neutral-300! border! border-neutral-200! text-neutral-700! font-sentient! font-medium! ring-1 ring-neutral-300! ring-offset-3!" as const },
+    {
+      text: "Request Bulk Quote",
+      link: "/contact-us",
+      variant: "dark",
+    },
+    {
+      text: "WhatsApp for Gift Ideas",
+      link: "https://wa.me/+971556545950",
+      target: "_blank",
+      rel: "noopener noreferrer",
+      variant: "light",
+    },
   ] as CallToActionButton[],
 }: CallToActionProps) => {
-  const { ref: topRef, inView: topInView } = useInViewOnce<HTMLDivElement>();
-  const { ref: infoRef, inView: infoInView } = useInViewOnce<HTMLDivElement>();
   return (
-    <section className="relative w-full overflow-hidden mb-10">
-      {/* Top CTA Section with gradient background */}
-      <div className="relative flex  items-center justify-center px-4 py-10 sm:px-6 sm:py-12 md:px-8 md:py-16 lg:px-16">
-
-
-        {/* Content */}
-        <div className="relative z-10 mx-auto max-w-5xl text-center">
-          <div
-            ref={topRef}
-            className={`space-y-8 transition-all duration-700 ease-out ${topInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
-          >
-            <div className="space-y-2">
-              {headlineTopLine && (
-                <p
-                  className={`font-sentient text-xl font-medium italic text-textcolor/80 sm:text-2xl md:text-3xl transition-all duration-700 ${topInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-                    }`}
-                  style={{ transitionDelay: "150ms" }}
-                >
+    <section className="relative w-full overflow-x-hidden bg-canvas">
+      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-16 sm:px-6 sm:py-20 lg:py-24">
+        {/* Top CTA */}
+        <div className="mx-auto max-w-4xl text-center">
+          <div className="space-y-4">
+            {headlineTopLine && (
+              <Reveal animationNum={0}>
+                <p className="text-body-md italic text-muted sm:text-lg">
                   {headlineTopLine}
                 </p>
-              )}
-              <h2
-                className={`font-sentient text-3xl font-semibold leading-tight text-textcolor sm:text-4xl md:text-5xl lg:text-6xl transition-all duration-700 ${topInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-                  }`}
-                style={{ transitionDelay: "250ms" }}
-              >
-                {title}
-              </h2>
-              {headlineBottomText && (
-                <p
-                  className={`font-switzer pt-2 text-base font-medium capitalize leading-tight text-textcolor sm:text-lg md:text-xl transition-all duration-700 ${topInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-                    }`}
-                  style={{ transitionDelay: "350ms" }}
-                >
+              </Reveal>
+            )}
+
+            <Reveal animationNum={1}>
+              <h2 className="text-display-md text-ink">{title}</h2>
+            </Reveal>
+
+            {headlineBottomText && (
+              <Reveal animationNum={2}>
+                <p className="mx-auto max-w-3xl text-body-md capitalize text-muted sm:text-[17px] sm:leading-7">
                   {headlineBottomText}
                 </p>
-              )}
-            </div>
-
-            {buttons.length > 0 && (
-              <div
-                className={`flex flex-col items-center justify-center gap-4 pt-4 sm:flex-row sm:gap-6 transition-all duration-700 ${topInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-                  }`}
-                style={{ transitionDelay: "450ms" }}
-              >
-                {buttons.map((button, index) => (
-                  <CTAButton
-                    key={index}
-                    label={button.text}
-                    href={button.link}
-                    onClick={button.onClick}
-                    variant={button.variant ?? "default"}
-                    target={button.target}
-                    rel={button.rel}
-                    className={cn(
-                      "w-full sm:w-auto sm:max-w-xs cursor-pointer font-sentient! font-medium text-xs sm:text-sm md:text-base",
-                      button.className
-                    )}
-                  />
-                ))}
-              </div>
+              </Reveal>
             )}
           </div>
-        </div>
-      </div>
 
-      {/* Bottom info section with dashed grid */}
-      <div className="relative p-2 md:p-0">
-        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-xl border border-neutral-200 bg-white px-4 py-6 shadow-lg ring ring-neutral-200 ring-offset-4 mb-6 sm:mb-8 sm:px-6 sm:py-8 md:mb-10 md:py-10 md:ring-offset-8 lg:px-16">
-          {/* Dashed grid background */}
-          <div
-            className="absolute inset-0 z-0"
-            style={{
-              backgroundImage: `
-                linear-gradient(to right, #A8DDF0 1px, transparent 1px),
-                linear-gradient(to bottom, #A8DDF0 1px, transparent 1px)
-              `,
-              backgroundSize: "1px 1px",
-              backgroundPosition: "0 0, 0 0",
-              maskImage: `
-                repeating-linear-gradient(
-                  to right,
-                  black 0px,
-                  black 3px,
-                  transparent 3px,
-                  transparent 8px
-                ),
-                repeating-linear-gradient(
-                  to bottom,
-                  black 0px,
-                  black 3px,
-                  transparent 3px,
-                  transparent 8px
-                ),
-                radial-gradient(ellipse 70% 60% at 50% 0%, #000 40%, transparent 80%)
-              `,
-              WebkitMaskImage: `
-                repeating-linear-gradient(
-                  to right,
-                  black 0px,
-                  black 3px,
-                  transparent 3px,
-                  transparent 8px
-                ),
-                repeating-linear-gradient(
-                  to bottom,
-                  black 0px,
-                  black 3px,
-                  transparent 3px,
-                  transparent 8px
-                ),
-                radial-gradient(ellipse 70% 60% at 50% 0%, #000 40%, transparent 80%)
-              `,
-              maskComposite: "intersect",
-              WebkitMaskComposite: "source-in",
-            }}
-          />
-          <div className="relative z-10 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
+          {buttons.length > 0 && (
+            <Reveal animationNum={3}>
+              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:mt-10 sm:flex-row sm:gap-4">
+                {buttons.map((button, index) => (
+                  <CtaActionButton key={index} button={button} index={index} />
+                ))}
+              </div>
+            </Reveal>
+          )}
+        </div>
+
+        {/* Bottom info panel */}
+        <Reveal animationNum={4}>
+          <div className="relative mt-12 overflow-hidden border border-hairline sm:mt-14 lg:mt-16">
             <div
-              ref={infoRef}
-              className={`space-y-4 transition-all duration-700 ease-out ${infoInView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
-                }`}
+              className="pointer-events-none absolute inset-0 z-0"
+              aria-hidden
+              style={{
+                background:
+                  "linear-gradient(to bottom, var(--cal-canvas) 0%, var(--cal-canvas) 20%, transparent 100%), radial-gradient(ellipse at 50% -10%, var(--cal-brand-accent) 0%, var(--cal-canvas) 100%)",
+                opacity: 0.7,
+              }}
             >
-              <div className="flex items-center gap-3">
-                <span className="font-switzer text-sm font-medium uppercase tracking-wider text-neutral-600 bg-white/10 backdrop-blur-sm">
-                  <span className="inline-block h-3 w-3 shrink-0 rounded-sm bg-[#0F5C85] " />{" "}
-                  {infoBoxHeading}
-                </span>
-              </div>
-              <div className="font-sentient text-xl leading-tight text-textcolor sm:text-2xl md:text-2xl">
-                {subtitle}
-              </div>
+              <div
+                className="dark:hidden"
+                style={{
+                  WebkitMaskImage:
+                    "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%)",
+                  maskImage:
+                    "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%)",
+                  backgroundImage:
+                    "repeating-conic-gradient(from 0deg at 50% 0%, var(--cal-brand-accent) 0deg, var(--cal-brand-accent) 2deg, transparent 2deg, transparent 12deg)",
+                  height: "100%",
+                  left: "50%",
+                  opacity: 0.2,
+                  pointerEvents: "none",
+                  position: "absolute",
+                  top: "0",
+                  transform: "translateX(-50%)",
+                  width: "200%",
+                }}
+              />
+              <div
+                className="hidden dark:block"
+                style={{
+                  WebkitMaskImage:
+                    "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%)",
+                  maskImage:
+                    "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%)",
+                  backgroundImage:
+                    "repeating-conic-gradient(from 0deg at 50% 0%, var(--cal-brand-accent) 0deg, var(--cal-brand-accent) 2deg, transparent 2deg, transparent 12deg)",
+                  height: "100%",
+                  left: "50%",
+                  opacity: 0.6,
+                  pointerEvents: "none",
+                  position: "absolute",
+                  top: "0",
+                  transform: "translateX(-50%)",
+                  width: "200%",
+                }}
+              />
             </div>
 
-            <div
-              className={`flex flex-col justify-center space-y-6 transition-all duration-700 ease-out ${infoInView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
-                }`}
-            >
-              <h4 className="font-sentient mb-2 md:mb-6 text-lg font-semibold text-textcolor sm:text-xl md:text-2xl">
-                Why choose Baharnani?
-              </h4>
-              <ul className="space-y-3 md:space-y-5">
-                {infoBoxBullets.map((item, i) => (
-                  <li
-                    key={i}
-                    className="font-switzer flex items-start text-base leading-tight text-textcolor sm:text-lg md:text-xl"
-                  >
-                    <span className="mr-3 mt-1 text-[#0F5C85]">•</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
+            <div className="relative z-10 grid grid-cols-1 gap-8 p-6 sm:p-8 md:grid-cols-2 md:gap-10 lg:p-10">
+              <div className="space-y-4">
+                <div className="flex items-center gap-2.5">
+                  <span
+                    className="inline-block h-3 w-3 shrink-0 rounded-sm bg-brand-accent"
+                    aria-hidden="true"
+                  />
+                  <span className="text-caption font-medium uppercase tracking-wider text-muted">
+                    {infoBoxHeading}
+                  </span>
+                </div>
+
+                <div className="text-body-md text-ink sm:text-[17px] sm:leading-7">
+                  {subtitle}
+                </div>
+              </div>
+
+              <div className="flex flex-col justify-center space-y-5">
+                <h4 className="text-display-sm text-ink">
+                  Why choose Baharnani?
+                </h4>
+
+                <ul className="space-y-3 sm:space-y-4">
+                  {infoBoxBullets.map((item, i) => (
+                    <li
+                      key={i}
+                      className="flex items-start gap-3 text-body-md text-muted sm:text-[17px] sm:leading-7"
+                    >
+                      <span
+                        className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-accent"
+                        aria-hidden="true"
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </Reveal>
+      </RevealSection>
     </section>
   );
 };

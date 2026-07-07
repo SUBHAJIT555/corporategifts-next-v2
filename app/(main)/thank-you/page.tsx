@@ -1,6 +1,8 @@
-import { FaCheckCircle, LuArrowLeft } from "@/components/icons";
-import { LuHouse } from "@/components/icons";
+"use client";
+
+import { FaCheckCircle, LuArrowLeft, LuHouse } from "@/components/icons";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
+import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 
 export default function ThankYou() {
   return (
@@ -54,36 +56,26 @@ export default function ThankYou() {
       />
 
       <div className="relative z-10 flex min-h-screen items-center justify-center px-4 sm:px-6 py-16">
-        <div className="w-full max-w-2xl rounded-2xl border border-neutral-300 bg-white ring ring-neutral-200 ring-offset-2 md:ring-offset-4 p-8 sm:p-10 md:p-12 text-center opacity-0 translate-y-8 animate-fade-up3">
-          <div
-            className="flex justify-center mb-6 opacity-0 scale-75 animate-scale-in"
-            style={{ animationDelay: "200ms" }}
-          >
-            <div className="relative">
-              <div className="absolute inset-0 bg-[#0F5C85]/15 rounded-full animate-ping" />
-              <FaCheckCircle className="w-20 h-20 sm:w-24 sm:h-24 text-[#0F5C85] relative z-10" />
+        <RevealSection className="w-full max-w-2xl rounded-2xl border border-neutral-300 bg-white ring ring-neutral-200 ring-offset-2 md:ring-offset-4 p-8 sm:p-10 md:p-12 text-center">
+          <Reveal animationNum={0}>
+            <div className="flex justify-center mb-6">
+              <div className="relative">
+                <div className="absolute inset-0 bg-[#0F5C85]/15 rounded-full animate-ping" />
+                <FaCheckCircle className="w-20 h-20 sm:w-24 sm:h-24 text-[#0F5C85] relative z-10" />
+              </div>
             </div>
-          </div>
+          </Reveal>
 
-          <h1
-            className="text-3xl sm:text-4xl md:text-5xl font-sentient font-semibold text-textcolor mb-4 opacity-0 translate-y-6 animate-fade-up3"
-            style={{ animationDelay: "300ms" }}
-          >
+          <Reveal as="h1" animationNum={1} className="text-3xl sm:text-4xl md:text-5xl font-sentient font-semibold text-textcolor mb-4">
             Thank You!
-          </h1>
+          </Reveal>
 
-          <p
-            className="text-base sm:text-lg md:text-xl font-switzer text-textcolor/90 mb-8 leading-relaxed opacity-0 translate-y-6 animate-fade-up"
-            style={{ animationDelay: "400ms" }}
-          >
+          <Reveal as="p" animationNum={2} className="text-base sm:text-lg md:text-xl font-switzer text-textcolor/90 mb-8 leading-relaxed">
             Your quote request has been submitted successfully. Our team will
             review your request and get back to you shortly.
-          </p>
+          </Reveal>
 
-          <div
-            className="bg-neutral-100 border border-neutral-300 ring ring-neutral-200 ring-offset-2 rounded-xl p-6 mb-8 opacity-0 translate-y-6 animate-fade-up"
-            style={{ animationDelay: "500ms" }}
-          >
+          <Reveal animationNum={3} className="bg-neutral-100 border border-neutral-300 ring ring-neutral-200 ring-offset-2 rounded-xl p-6 mb-8">
             <p className="text-base font-switzer text-textcolor/85">
               <strong className="font-sentient font-semibold">What&apos;s Next?</strong>
               <br />
@@ -92,12 +84,9 @@ export default function ThankYou() {
               sales team will contact you within 24-48 hours to discuss your
               requirements and provide you with a detailed quote.
             </p>
-          </div>
+          </Reveal>
 
-          <div
-            className="flex flex-col sm:flex-row gap-4 justify-center opacity-0 translate-y-6 animate-fade-up"
-            style={{ animationDelay: "600ms" }}
-          >
+          <Reveal animationNum={4} className="flex flex-col sm:flex-row gap-4 justify-center">
             <NoPrefetchLink
               href="/shop"
               className="inline-flex items-center justify-center gap-2 bg-linear-to-r from-neutral-800 to-neutral-500 hover:opacity-90 text-white font-sentient font-medium py-3 px-8 rounded-xl border border-neutral-200 ring ring-neutral-300 ring-offset-2 transition-opacity"
@@ -112,8 +101,8 @@ export default function ThankYou() {
               <LuHouse className="w-5 h-5" />
               Back to Home
             </NoPrefetchLink>
-          </div>
-        </div>
+          </Reveal>
+        </RevealSection>
       </div>
     </main>
   );

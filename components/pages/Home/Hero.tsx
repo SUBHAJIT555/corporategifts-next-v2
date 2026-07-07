@@ -17,6 +17,10 @@ import {
 } from "lucide-react";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import { candyDarkButtonClasses, candyWhiteButtonClasses } from "@/components/ui/candy-button";
+import {
+  Reveal,
+  RevealSection,
+} from "@/components/ui/timeline-animation";
 
 const SLIDES: {
   image: string;
@@ -199,38 +203,43 @@ export default function HeroSection() {
 
   return (
     <section className="relative w-full bg-canvas">
-      <div className="relative mx-auto max-w-7xl border-x border-hairline px-5 pt-24 pb-14 sm:px-6 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-28">
-        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
-          {/* Copy */}
+      <RevealSection className="relative mx-auto max-w-7xl border-x border-hairline px-5 pt-24 pb-14 sm:px-6 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-28">
+        <div className="relative z-10 grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
           <div className="text-center lg:col-span-6 lg:text-left">
-            {/* Static eyebrow badge */}
-            <div className="mb-5 flex justify-center lg:justify-start">
-              <span className="inline-flex items-center gap-1.5 rounded-lg border border-hairline  border-dashed bg-surface-card px-3 py-1 text-caption font-medium text-body">
+            <Reveal
+              animationNum={0}
+              className="mb-5 flex justify-center lg:justify-start"
+            >
+              <span className="inline-flex items-center gap-1.5 rounded-lg border border-hairline border-dashed bg-surface-card px-3 py-1 text-caption font-medium text-body">
                 <Sparkles className="h-3.5 w-3.5 text-brand-accent" />
-                | Corporate Gifts in Dubai &amp; UAE
+                Corporate Gifts in Dubai &amp; UAE
               </span>
-            </div>
+            </Reveal>
 
-            <h1 className="text-display-lg text-ink">
+            <Reveal as="h1" animationNum={1} className="text-display-lg text-ink">
               Corporate Gifts Supplier in Dubai for Custom, Luxury &amp;
               Promotional Gifts
-            </h1>
+            </Reveal>
 
-            <p className="mx-auto mt-5 max-w-xl text-body-md text-muted sm:mt-6 lg:mx-0">
+            <Reveal
+              animationNum={2}
+              className="mx-auto mt-5 max-w-xl text-body-md text-muted sm:mt-6 lg:mx-0"
+            >
               Baharnani Advertising helps UAE businesses choose custom corporate
               gifts in Dubai for clients, employees, events, and brand awareness.
               We provide a wide range of smart corporate gifts, premium hampers,
               affordable corporate gifts, branded stationery, bags, drinkware,
               and apparel. Practical gifts with logo printing, packaging and bulk
               delivery support in Dubai and the UAE.
-            </p>
+            </Reveal>
 
-            <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row sm:items-center lg:justify-start">
+            <Reveal
+              animationNum={3}
+              className="mt-7 flex flex-col justify-center gap-3 sm:flex-row sm:items-center lg:justify-start"
+            >
               <NoPrefetchLink
                 href="/products"
-                className={candyDarkButtonClasses(
-                  "group w-full sm:w-auto"
-                )}
+                className={candyDarkButtonClasses("group w-full sm:w-auto")}
               >
                 Explore Corporate Gifts
               </NoPrefetchLink>
@@ -240,15 +249,14 @@ export default function HeroSection() {
               >
                 Get Bulk Quote
               </NoPrefetchLink>
-            </div>
+            </Reveal>
           </div>
 
-          {/* Showcase */}
-          <div className="lg:col-span-6">
+          <Reveal animationNum={4} className="lg:col-span-6">
             <HeroShowcaseCard index={index} />
-          </div>
+          </Reveal>
         </div>
-      </div>
+      </RevealSection>
     </section>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState, useCallback, memo } from "react";
+import { useEffect, useState, useCallback, memo } from "react";
 import {
   ArrowRight,
   Briefcase,
@@ -19,6 +19,10 @@ import {
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
+import {
+  Reveal,
+  RevealSection,
+} from "@/components/ui/timeline-animation";
 import {
   candyIconButtonClasses,
   candyAccentIconClasses,
@@ -120,59 +124,46 @@ const productCategories: ProductCategory[] = [
 
 type CategoryCardProps = {
   category: ProductCategory;
-  visible: boolean;
-  index: number;
 };
 
-const CategoryCard = memo(function CategoryCard({
-  category,
-  visible,
-  index,
-}: CategoryCardProps) {
+const CategoryCard = memo(function CategoryCard({ category }: CategoryCardProps) {
   const Icon = category.icon;
 
   return (
-    <div
-      className={`h-full transition-all duration-500 ${
-        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-      }`}
-      style={{ transitionDelay: `${index * 80}ms` }}
+    <NoPrefetchLink
+      href={category.link}
+      className="group flex h-full min-h-[320px] flex-col overflow-hidden rounded-xl border border-hairline bg-surface-card transition-colors duration-200 hover:bg-canvas sm:min-h-[240px] sm:flex-row"
     >
-      <NoPrefetchLink
-        href={category.link}
-        className="group flex h-full min-h-[320px] flex-col overflow-hidden rounded-xl border border-hairline bg-canvas sm:min-h-[240px] sm:flex-row"
-      >
-        <div className="relative h-48 w-full shrink-0 overflow-hidden bg-surface-card sm:h-auto sm:w-[42%]">
-          <Image
-            src={category.image}
-            alt={category.title}
-            width={1000}
-            height={1000}
-            loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-          />
-          <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent sm:bg-linear-to-r sm:from-transparent sm:via-transparent sm:to-black/5" />
-        </div>
+      <div className="relative h-48 w-full shrink-0 overflow-hidden bg-surface-soft sm:h-auto sm:w-[42%]">
+        <Image
+          src={category.image}
+          alt={category.title}
+          width={1000}
+          height={1000}
+          loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent sm:bg-linear-to-r sm:from-transparent sm:via-transparent sm:to-black/5" />
+      </div>
 
-        <div className="flex flex-1 flex-col border-t border-hairline p-5 sm:border-t-0 sm:border-l sm:p-6">
-          <div className="mb-3 flex items-start gap-3">
-            <span className={candyIconButtonClasses("white", "sm")}>
-              <Icon className={candyAccentIconClasses} />
-            </span>
-            <h3 className="pt-1.5 text-lg font-semibold leading-snug tracking-tight text-ink">
-              {category.title}
-            </h3>
-          </div>
-
-          <p className="grow text-body-md text-muted">{category.description}</p>
-
-          <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-ink transition-colors group-hover:text-brand-accent">
-            Know more
-            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+      <div className="flex flex-1 flex-col border-t border-hairline bg-canvas p-5 sm:border-t-0 sm:border-l sm:p-6">
+        <div className="mb-3 flex items-start gap-3">
+          <span className={candyIconButtonClasses("white", "sm")}>
+            <Icon className={candyAccentIconClasses} />
           </span>
+          <h3 className="pt-1.5 text-lg font-semibold leading-snug tracking-tight text-ink">
+            {category.title}
+          </h3>
         </div>
-      </NoPrefetchLink>
-    </div>
+
+        <p className="grow text-body-md text-muted">{category.description}</p>
+
+        <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-ink transition-colors group-hover:text-brand-accent">
+          Know more
+          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+        </span>
+      </div>
+    </NoPrefetchLink>
   );
 });
 
@@ -183,7 +174,6 @@ const ProductGridHomeCarousel = memo(function ProductGridHomeCarousel() {
     loop: true,
   });
 
-  const [swiperVisible, setSwiperVisible] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
@@ -191,26 +181,6 @@ const ProductGridHomeCarousel = memo(function ProductGridHomeCarousel() {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
     setScrollSnaps(emblaApi.scrollSnapList());
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    const root = emblaApi.rootNode();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting && entry.target === root) {
-            setSwiperVisible(true);
-            break;
-          }
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(root);
-    return () => observer.disconnect();
   }, [emblaApi]);
 
   useEffect(() => {
@@ -229,14 +199,14 @@ const ProductGridHomeCarousel = memo(function ProductGridHomeCarousel() {
   }, [emblaApi, syncCarouselState]);
 
   useEffect(() => {
-    if (!emblaApi || !swiperVisible) return;
+    if (!emblaApi) return;
 
     const autoplayId = window.setInterval(() => {
       emblaApi.scrollNext();
     }, 4000);
 
     return () => window.clearInterval(autoplayId);
-  }, [emblaApi, swiperVisible]);
+  }, [emblaApi]);
 
   const scrollPrev = useCallback(() => {
     emblaApi?.scrollPrev();
@@ -257,11 +227,7 @@ const ProductGridHomeCarousel = memo(function ProductGridHomeCarousel() {
   const totalLabel = String(productCategories.length).padStart(2, "0");
 
   return (
-    <div
-      className={`overflow-hidden rounded-2xl border border-hairline bg-canvas transition-opacity duration-700 ease-out ${
-        swiperVisible ? "opacity-100" : "opacity-0"
-      }`}
-    >
+    <div className="overflow-hidden rounded-2xl border border-hairline bg-surface-soft">
       {/* Carousel toolbar */}
       <div className="flex items-center justify-between gap-4 border-b border-hairline px-4 py-3 sm:px-5">
         <p className="text-caption font-medium uppercase tracking-[0.14em] text-muted">
@@ -293,16 +259,12 @@ const ProductGridHomeCarousel = memo(function ProductGridHomeCarousel() {
       {/* Slides */}
       <div className="overflow-hidden p-4 sm:p-5" ref={emblaRef}>
         <div className="-mx-2 flex sm:-mx-2.5">
-          {productCategories.map((productCategory, index) => (
+          {productCategories.map((productCategory) => (
             <div
               key={productCategory.id}
               className="h-auto flex-[0_0_100%] px-2 sm:flex-[0_0_100%] sm:px-2.5 lg:flex-[0_0_85%]"
             >
-              <CategoryCard
-                category={productCategory}
-                visible={swiperVisible}
-                index={index}
-              />
+              <CategoryCard category={productCategory} />
             </div>
           ))}
         </div>
@@ -329,39 +291,12 @@ const ProductGridHomeCarousel = memo(function ProductGridHomeCarousel() {
 });
 
 const ProductGridHome = () => {
-  const headingRef = useRef<HTMLDivElement>(null);
-  const [headingVisible, setHeadingVisible] = useState(false);
-
-  useEffect(() => {
-    const headingEl = headingRef.current;
-    if (!headingEl) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting && entry.target === headingEl) {
-            setHeadingVisible(true);
-            break;
-          }
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(headingEl);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <section className="w-full overflow-x-hidden bg-canvas">
-      <div className="mx-auto max-w-7xl border-x border-hairline px-5 py-16 sm:px-6 sm:py-20 lg:py-24">
-        <div
-          ref={headingRef}
-          className={`mb-10 grid grid-cols-1 gap-6 transition-all duration-700 ease-out sm:mb-12 lg:grid-cols-12 lg:gap-10 ${
-            headingVisible
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-8"
-          }`}
+      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-16 sm:px-6 sm:py-20 lg:py-24">
+        <Reveal
+          animationNum={0}
+          className="mb-10 grid grid-cols-1 gap-6 sm:mb-12 lg:grid-cols-12 lg:gap-10"
         >
           <div className="lg:col-span-5">
             <span className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-3 py-1 text-caption font-medium text-body shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.12)] dark:shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.35)]">
@@ -386,10 +321,12 @@ const ProductGridHome = () => {
               Dubai and the UAE.
             </p>
           </div>
-        </div>
+        </Reveal>
 
-        <ProductGridHomeCarousel />
-      </div>
+        <Reveal animationNum={1}>
+          <ProductGridHomeCarousel />
+        </Reveal>
+      </RevealSection>
     </section>
   );
 };

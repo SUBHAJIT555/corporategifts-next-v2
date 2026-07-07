@@ -3,7 +3,6 @@
 import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { ChevronLeft, ChevronRight, Tag } from "lucide-react";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
-import useInView from "@/hooks/useInView";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { BsCart4 } from "@/components/icons";
@@ -12,6 +11,10 @@ import { useQuote } from "@/contexts/QuoteContext";
 import { Product } from "@/lib/api/types";
 import Image from "next/image";
 import { TypewriterInfinite as TypewriterEffect } from "@/components/ui/Typewriter";
+import {
+  Reveal,
+  RevealSection,
+} from "@/components/ui/timeline-animation";
 import {
   candyAccentButtonClasses,
   candyCarouselNavClasses,
@@ -49,11 +52,6 @@ export default function TopSaverClient({
     },
     [autoplayRef.current]
   );
-  const { ref: carouselRef, inView: swiperInView } =
-    useInView<HTMLDivElement>();
-
-  const { ref: headingRef, inView: headingInView } =
-    useInView<HTMLDivElement>();
   const videoContainerRef = useRef<HTMLDivElement>(null);
 
   const [isVideoVisible, setIsVideoVisible] = useState(false);
@@ -102,15 +100,11 @@ export default function TopSaverClient({
 
   return (
     <section className="w-full overflow-x-hidden bg-canvas">
-      <div className="mx-auto max-w-7xl border-x border-hairline px-5 py-16 sm:px-6 sm:py-20 lg:py-24">
+      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-16 sm:px-6 sm:py-20 lg:py-24">
         {/* Heading */}
-        <div
-          ref={headingRef}
-          className={`mb-10 grid grid-cols-1 gap-6 transition-all duration-700 ease-out sm:mb-12 lg:grid-cols-12 lg:gap-10 ${
-            headingInView
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-8"
-          }`}
+        <Reveal
+          animationNum={0}
+          className="mb-10 grid grid-cols-1 gap-6 sm:mb-12 lg:grid-cols-12 lg:gap-10"
         >
           <div className="lg:col-span-5">
             <span className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-3 py-1 text-caption font-medium text-body shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.12)] dark:shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.35)]">
@@ -132,206 +126,183 @@ export default function TopSaverClient({
               Dubai and the UAE.
             </p>
           </div>
-        </div>
+        </Reveal>
 
-        <div
-          ref={carouselRef}
-          className={`transition-opacity duration-700 ease-out ${
-            swiperInView ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-stretch lg:gap-8">
-            {/* Product carousel */}
-            <div className="flex flex-col lg:col-span-9">
-              <div className="flex h-full flex-1 flex-col overflow-hidden rounded-2xl border border-hairline bg-canvas">
-                {/* Toolbar */}
-                <div className="flex items-center justify-between gap-4 border-b border-hairline px-4 py-3 sm:px-5">
-                  <p className="text-caption font-medium uppercase tracking-[0.14em] text-muted">
-                    <span className="text-ink">{slideLabel}</span>
-                    <span className="mx-1.5 text-muted-soft">/</span>
-                    {totalLabel}
-                  </p>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-stretch lg:gap-8">
+          {/* Product carousel */}
+          <Reveal animationNum={1} className="flex flex-col lg:col-span-9">
+            <div className="flex h-full flex-1 flex-col overflow-hidden rounded-2xl border border-hairline bg-canvas">
+              {/* Toolbar */}
+              <div className="flex items-center justify-between gap-4 border-b border-hairline px-4 py-3 sm:px-5">
+                <p className="text-caption font-medium uppercase tracking-[0.14em] text-muted">
+                  <span className="text-ink">{slideLabel}</span>
+                  <span className="mx-1.5 text-muted-soft">/</span>
+                  {totalLabel}
+                </p>
 
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => emblaApi?.scrollPrev()}
-                      className={candyCarouselNavClasses("prev")}
-                      aria-label="Previous slide"
-                    >
-                      <ChevronLeft
-                        className={candySquareIconClasses}
-                        strokeWidth={2.25}
-                      />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => emblaApi?.scrollNext()}
-                      className={candyCarouselNavClasses("next")}
-                      aria-label="Next slide"
-                    >
-                      <ChevronRight
-                        className={candySquareIconClasses}
-                        strokeWidth={2.25}
-                      />
-                    </button>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => emblaApi?.scrollPrev()}
+                    className={candyCarouselNavClasses("prev")}
+                    aria-label="Previous slide"
+                  >
+                    <ChevronLeft
+                      className={candySquareIconClasses}
+                      strokeWidth={2.25}
+                    />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => emblaApi?.scrollNext()}
+                    className={candyCarouselNavClasses("next")}
+                    aria-label="Next slide"
+                  >
+                    <ChevronRight
+                      className={candySquareIconClasses}
+                      strokeWidth={2.25}
+                    />
+                  </button>
                 </div>
+              </div>
 
-                {/* Slides */}
-                <div
-                  className="top-saver-swiper cursor-grab overflow-hidden p-4 active:cursor-grabbing sm:p-5"
-                  ref={emblaRef}
-                >
-                  <div className="-mx-2 flex items-stretch sm:-mx-2.5">
-                    {safeProducts.map((product, index) => (
-                      <div
-                        key={product.id}
-                        className="flex h-auto flex-[0_0_100%] px-2 sm:flex-[0_0_50%] sm:px-2.5 lg:flex-[0_0_33.333%]"
-                      >
-                        <article
-                          className={`group relative flex h-full min-h-[360px] w-full flex-col overflow-hidden rounded-xl border border-hairline bg-canvas p-4 transition-all duration-700 ease-out sm:min-h-[380px] sm:p-5 ${
-                            swiperInView
-                              ? "opacity-100 translate-y-0"
-                              : "opacity-0 translate-y-8"
-                          }`}
-                          style={{ transitionDelay: `${index * 100}ms` }}
+              {/* Slides */}
+              <div
+                className="top-saver-swiper cursor-grab overflow-hidden p-4 active:cursor-grabbing sm:p-5"
+                ref={emblaRef}
+              >
+                <div className="-mx-2 flex items-stretch sm:-mx-2.5">
+                  {safeProducts.map((product) => (
+                    <div
+                      key={product.id}
+                      className="flex h-auto flex-[0_0_100%] px-2 sm:flex-[0_0_50%] sm:px-2.5 lg:flex-[0_0_33.333%]"
+                    >
+                      <article className="group relative flex h-full min-h-[360px] w-full flex-col overflow-hidden rounded-xl border border-hairline bg-canvas p-4 sm:min-h-[380px] sm:p-5">
+                        <NoPrefetchLink
+                          href={getProductUrl(product)}
+                          className="block shrink-0"
                         >
+                          <div className="relative mb-4 flex h-40 w-full items-center justify-center overflow-hidden rounded-xl border border-hairline bg-surface-soft sm:mb-5 sm:h-44">
+                            <Image
+                              width={500}
+                              height={500}
+                              src={product.image}
+                              alt={product.name}
+                              className="h-full w-full object-contain p-4 transition-transform duration-500 ease-out group-hover:scale-105"
+                            />
+                          </div>
+                        </NoPrefetchLink>
+
+                        <div className="flex min-h-0 flex-1 flex-col">
+                          {product.categories[0] ? (
+                            <span className="mb-2 inline-flex w-fit max-w-full items-center rounded-md border border-dashed border-hairline bg-surface-soft px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.14em] text-brand-accent">
+                              {product.categories[0]}
+                            </span>
+                          ) : (
+                            <span className="mb-2 block h-[22px]" aria-hidden />
+                          )}
+
                           <NoPrefetchLink
                             href={getProductUrl(product)}
-                            className="block shrink-0"
+                            className="mb-4 block min-h-11 sm:min-h-12"
                           >
-                            <div className="relative mb-4 flex h-40 w-full items-center justify-center overflow-hidden rounded-xl border border-hairline bg-canvas sm:mb-5 sm:h-44">
-                              <div
-                                aria-hidden
-                                className="bg-crosshatch pointer-events-none absolute inset-0 opacity-[0.35] dark:opacity-[0.2]"
-                              />
-                              <Image
-                                width={500}
-                                height={500}
-                                src={product.image}
-                                alt={product.name}
-                                className="relative z-10 h-full w-full object-contain p-4 transition-transform duration-500 ease-out group-hover:scale-105"
-                              />
-                            </div>
+                            <h3 className="line-clamp-2 text-base font-semibold leading-snug text-ink sm:text-[17px]">
+                              {product.name}
+                            </h3>
                           </NoPrefetchLink>
 
-                          <div className="flex min-h-0 flex-1 flex-col">
-                            {product.categories[0] ? (
-                              <span className="mb-2 inline-flex w-fit max-w-full items-center rounded-md border border-dashed border-hairline bg-surface-soft px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.14em] text-brand-accent">
-                                {product.categories[0]}
-                              </span>
-                            ) : (
-                              <span className="mb-2 block h-[22px]" aria-hidden />
+                          <button
+                            type="button"
+                            disabled={isInQuote(product.id)}
+                            className={cn(
+                              candyAccentButtonClasses(
+                                "group/btn mt-auto w-full text-sm sm:text-base"
+                              ),
+                              isInQuote(product.id) && "opacity-60"
                             )}
-
-                            <NoPrefetchLink
-                              href={getProductUrl(product)}
-                              className="mb-4 block min-h-11 sm:min-h-12"
-                            >
-                              <h3 className="line-clamp-2 text-base font-semibold leading-snug text-ink sm:text-[17px]">
-                                {product.name}
-                              </h3>
-                            </NoPrefetchLink>
-
-                            <button
-                              type="button"
-                              disabled={isInQuote(product.id)}
+                            onClick={() => addToQuote(product, 1)}
+                          >
+                            <span
                               className={cn(
-                                candyAccentButtonClasses(
-                                  "group/btn mt-auto w-full text-sm sm:text-base"
-                                ),
-                                isInQuote(product.id) && "opacity-60"
+                                "inline-block transition-all duration-300 ease-in-out",
+                                !isInQuote(product.id) &&
+                                  "group-hover/btn:-translate-y-full group-hover/btn:opacity-0"
                               )}
-                              onClick={() => addToQuote(product, 1)}
                             >
-                              <span
-                                className={cn(
-                                  "inline-block transition-all duration-300 ease-in-out",
-                                  !isInQuote(product.id) &&
-                                    "group-hover/btn:-translate-y-full group-hover/btn:opacity-0"
-                                )}
-                              >
-                                {isInQuote(product.id)
-                                  ? "Added to Quote"
-                                  : "Add to Quote"}
-                              </span>
-                              {!isInQuote(product.id) && (
-                                <BsCart4 className="absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 translate-y-full opacity-0 transition-all duration-300 ease-in-out group-hover/btn:-translate-y-1/2 group-hover/btn:opacity-100" />
-                              )}
-                            </button>
-                          </div>
-                        </article>
-                      </div>
-                    ))}
-                  </div>
+                              {isInQuote(product.id)
+                                ? "Added to Quote"
+                                : "Add to Quote"}
+                            </span>
+                            {!isInQuote(product.id) && (
+                              <BsCart4 className="absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 translate-y-full opacity-0 transition-all duration-300 ease-in-out group-hover/btn:-translate-y-1/2 group-hover/btn:opacity-100" />
+                            )}
+                          </button>
+                        </div>
+                      </article>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
+          </Reveal>
 
-            {/* Video CTA panel */}
-            <div className="relative flex min-h-[420px] lg:col-span-3 lg:min-h-0">
-              <div
-                ref={videoContainerRef}
-                className={`relative flex h-full min-h-[420px] w-full flex-1 flex-col overflow-hidden border border-hairline bg-surface-dark transition-all duration-700 ease-out lg:min-h-full ${
-                  swiperInView
-                    ? "opacity-100 translate-x-0"
-                    : "opacity-0 translate-x-8"
-                }`}
-                style={{ transitionDelay: "400ms" }}
-              >
-                <div className="absolute inset-0 overflow-hidden">
-                  {isVideoVisible ? (
-                    <video
-                      className="absolute inset-0 h-full w-full scale-110 object-cover object-center"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      preload="none"
-                      width="640"
-                      height="360"
-                    >
-                      <source src={videoUrl} type="video/webm" />
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <div className="absolute inset-0 animate-pulse bg-surface-card" />
-                  )}
-                </div>
+          {/* Video CTA panel */}
+          <Reveal animationNum={2} className="relative flex min-h-[420px] lg:col-span-3 lg:min-h-0">
+            <div
+              ref={videoContainerRef}
+              className="relative flex h-full min-h-[420px] w-full flex-1 flex-col overflow-hidden border border-hairline bg-surface-dark lg:min-h-full"
+            >
+              <div className="absolute inset-0 overflow-hidden">
+                {isVideoVisible ? (
+                  <video
+                    className="absolute inset-0 h-full w-full scale-110 object-cover object-center"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="none"
+                    width="640"
+                    height="360"
+                  >
+                    <source src={videoUrl} type="video/webm" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <div className="absolute inset-0 animate-pulse bg-surface-card" />
+                )}
+              </div>
 
-                <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/90 via-black/60 to-black/25" />
+              <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/90 via-black/60 to-black/25" />
 
-                <div className="relative z-10 flex flex-1 flex-col justify-between p-5 text-center sm:p-6">
-                  <h3 className="pt-1 text-2xl font-semibold leading-tight text-white sm:text-3xl">
-                    <TypewriterEffect
-                      words={words}
-                      className="text-inherit font-inherit"
-                      cursorClassName="bg-white"
-                    />
-                  </h3>
+              <div className="relative z-10 flex flex-1 flex-col justify-between p-5 text-center sm:p-6">
+                <h3 className="pt-1 text-2xl font-semibold leading-tight text-white sm:text-3xl">
+                  <TypewriterEffect
+                    words={words}
+                    className="text-inherit font-inherit"
+                    cursorClassName="bg-white"
+                  />
+                </h3>
 
-                  <div className="flex w-full flex-col items-center pb-1">
-                    <p className="max-w-[220px] text-base font-medium leading-snug text-white/90 sm:text-lg">
-                      Request a bulk quote today.
-                    </p>
+                <div className="flex w-full flex-col items-center pb-1">
+                  <p className="max-w-[220px] text-base font-medium leading-snug text-white/90 sm:text-lg">
+                    Request a bulk quote today.
+                  </p>
 
-                    <NoPrefetchLink
-                      href="/contact-us"
-                      className={cn(
-                        candyWhiteButtonClasses("mt-4 w-full max-w-[220px]"),
-                        "pointer-events-auto"
-                      )}
-                    >
-                      Contact Us Now
-                    </NoPrefetchLink>
-                  </div>
+                  <NoPrefetchLink
+                    href="/contact-us"
+                    className={cn(
+                      candyWhiteButtonClasses("mt-4 w-full max-w-[220px]"),
+                      "pointer-events-auto"
+                    )}
+                  >
+                    Contact Us Now
+                  </NoPrefetchLink>
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
-      </div>
+      </RevealSection>
     </section>
   );
 }

@@ -1,337 +1,173 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import type { Swiper as SwiperType } from "swiper";
-import { Pagination, Autoplay } from "swiper/modules";
-import { PiSealQuestionDuotone } from "@/components/icons";
-// import { motion, useInView } from "framer-motion";
-import useInView from "@/hooks/useInView";
-import { PiHandshakeDuotone } from "@/components/icons/PiHandshakeDuotone";
+import {
+  LuLeaf,
+  LuPackageSearch,
+  LuTicketCheck,
+  LuUsers,
+} from "@/components/icons";
+import { Award } from "lucide-react";
+import {
+  Reveal,
+  RevealSection,
+} from "@/components/ui/timeline-animation";
 
-export interface FeatureCard {
-  id: number;
-  number: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  iconColor: string;
-}
+const homeFeatures = [
+  {
+    id: 1,
+    number: "01",
+    title: "Customized Corporate Gifts With Logo Branding",
+    description:
+      "We help businesses design custom corporate gifts in Dubai, featuring logo printing, engraving, embossing, packaging, and product personalization for clients, employees, and special events.",
+    icon: <LuPackageSearch className="h-5 w-5" />,
+    iconColor: "#A8DDF0",
+  },
+  {
+    id: 2,
+    number: "02",
+    title: "Luxury, Smart & Promotional Gift Options",
+    description:
+      "Explore luxury corporate gifts, smart corporate gifts, branded giveaways, stationery, bags, drinkware, apparel, and premium gift sets for different budgets and occasions.",
+    icon: <LuTicketCheck className="h-5 w-5" />,
+    iconColor: "#F9C46B",
+  },
+  {
+    id: 3,
+    number: "03",
+    title: "Affordable Bulk Gifting Support",
+    description:
+      "Whether you want inexpensive corporate gifts or high-end executive hampers, our team will help you choose practical options according to your quantity, audience, branding style, and delivery requirements.",
+    icon: <LuLeaf className="h-5 w-5" />,
+    iconColor: "#94EBC5",
+  },
+  {
+    id: 4,
+    number: "04",
+    title: "UAE-Focused Corporate Gifting Experience",
+    description:
+      "We know the business gifting needs in Dubai for corporate events, exhibitions, festive campaigns, employee rewards, client appreciation and promotional marketing.",
+    icon: <LuUsers className="h-5 w-5" />,
+    iconColor: "#F7B6F7",
+  },
+];
 
-interface WhyChooseUsProps {
-  features: FeatureCard[];
-  title?: React.ReactNode;
-  subtitle?: string;
-}
+const title = (
+  <>
+    <span className="inline-flex flex-wrap items-center justify-center gap-2">
+      <span>Why </span>
+      <span
+        className="inline-flex rotate-6 rounded-lg border border-dashed border-hairline bg-surface-card p-0.5 sm:p-1"
+        aria-hidden="true"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-4 w-4 text-brand-accent sm:h-5 sm:w-5 md:h-6 md:w-6"
+          aria-hidden="true"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M8 8a3.5 3 0 0 1 3.5 -3h1a3.5 3 0 0 1 3.5 3a3 3 0 0 1 -2 3a3 4 0 0 0 -2 4" />
+          <path d="M12 19l0 .01" />
+        </svg>
+      </span>
+      <span>choose Baharnani Advertising </span>
+      <span
+        className="inline-flex -rotate-6 rounded-lg border border-dashed border-hairline bg-surface-card p-0.5 sm:p-1"
+        aria-hidden="true"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-4 w-4 text-brand-accent sm:h-5 sm:w-5 md:h-6 md:w-6"
+          aria-hidden="true"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M6 9a6 6 0 1 0 12 0a6 6 0 1 0 -12 0" />
+          <path d="M12 15l3.4 5.89l1.598 -3.233l3.598 .232l-3.4 -5.889" />
+          <path d="M6.802 12l-3.4 5.89l3.598 -.233l1.598 3.232l3.4 -5.889" />
+        </svg>
+      </span>
+      <span>as Your Most Trusted Corporate Gifts Supplier in Dubai?</span>
+    </span>
+  </>
+);
 
-const WhyChooseUs = ({
-  features,
-  title = (
-    <>
-      Why{" "}
-      <PiSealQuestionDuotone className="inline-block align-middle rotate-45 w-24 h-24" />
-      choose Baharnani Advertising as your trusted
-      <PiHandshakeDuotone className="inline-block align-middle rotate-45 w-24 h-24" />{" "}
-      corporate gifts supplier?
-    </>
-  ),
-  subtitle = "With years of expertise, we have become one of the most reliable names among corporate gift suppliers in UAE, especially in Dubai, offering creative concepts and superior-quality products that represent your brand’s identity.",
-}: WhyChooseUsProps) => {
+const subtitle =
+  "Delivering quality, reliability, and consistency in every shipment.";
 
-  const swiperInstanceRef = useRef<SwiperType | null>(null);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  const heading = useInView<HTMLDivElement>({
-    rootMargin: "-50px",
-  });
-
-  const swiperSection = useInView<HTMLDivElement>({
-    rootMargin: "-100px",
-  });
-
-  const [isMobile, setIsMobile] = useState(false);
-  const hasFewItems = features.length <= 3;
-  const shouldUseFlexbox = hasFewItems && !isMobile;
-
-  /* ---------------- Height Equalization (Optimized) ---------------- */
-
-  const equalizeHeights = () => {
-    const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
-    if (!cards.length) return;
-
-    // Reset heights
-    for (const card of cards) {
-      card.style.height = "auto";
-    }
-
-    let maxHeight = 0;
-
-    for (const card of cards) {
-      const height = card.offsetHeight;
-      if (height > maxHeight) maxHeight = height;
-    }
-
-    if (maxHeight > 0) {
-      for (const card of cards) {
-        card.style.height = `${maxHeight}px`;
-      }
-    }
-  };
-
-  /* ---------------- Mobile Detection (Throttled) ---------------- */
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkMobile();
-
-    let timeout: NodeJS.Timeout;
-
-    const handleResize = () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(checkMobile, 150);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  /* ---------------- ResizeObserver Instead of Timeouts ---------------- */
-
-  useEffect(() => {
-    if (!swiperSection.inView) return;
-
-    // Run once when section becomes visible
-    requestAnimationFrame(equalizeHeights);
-  }, [swiperSection.inView, features]);
-
+export default function HomeWhyChooseUs() {
   return (
-    <section className="w-full py-6 sm:py-8 md:py-12 lg:py-16 xl:py-20 2xl:py-24 overflow-x-hidden">
-      <div className="w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1920px] mx-auto">
-        {/* Heading */}
-        <div
-          ref={heading.ref}
-          className={`mb-8 sm:mb-10 md:mb-12 lg:mb-16 text-center transition-all duration-700 ease-out ${heading.inView
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 translate-y-12"
-            }`}
+    <section className="w-full overflow-x-hidden bg-canvas">
+      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-16 sm:px-6 sm:py-20 lg:py-24">
+        <Reveal
+          animationNum={0}
+          className="mx-auto mb-10 max-w-4xl text-center sm:mb-12"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor leading-tight mb-3 sm:mb-4 md:mb-5 lg:mb-6">
-            {title}
-          </h2>
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-3 py-1 text-caption font-medium text-body shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.12)] dark:shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.35)]">
+            <Award className="h-3.5 w-3.5 text-brand-accent" />
+            Why Choose Us
+          </span>
 
-          <div className="mb-3 sm:mb-4 md:mb-5">
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-switzer tracking-widest sm:tracking-[0.2em] md:tracking-[0.3em] text-textcolor font-medium">
-              {subtitle}
-            </p>
-          </div>
-        </div>
+          <h2 className="mt-4 text-display-md text-ink">{title}</h2>
 
-        {/* Swiper Section */}
-        <div
-          ref={swiperSection.ref}
-          className={`w-full relative transition-opacity duration-700 ease-out ${swiperSection.inView ? "opacity-100" : "opacity-0"
-            }`}
-        >
-          <div className="relative">
-            {shouldUseFlexbox ? (
-              <div className="flex flex-wrap justify-center items-stretch gap-4 sm:gap-6 md:gap-8">
-                {features.map((feature, index) => (
-                  <div
-                    key={feature.id}
-                    className={`h-full w-full transition-all duration-700 ease-out ${swiperSection.inView
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-8"
-                      }`}
-                    style={{ transitionDelay: `${index * 100}ms` }}
-                  >
-                    <div
-                      ref={(el) => {
-                        if (el) cardRefs.current[index] = el;
-                      }}
-                      className="bg-[#e1e1e1] rounded-lg p-6 sm:p-7 md:p-8 lg:p-10 flex flex-col border border-textcolor hover:shadow-lg transition-shadow duration-300 h-full"
-                    >
-                      <div className="flex items-center gap-4 sm:gap-5 mb-4 sm:mb-5 md:mb-6">
-                        <div
-                          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-lg flex items-center justify-center shrink-0"
-                          style={{ backgroundColor: feature.iconColor }}
-                        >
-                          <div className="text-textcolor">
-                            {feature.icon}
-                          </div>
-                        </div>
+          <p className="mt-4 text-body-md text-muted sm:text-[17px] sm:leading-7">
+            {subtitle}
+          </p>
+        </Reveal>
 
-                        <span
-                          className="text-3xl sm:text-4xl md:text-5xl font-tanker text-textcolor "
-                          style={{
-                            WebkitTextStroke: "1px #10100e",
-                            WebkitTextFillColor: "transparent",
-                          }}
-                        >
-                          {feature.number}
-                        </span>
-                      </div>
-
-                      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-tanker text-textcolor  mb-3 sm:mb-4 md:mb-5">
-                        {feature.title}
-                      </h3>
-
-                      <p className="text-sm sm:text-base md:text-lg lg:text-xl font-switzer text-textcolor leading-relaxed grow">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <>
-                <Swiper
-                  modules={[Pagination, Autoplay]}
-                  spaceBetween={20}
-                  slidesPerView={1}
-                  breakpoints={{
-                    640: { slidesPerView: 1, spaceBetween: 24 },
-                    768: { slidesPerView: 2, spaceBetween: 28 },
-                    1024: { slidesPerView: 3, spaceBetween: 32 },
-                  }}
-                  pagination={{
-                    clickable: true,
-                    el: ".swiper-pagination-why-choose-us",
-                    dynamicBullets: false,
-                  }}
-                  autoplay={{
-                    delay: 4000,
-                    disableOnInteraction: false,
-                  }}
-                  grabCursor
-                  className="why-choose-us-swiper"
-                  onSwiper={(swiper) => {
-                    swiperInstanceRef.current = swiper;
-                    requestAnimationFrame(equalizeHeights);
-                  }}
-                  onResize={equalizeHeights}
-                  onSlideChange={equalizeHeights}
+        <Reveal animationNum={1}>
+          <div className="overflow-hidden rounded-2xl border border-hairline bg-surface-soft p-4 sm:p-5">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {homeFeatures.map((feature, index) => (
+                <Reveal
+                  key={feature.id}
+                  animationNum={2 + index}
+                  as="article"
+                  className="flex h-full flex-col rounded-xl border border-hairline bg-canvas p-5 sm:p-6"
                 >
-                  {features.map((feature, index) => (
-                    <SwiperSlide key={feature.id}>
-                      <div
-                        className={`h-full w-full transition-all duration-700 m-4 ease-out ${swiperSection.inView
-                          ? "opacity-100 translate-y-0"
-                          : "opacity-0 translate-y-8"
-                          }`}
-                        style={{ transitionDelay: `${index * 100}ms` }}
-                      >
-                        <div
-                          ref={(el) => {
-                            if (el) cardRefs.current[index] = el;
-                          }}
-                          className="bg-neutral-100 rounded-xl p-6 sm:p-7 md:p-8 lg:p-10 flex flex-col border border-neutral-300 ring ring-neutral-300 ring-offset-4 md:ring-offset-6 transition-shadow duration-300"
-                        >
-                          <div className="flex items-center gap-4 sm:gap-5 mb-4 sm:mb-5 md:mb-6">
-                            <div
-                              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl ring ring-neutral-300 ring-offset-3 flex items-center justify-center shrink-0"
-                              style={{ backgroundColor: feature.iconColor }}
-                            >
-                              <div className="text-textcolor">
-                                {feature.icon}
-                              </div>
-                            </div>
-
-                            <span
-                              className="text-3xl sm:text-4xl md:text-5xl font-sentient font-semibold text-textcolor "
-                              style={{
-                                WebkitTextStroke: "1px #10100e",
-                                WebkitTextFillColor: "transparent",
-                              }}
-                            >
-                              {feature.number}
-                            </span>
-                          </div>
-
-                          <h3 className="text-xl sm:text-2xl md:text-3xl font-sentient font-semibold text-textcolor  mb-3 sm:mb-4 md:mb-5">
-                            {feature.title}
-                          </h3>
-
-                          <p className="text-sm sm:text-base md:text-lg lg:text-xl font-switzer text-textcolor leading-relaxed grow">
-                            {feature.description}
-                          </p>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-
-                <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8 mt-6 sm:mt-8 md:mt-10">
-                  <button
-                    onClick={() => swiperInstanceRef.current?.slidePrev()}
-                    className="swiper-button-prev-product-grid inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 text-textcolor font-switzer text-xs sm:text-sm border! border-neutral-200! rounded-xl bg-neutral-100! hover:bg-white!"
-                    aria-label="Previous slide"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#0F5C85"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="size-4 sm:size-5"
-                      aria-hidden="true"
+                  <div className="mb-4 flex items-center gap-4">
+                    <div
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-hairline text-ink"
+                      style={{ backgroundColor: feature.iconColor }}
                     >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <path d="M5 12h6m3 0h1.5m3 0h.5" />
-                      <path d="M5 12l6 6" />
-                      <path d="M5 12l6 -6" />
-                    </svg>
-                    <span className="hidden sm:inline text-textcolor font-switzer font-semibold">
-                      Previous
-                    </span>
-                  </button>
-
-                  <div className="swiper-pagination-why-choose-us"></div>
-
-                  <button
-                    onClick={() => swiperInstanceRef.current?.slideNext()}
-                    className="swiper-button-next-product-grid inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 text-textcolor font-switzer text-xs sm:text-sm border! border-neutral-200! rounded-xl bg-neutral-100! hover:bg-white!"
-                    aria-label="Next slide"
-                  >
-                    <span className="hidden sm:inline text-textcolor font-switzer font-semibold">
-                      Next
-                    </span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#0F5C85"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="size-4 sm:size-5"
-                      aria-hidden="true"
+                      {feature.icon}
+                    </div>
+                    <span
+                      className="text-3xl font-semibold tracking-tight text-muted-soft sm:text-4xl"
+                      style={{
+                        WebkitTextStroke: "1px var(--cal-hairline)",
+                        WebkitTextFillColor: "transparent",
+                      }}
                     >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <path d="M5 12h.5m3 0h1.5m3 0h6" />
-                      <path d="M13 18l6 -6" />
-                      <path d="M13 6l6 6" />
-                    </svg>
-                  </button>
-                </div>
-              </>
-            )}
+                      {feature.number}
+                    </span>
+                  </div>
+
+                  <h3 className="mb-3 text-lg font-semibold leading-snug text-ink sm:text-xl">
+                    {feature.title}
+                  </h3>
+
+                  <p className="text-body-md text-muted">{feature.description}</p>
+                </Reveal>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
+        </Reveal>
+      </RevealSection>
     </section>
   );
-};
-
-export default WhyChooseUs;
+}

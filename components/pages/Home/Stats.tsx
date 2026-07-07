@@ -3,7 +3,16 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
-import { candyDarkButtonClasses, candyIconButtonClasses, candyAccentIconClasses, candyWhiteButtonClasses } from "@/components/ui/candy-button";
+import {
+  Reveal,
+  RevealSection,
+} from "@/components/ui/timeline-animation";
+import {
+  candyDarkButtonClasses,
+  candyIconButtonClasses,
+  candyAccentIconClasses,
+  candyWhiteButtonClasses,
+} from "@/components/ui/candy-button";
 
 const AnimatedNumber = ({
   value,
@@ -116,28 +125,6 @@ const StatIcon = ({ icon }: { icon: string }) => {
 };
 
 const Stats = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(el);
-
-    return () => observer.disconnect();
-  }, []);
-
   const stats = [
     {
       value: 10,
@@ -164,119 +151,103 @@ const Stats = () => {
 
   return (
     <section className="w-full bg-canvas">
-      <div
-        ref={containerRef}
-        className="mx-auto max-w-7xl border-x border-hairline px-5 py-16 sm:px-6 sm:py-20 lg:py-24"
-      >
+      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-16 sm:px-6 sm:py-20 lg:py-24">
         {/* Desktop / tablet grid */}
-        <div className="hidden overflow-hidden rounded-2xl border border-hairline bg-canvas sm:block">
-          {/* Numbers row */}
-          <div className="grid grid-cols-3">
-            {stats.map((stat, index) => (
-              <div
-                key={`top-${stat.label}`}
-                className={`flex flex-col items-center justify-center px-4 py-8 text-center transition-all duration-500 md:py-10 ${
-                  index > 0 ? "border-l border-hairline" : ""
-                } ${
-                  visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-                }`}
-                style={{ transitionDelay: `${index * 120}ms` }}
-              >
-                <div className="text-4xl font-semibold tracking-tight text-ink md:text-5xl">
-                  <AnimatedNumber value={stat.value} suffix={stat.suffix} />
+        <Reveal animationNum={0}>
+          <div className="hidden overflow-hidden rounded-2xl border border-hairline bg-canvas sm:block">
+            {/* Numbers row */}
+            <div className="grid grid-cols-3">
+              {stats.map((stat, index) => (
+                <div
+                  key={`top-${stat.label}`}
+                  className={`flex flex-col items-center justify-center px-4 py-8 text-center md:py-10 ${
+                    index > 0 ? "border-l border-hairline" : ""
+                  }`}
+                >
+                  <div className="text-4xl font-semibold tracking-tight text-ink md:text-5xl">
+                    <AnimatedNumber value={stat.value} suffix={stat.suffix} />
+                  </div>
+                  <div className="mt-2 text-xs font-medium uppercase tracking-[0.18em] text-muted">
+                    {stat.label}
+                  </div>
                 </div>
-                <div className="mt-2 text-xs font-medium uppercase tracking-[0.18em] text-muted">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Icon + description row */}
-          <div className="grid grid-cols-3 border-t border-hairline bg-canvas">
-            {stats.map((stat, index) => (
-              <div
-                key={`bottom-${stat.label}`}
-                className={`flex items-center justify-between gap-3 px-4 py-5 transition-all duration-500 ${
-                  index > 0 ? "border-l border-hairline" : ""
-                } ${
-                  visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-                }`}
-                style={{ transitionDelay: `${index * 120 + 180}ms` }}
-              >
-                <span className={candyIconButtonClasses("white", "sm")}>
-                  <StatIcon icon={stat.icon} />
-                </span>
-                <p className="flex-1 text-right text-sm font-medium text-body">
-                  {stat.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Mobile stacked cards */}
-        <div className="space-y-4 sm:hidden">
-          {stats.map((stat, index) => (
-            <div
-              key={`mobile-${stat.label}`}
-              className={`overflow-hidden rounded-2xl border border-hairline bg-canvas transition-all duration-500 ${
-                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-              }`}
-              style={{ transitionDelay: `${index * 120}ms` }}
-            >
-              <div className="flex flex-col items-center justify-center px-4 py-5 text-center">
-                <div className="text-3xl font-semibold tracking-tight text-ink">
-                  <AnimatedNumber value={stat.value} suffix={stat.suffix} />
-                </div>
-                <div className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-muted">
-                  {stat.label}
-                </div>
-              </div>
-              <div className="flex items-center gap-3 border-t border-hairline px-4 py-4">
-                <span className={candyIconButtonClasses("white", "sm")}>
-                  <StatIcon icon={stat.icon} />
-                </span>
-                <p className="flex-1 text-sm font-medium text-body">
-                  {stat.description}
-                </p>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        <p
-          className={`mx-auto mt-10 max-w-4xl text-center text-2xl font-medium leading-relaxed text-muted transition-all duration-700 sm:mt-12 sm:text-3xl lg:mt-14 ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-          style={{ transitionDelay: "500ms" }}
-        >
-          From startups to corporate teams, Baharnani supports bulk corporate
-          gifts in Dubai with practical product choices, customisation options,
-          and reliable delivery coordination.
-        </p>
+            {/* Icon + description row */}
+            <div className="grid grid-cols-3 border-t border-hairline bg-canvas">
+              {stats.map((stat, index) => (
+                <div
+                  key={`bottom-${stat.label}`}
+                  className={`flex items-center justify-between gap-3 px-4 py-5 ${
+                    index > 0 ? "border-l border-hairline" : ""
+                  }`}
+                >
+                  <span className={candyIconButtonClasses("white", "sm")}>
+                    <StatIcon icon={stat.icon} />
+                  </span>
+                  <p className="flex-1 text-right text-sm font-medium text-body">
+                    {stat.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
 
-        <div
-          className={`mt-8 flex flex-col justify-center gap-3 transition-all duration-700 sm:flex-row sm:items-center ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-          style={{ transitionDelay: "620ms" }}
-        >
-          <NoPrefetchLink
-            href="/products"
-            className={candyDarkButtonClasses("group w-full sm:w-auto")}
-          >
-            Explore Our Products
-            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-          </NoPrefetchLink>
-          <NoPrefetchLink
-            href="/products"
-            className={candyWhiteButtonClasses("w-full sm:w-auto")}
-          >
-            Shop Now
-          </NoPrefetchLink>
-        </div>
-      </div>
+          {/* Mobile stacked cards */}
+          <div className="space-y-4 sm:hidden">
+            {stats.map((stat) => (
+              <div
+                key={`mobile-${stat.label}`}
+                className="overflow-hidden rounded-2xl border border-hairline bg-canvas"
+              >
+                <div className="flex flex-col items-center justify-center px-4 py-5 text-center">
+                  <div className="text-3xl font-semibold tracking-tight text-ink">
+                    <AnimatedNumber value={stat.value} suffix={stat.suffix} />
+                  </div>
+                  <div className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-muted">
+                    {stat.label}
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 border-t border-hairline px-4 py-4">
+                  <span className={candyIconButtonClasses("white", "sm")}>
+                    <StatIcon icon={stat.icon} />
+                  </span>
+                  <p className="flex-1 text-sm font-medium text-body">
+                    {stat.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+
+        <Reveal animationNum={1}>
+          <p className="mx-auto mt-10 max-w-4xl text-center text-2xl font-medium leading-relaxed text-muted sm:mt-12 sm:text-3xl lg:mt-14">
+            From startups to corporate teams, Baharnani supports bulk corporate
+            gifts in Dubai with practical product choices, customisation options,
+            and reliable delivery coordination.
+          </p>
+        </Reveal>
+
+        <Reveal animationNum={2}>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:items-center">
+            <NoPrefetchLink
+              href="/products"
+              className={candyDarkButtonClasses("group w-full sm:w-auto")}
+            >
+              Explore Our Products
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </NoPrefetchLink>
+            <NoPrefetchLink
+              href="/products"
+              className={candyWhiteButtonClasses("w-full sm:w-auto")}
+            >
+              Shop Now
+            </NoPrefetchLink>
+          </div>
+        </Reveal>
+      </RevealSection>
     </section>
   );
 };

@@ -1,68 +1,57 @@
 import { memo, type ReactNode } from "react";
+import { ArrowUpRight } from "lucide-react";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
+import { cn } from "@/lib/utilts";
 
 type FooterLinkProps = {
-    href: string;
-    children: ReactNode;
-    external?: boolean;
+  href: string;
+  children: ReactNode;
+  external?: boolean;
 };
 
 const FooterLink = memo(function FooterLink({
-    href,
-    children,
-    external,
+  href,
+  children,
+  external,
 }: FooterLinkProps) {
-    const itemClassName = `
-        group relative flex items-center cursor-pointer
-        transition-transform duration-200 ease-out
-        hover:translate-x-2 active:scale-95
-        mb-2 last:mb-0
-      `;
+  const itemClassName = cn(
+    "group flex items-center gap-1.5 text-body-md text-muted transition-colors duration-200",
+    "hover:text-ink"
+  );
 
-    const content = (
-        <>
-            <span className="relative inline-block">
-                {children}
-            </span>
-            <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#0F5C85"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                >
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M5 12h.5m3 0h1.5m3 0h6" />
-                    <path d="M15 16l4 -4" />
-                    <path d="M15 8l4 4" />
-                </svg>
-            </span>
-        </>
-    );
+  const content = (
+    <>
+      <span>{children}</span>
+      <ArrowUpRight
+        className="h-3.5 w-3.5 shrink-0 text-brand-accent opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+        strokeWidth={2.25}
+        aria-hidden="true"
+      />
+    </>
+  );
 
-    if (external) {
-        return (
-            <li className={itemClassName}>
-                <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                    {content}
-                </a>
-            </li>
-        );
-    }
-
+  if (external) {
     return (
-        <li className={itemClassName}>
-            <NoPrefetchLink href={href} className="flex items-center">
-                {content}
-            </NoPrefetchLink>
-        </li>
+      <li>
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={itemClassName}
+        >
+          {content}
+        </a>
+      </li>
     );
+  }
+
+  return (
+    <li>
+      <NoPrefetchLink href={href} className={itemClassName}>
+        {content}
+      </NoPrefetchLink>
+    </li>
+  );
 });
 
 export default FooterLink;

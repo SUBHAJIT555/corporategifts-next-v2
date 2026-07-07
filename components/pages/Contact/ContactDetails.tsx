@@ -2,21 +2,12 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-// import {
-//     FaEnvelope,
-//     FaPhone,
-//     FaMapMarkerAlt,
-//     FaFacebookF,
-//     FaInstagram,
-//     FaLinkedinIn,
-// } from "react-icons/fa";
-
-import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import CTAButton from "@/components/ui/CTAButton";
 import { FluentFormApi } from "@/lib/api/endpoints";
 import { FluentFormPayload } from "@/lib/api/types";
 import { FaFacebook, FaInstagram, FaLinkedinIn, FcGoogle, } from "@/components/icons";
+import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 
 
 
@@ -32,25 +23,6 @@ type FormData = {
 
 const ContactDetails = () => {
     const router = useRouter();
-    const fadeInUp = {
-        hidden: { opacity: 0, y: 20 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.6 },
-        },
-    };
-
-    const staggerContainer = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2,
-            },
-        },
-    };
-
     const {
         register,
         handleSubmit,
@@ -117,39 +89,25 @@ const ContactDetails = () => {
 
     return (
         <div>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 mb-10">
-                <motion.h2
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
-                    variants={fadeInUp}
-                    className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold  text-textcolor leading-tight"
-                >
+            <RevealSection className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 mb-10">
+                <Reveal animationNum={0}>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold  text-textcolor leading-tight">
                     Please reach out to us.
-                </motion.h2>
-                <motion.p
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
-                    variants={fadeInUp}
-                    className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-textcolor font-switzer font-medium mb-10 max-w-3xl"
-                >
+                </h2>
+                </Reveal>
+                <Reveal animationNum={1}>
+                <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-textcolor font-switzer font-medium mb-10 max-w-3xl">
                     We&apos;re here to help you with premium corporate gifts, customized
                     promotional items, luxury gift sets, and personalized branding
                     solutions. Reach out to our team for creative concepts and superior
                     quality products tailored to your business needs.
-                </motion.p>
+                </p>
+                </Reveal>
 
                 {/* Left-Right Layout: Form & Contact Info (Reversed) */}
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 mb-16 items-start">
                     {/* Left Side: Contact Form */}
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-100px" }}
-                        variants={fadeInUp}
-                        className="w-full lg:w-1/2 flex flex-col"
-                    >
+                    <Reveal animationNum={2} className="w-full lg:w-1/2 flex flex-col">
                         <form
                             onSubmit={handleSubmit(onSubmit)}
                             id="get-free-quote"
@@ -375,31 +333,19 @@ const ContactDetails = () => {
                                 )}
                             </div>
                         </form>
-                    </motion.div>
+                    </Reveal>
 
                     {/* Right Side: Contact Information & Social Media (Dark Card) */}
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-100px" }}
-                        variants={staggerContainer}
-                        className="w-full lg:w-1/2 flex flex-col"
-                    >
+                    <Reveal animationNum={3} className="w-full lg:w-1/2 flex flex-col">
                         <div className="border border-neutral-300 ring ring-neutral-200 ring-offset-3 md:ring-offset-6 rounded-2xl p-6 sm:p-8 lg:p-10 h-full flex flex-col bg-white">
-                            <motion.div variants={fadeInUp} className="mb-8">
+                            <div className="mb-8">
                                 <h3 className="text-2xl sm:text-3xl font-sentient font-semibold text-textcolor mb-4">
                                     Hi there! We&apos;re always here and happy to help you anytime.
                                 </h3>
-                            </motion.div>
+                            </div>
 
-                            <motion.div
-                                variants={staggerContainer}
-                                className="space-y-4 mb-8 flex-1"
-                            >
-                                <motion.div
-                                    variants={fadeInUp}
-                                    className=" rounded-lg flex items-start gap-4"
-                                >
+                            <div className="space-y-4 mb-8 flex-1">
+                                <div className=" rounded-lg flex items-start gap-4">
                                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-neutral-300 ring ring-neutral-200 ring-offset-2 bg-neutral-100">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#0F5C85]">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -426,12 +372,9 @@ const ContactDetails = () => {
                                             info@baharnani.com
                                         </a>
                                     </div>
-                                </motion.div>
+                                </div>
 
-                                <motion.div
-                                    variants={fadeInUp}
-                                    className=" rounded-lg flex items-start gap-4"
-                                >
+                                <div className=" rounded-lg flex items-start gap-4">
                                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-neutral-300 ring ring-neutral-200 ring-offset-2 bg-neutral-100">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#0F5C85]">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -457,12 +400,9 @@ const ContactDetails = () => {
                                             (+971) 4 380 5587 - Landline
                                         </a>
                                     </div>
-                                </motion.div>
+                                </div>
 
-                                <motion.div
-                                    variants={fadeInUp}
-                                    className=" rounded-lg flex items-start gap-4"
-                                >
+                                <div className=" rounded-lg flex items-start gap-4">
                                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-neutral-300 ring ring-neutral-200 ring-offset-2 bg-neutral-100">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#0F5C85]">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -485,66 +425,52 @@ const ContactDetails = () => {
                                             Dubai, إمارة دبيّ 49757, United Arab Emirates
                                         </a>
                                     </div>
-                                </motion.div>
-                            </motion.div>
+                                </div>
+                            </div>
 
-                            <motion.div variants={fadeInUp}>
+                            <div>
                                 <div className="border-t border-neutral-300 pt-6">
                                     <p className="text-textcolor font-sentient font-semibold mb-4">
                                         Connect with us
                                     </p>
                                     <div className="flex gap-4">
-                                        <motion.a
+                                        <a
                                             href="https://www.facebook.com/BAHARNANIADV"
                                             target="_blank"
-                                            whileHover={{ scale: 1.1 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            className="group relative text-neutral-700 hover:text-[#0F5C85] transition-colors duration-300 rounded-xl border border-neutral-300 p-1 bg-neutral-100 ring ring-neutral-300 ring-offset-2"
+                                            className="group relative text-neutral-700 hover:text-[#0F5C85] transition-colors duration-300 rounded-xl border border-neutral-300 p-1 bg-neutral-100 ring ring-neutral-300 ring-offset-2 hover:scale-105"
                                         >
                                             <FaFacebook className="size-6" />
-                                        </motion.a>
-                                        <motion.a
+                                        </a>
+                                        <a
                                             href="https://www.instagram.com/baharnaniadv/"
                                             target="_blank"
-                                            whileHover={{ scale: 1.1 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            className="group relative text-neutral-700 hover:text-[#0F5C85] transition-colors duration-300 rounded-xl border border-neutral-300 p-1 bg-neutral-100 ring ring-neutral-300 ring-offset-2"
+                                            className="group relative text-neutral-700 hover:text-[#0F5C85] transition-colors duration-300 rounded-xl border border-neutral-300 p-1 bg-neutral-100 ring ring-neutral-300 ring-offset-2 hover:scale-105"
                                         >
                                             <FaInstagram className="size-6" />
-                                        </motion.a>
-                                        <motion.a
+                                        </a>
+                                        <a
                                             href="https://www.linkedin.com/company/baharnaniadvertisingdubai/"
                                             target="_blank"
-                                            whileHover={{ scale: 1.1 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            className="group relative text-neutral-700 hover:text-[#0F5C85] transition-colors duration-300 rounded-xl border border-neutral-300 p-1 bg-neutral-100 ring ring-neutral-300 ring-offset-2"
+                                            className="group relative text-neutral-700 hover:text-[#0F5C85] transition-colors duration-300 rounded-xl border border-neutral-300 p-1 bg-neutral-100 ring ring-neutral-300 ring-offset-2 hover:scale-105"
                                         >
                                             <FaLinkedinIn className="size-6" />
-                                        </motion.a>
-                                        <motion.a
+                                        </a>
+                                        <a
                                             href="https://www.google.com/maps/place/Baharnani+Advertising+LLC+-+Corporate+gifts+Company+Dubai+%7C+Exhibition+stand+Contractors+Dubai/@25.1625624,55.2303193,16z/data=!4m16!1m7!3m6!1s0x3e5f69c4ae8eb43b:0x34670daac58a6f22!2sBaharnani+Advertising+LLC+-+Corporate+gifts+Company+Dubai+%7C+Exhibition+stand+Contractors+Dubai!8m2!3d25.1625188!4d55.2343055!16s%2Fg%2F11f66tl53w!3m7!1s0x3e5f69c4ae8eb43b:0x34670daac58a6f22!8m2!3d25.1625188!4d55.2343055!9m1!1b1!16s%2Fg%2F11f66tl53w?entry=ttu&g_ep=EgoyMDI2MDEwNy4wIKXMDSoASAFQAw%3D%3D"
                                             target="_blank"
-                                            whileHover={{ scale: 1.1 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            className="group relative text-neutral-700 hover:text-[#0F5C85] transition-colors duration-300 rounded-xl border border-neutral-300 p-1 bg-neutral-100 ring ring-neutral-300 ring-offset-2"
+                                            className="group relative text-neutral-700 hover:text-[#0F5C85] transition-colors duration-300 rounded-xl border border-neutral-300 p-1 bg-neutral-100 ring ring-neutral-300 ring-offset-2 hover:scale-105"
                                         >
                                             <FcGoogle className="size-6" />
-                                        </motion.a>
+                                        </a>
                                     </div>
                                 </div>
-                            </motion.div>
+                            </div>
                         </div>
-                    </motion.div>
+                    </Reveal>
                 </div>
 
                 {/* Address Section with Google Map */}
-                <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
-                    variants={fadeInUp}
-                    className="w-full"
-                >
+                <Reveal animationNum={4} className="w-full">
                     <div className="mb-6">
                         <h3 className="text-2xl font-sentient font-semibold tracking-tight text-textcolor mb-2">
                             Our Address :
@@ -556,13 +482,7 @@ const ContactDetails = () => {
                             United Arab Emirates
                         </p>
                     </div>
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="w-full h-[400px] overflow-hidden p-4"
-                    >
+                    <div className="w-full h-[400px] overflow-hidden p-4">
                         <iframe
                             className="rounded-2xl border border-neutral-300 ring ring-neutral-200 ring-offset-4 shadow-lg"
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.2573929!2d55.2318626!3d25.1626598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f69c4ae8eb43b:0x34670daac58a6f22!2sBaharnani%20Advertising%20LLC%20-%20Corporate%20gifts%20Company%20Dubai%20%7C%20Exhibition%20stand%20Contractors%20Dubai!5e0!3m2!1sen!2som!4v1703837058988!5m2!1sen!2som"
@@ -574,9 +494,9 @@ const ContactDetails = () => {
                             loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"
                         />
-                    </motion.div>
-                </motion.div>
-            </div>
+                    </div>
+                </Reveal>
+            </RevealSection>
         </div>
     );
 };

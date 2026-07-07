@@ -3,7 +3,10 @@ import { memo, useRef, useEffect, useState, useMemo, useCallback } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import { Pagination, Autoplay } from "swiper/modules";
-import useInView from "@/hooks/useInView";
+import {
+  Reveal,
+  RevealSection,
+} from "@/components/ui/timeline-animation";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -39,6 +42,45 @@ const SWIPER_BREAKPOINTS = {
   },
 } as const;
 
+const FeatureCardContent = memo(function FeatureCardContent({
+  feature,
+}: {
+  feature: FeatureCard;
+}) {
+  return (
+    <div className="bg-neutral-100 rounded-xl p-6 sm:p-7 md:p-8 lg:p-10 flex flex-col border border-neutral-300 hover:shadow-lg transition-shadow duration-300 h-full ring ring-neutral-300 ring-offset-4 md:ring-offset-6">
+      {/* Icon and Number */}
+      <div className="flex items-center gap-4 sm:gap-5 mb-4 sm:mb-5 md:mb-6">
+        <div
+          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center shrink-0 border border-neutral-300 ring ring-neutral-200 ring-offset-2 md:ring-offset-3"
+          style={{ backgroundColor: feature.iconColor }}
+        >
+          <div className="text-textcolor">{feature.icon}</div>
+        </div>
+        <span
+          className="text-3xl sm:text-4xl md:text-5xl font-sentient font-semibold text-textcolor "
+          style={{
+            WebkitTextStroke: "1px #10100e",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
+          {feature.number}
+        </span>
+      </div>
+
+      {/* Title */}
+      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-sentient font-semibold text-textcolor  mb-3 sm:mb-4 md:mb-5">
+        {feature.title}
+      </h3>
+
+      {/* Description */}
+      <p className="text-sm sm:text-base md:text-lg lg:text-xl font-switzer text-textcolor leading-relaxed grow overflow-hidden">
+        {feature.description}
+      </p>
+    </div>
+  );
+});
+
 const WhyChooseUs = ({
   features,
   title = (
@@ -51,16 +93,6 @@ const WhyChooseUs = ({
   subtitle = "Delivering quality, reliability, and consistency in every shipment.",
 }: WhyChooseUsProps) => {
   const swiperInstanceRef = useRef<SwiperType | null>(null);
-  const { ref: headingRef, inView: isHeadingInView } = useInView<HTMLDivElement>({
-    once: true,
-    rootMargin: "-50px 0px -50px 0px",
-    threshold: 0.01,
-  });
-  const { ref: swiperRef, inView: isSwiperInView } = useInView<HTMLDivElement>({
-    once: true,
-    rootMargin: "-100px 0px -100px 0px",
-    threshold: 0.01,
-  });
 
   const [isDesktop, setIsDesktop] = useState(false);
   const [shouldAutoplay, setShouldAutoplay] = useState(false);
@@ -109,13 +141,11 @@ const WhyChooseUs = ({
 
   return (
     <section className="w-full py-6 sm:py-4 md:py-6 lg:py-8 xl:py-10 2xl:py-12 overflow-x-hidden">
-      <div className="w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1920px] mx-auto">
+      <RevealSection className="w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1920px] mx-auto">
         {/* Heading Section */}
-        <div
-          ref={headingRef}
-          className={`mb-8 sm:mb-10 md:mb-12 lg:mb-16 text-center transition-all duration-700 ease-out ${
-            isHeadingInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        <Reveal
+          animationNum={0}
+          className="mb-8 sm:mb-10 md:mb-12 lg:mb-16 text-center"
         >
           {/* Main Title */}
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor leading-tight">
@@ -127,60 +157,22 @@ const WhyChooseUs = ({
               {subtitle}
             </p>
           </div>
-        </div>
+        </Reveal>
 
         {/* Swiper Section */}
-        <div
-          ref={swiperRef}
-          className={`w-full relative transition-opacity duration-700 ease-out ${
-            isSwiperInView ? "opacity-100" : "opacity-0"
-          }`}
-        >
+        <div className="w-full relative">
           <div className="relative">
             {shouldUseFlexbox ? (
               /* Flexbox Layout for 3 or fewer items on desktop */
               <div className="flex flex-wrap justify-center items-stretch gap-4 sm:gap-6 md:gap-8">
                 {features.map((feature, index) => (
-                  <div
+                  <Reveal
                     key={feature.id}
-                    className={`flex-1 min-w-[280px] sm:min-w-[300px] md:min-w-[320px] max-w-[480px] transition-all duration-700 ease-out ${
-                      isSwiperInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                    }`}
-                    style={{ transitionDelay: `${index * 100}ms` }}
+                    animationNum={1 + index}
+                    className="flex-1 min-w-[280px] sm:min-w-[300px] md:min-w-[320px] max-w-[480px]"
                   >
-                    <div
-                      className="bg-neutral-100 rounded-xl p-6 sm:p-7 md:p-8 lg:p-10 flex flex-col border border-neutral-300 hover:shadow-lg transition-shadow duration-300 h-full ring ring-neutral-300 ring-offset-4 md:ring-offset-6"
-                    >
-                      {/* Icon and Number */}
-                      <div className="flex items-center gap-4 sm:gap-5 mb-4 sm:mb-5 md:mb-6">
-                        <div
-                          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center shrink-0 border border-neutral-300 ring ring-neutral-200 ring-offset-2 md:ring-offset-3"
-                          style={{ backgroundColor: feature.iconColor }}
-                        >
-                          <div className="text-textcolor">{feature.icon}</div>
-                        </div>
-                        <span
-                          className="text-3xl sm:text-4xl md:text-5xl font-sentient font-semibold text-textcolor "
-                          style={{
-                            WebkitTextStroke: "1px #10100e",
-                            WebkitTextFillColor: "transparent",
-                          }}
-                        >
-                          {feature.number}
-                        </span>
-                      </div>
-
-                      {/* Title */}
-                      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-sentient font-semibold text-textcolor  mb-3 sm:mb-4 md:mb-5">
-                        {feature.title}
-                      </h3>
-
-                      {/* Description */}
-                      <p className="text-sm sm:text-base md:text-lg lg:text-xl font-switzer text-textcolor leading-relaxed grow overflow-hidden">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </div>
+                    <FeatureCardContent feature={feature} />
+                  </Reveal>
                 ))}
               </div>
             ) : (
@@ -198,15 +190,11 @@ const WhyChooseUs = ({
                 >
                   {features.map((feature, index) => (
                     <SwiperSlide key={feature.id} className="h-auto! flex">
-                      <div
-                        className={`h-full w-full flex py-4 transition-all duration-700 ease-out ${
-                          isSwiperInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                        }`}
-                        style={{ transitionDelay: `${index * 100}ms` }}
+                      <Reveal
+                        animationNum={1 + index}
+                        className="h-full w-full flex py-4"
                       >
-                        <div
-                          className="bg-neutral-100 rounded-xl p-6 sm:p-7 md:p-8 lg:p-10 flex h-full flex-col border border-neutral-300 ring ring-neutral-300 ring-offset-3 md:ring-offset-6 hover:shadow-lg transition-shadow duration-300 min-h-[280px] md:min-h-[320px] mx-3"
-                        >
+                        <div className="bg-neutral-100 rounded-xl p-6 sm:p-7 md:p-8 lg:p-10 flex h-full flex-col border border-neutral-300 ring ring-neutral-300 ring-offset-3 md:ring-offset-6 hover:shadow-lg transition-shadow duration-300 min-h-[280px] md:min-h-[320px] mx-3">
                           {/* Icon and Number */}
                           <div className="flex items-center gap-4 sm:gap-5 mb-4 sm:mb-5 md:mb-6">
                             <div
@@ -238,7 +226,7 @@ const WhyChooseUs = ({
                             {feature.description}
                           </p>
                         </div>
-                      </div>
+                      </Reveal>
                     </SwiperSlide>
                   ))}
                 </Swiper>
@@ -310,7 +298,7 @@ const WhyChooseUs = ({
             )}
           </div>
         </div>
-      </div>
+      </RevealSection>
     </section>
   );
 };
