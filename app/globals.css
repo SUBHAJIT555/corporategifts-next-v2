@@ -656,6 +656,23 @@ html.image-gallery-fullscreen footer {
       );
     background-size: 5px 5px;
   }
+
+  .screen-line-top {
+    border-top: 1px solid var(--cal-hairline);
+  }
+
+  .screen-line-bottom {
+    border-bottom: 1px solid var(--cal-hairline);
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

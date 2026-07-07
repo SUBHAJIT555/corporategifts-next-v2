@@ -3,7 +3,8 @@
 import { memo } from "react";
 import Image from "next/image";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
-import { ShinyButton } from "@/components/ui/shiny-button";
+import { candyDarkButtonClasses } from "@/components/ui/candy-button";
+import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 import { cn } from "@/lib/utilts";
 
 interface ProductCategory {
@@ -239,45 +240,45 @@ const CategoryCard = memo(function CategoryCard({
   const isEven = index % 2 === 0;
 
   return (
-    <div
+    <Reveal
+      animationNum={index + 1}
+      as="article"
       className={cn(
-        "flex flex-col gap-4 sm:gap-6 md:gap-8 lg:gap-10 mb-8 sm:mb-10 md:mb-12 lg:mb-16 last:mb-0",
+        "flex flex-col gap-6 sm:gap-8 lg:gap-10",
         isEven ? "lg:flex-row" : "lg:flex-row-reverse",
       )}
     >
-      <div className="w-full lg:w-[38%] h-[250px] sm:h-[280px] md:h-[320px] lg:h-[380px] relative overflow-hidden rounded-xl border border-neutral-300 ring ring-offset-3 md:ring-offset-6 shadow-lg ring-neutral-200 bg-[#e1e1e1]">
+      <div className="relative h-[250px] w-full overflow-hidden rounded-2xl border border-hairline bg-surface-soft sm:h-[280px] md:h-[320px] lg:h-[380px] lg:w-[38%] lg:shrink-0">
         <Image
-          width={250}
-          height={250}
+          width={640}
+          height={480}
           src={category.imageUrl}
           alt={category.title}
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-500 hover:scale-[1.03]"
         />
-        <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent" />
       </div>
 
-      <div className="w-full lg:w-[62%] flex flex-col justify-center space-y-3 sm:space-y-4 md:space-y-5">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-sentient text-textcolor leading-tight">
+      <div className="flex w-full flex-col justify-center space-y-4 sm:space-y-5 lg:w-[62%]">
+        <h2 className="text-display-sm leading-tight text-ink sm:text-display-md lg:text-display-lg">
           {category.title}
         </h2>
 
-        <p className="text-sm sm:text-base md:text-lg font-switzer font-bold text-textcolor leading-relaxed">
+        <p className="text-body-md text-body sm:text-[17px] sm:leading-7">
           {category.description}
         </p>
 
         <div className="space-y-2">
-          <h3 className="text-base sm:text-lg md:text-xl font-sentient text-textcolor">
+          <h3 className="text-base font-semibold text-ink sm:text-lg">
             Product Range:
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
-            {category.productRange.slice(0, 6).map((item, idx) => (
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {category.productRange.slice(0, 6).map((item) => (
               <div
-                key={idx}
-                className="text-xs sm:text-sm md:text-base font-switzer text-textcolor flex items-start gap-2"
+                key={item}
+                className="flex items-start gap-2 text-body-md text-muted"
               >
-                <span className="text-[#0f5c85] mt-1 text-[10px] sm:text-xs">
-                  *
-                </span>
+                <span className="mt-1 text-brand-accent">*</span>
                 <span className="leading-snug">{item}</span>
               </div>
             ))}
@@ -285,18 +286,16 @@ const CategoryCard = memo(function CategoryCard({
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-base sm:text-lg md:text-xl font-sentient text-textcolor">
+          <h3 className="text-base font-semibold text-ink sm:text-lg">
             Highlights:
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
-            {category.highlights.map((item, idx) => (
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {category.highlights.map((item) => (
               <div
-                key={idx}
-                className="text-xs sm:text-sm md:text-base font-switzer text-textcolor flex items-start gap-2"
+                key={item}
+                className="flex items-start gap-2 text-body-md text-muted"
               >
-                <span className="text-[#0f5c85] mt-1 text-[10px] sm:text-xs">
-                  +
-                </span>
+                <span className="mt-1 text-brand-accent">+</span>
                 <span className="leading-snug">{item}</span>
               </div>
             ))}
@@ -304,28 +303,33 @@ const CategoryCard = memo(function CategoryCard({
         </div>
 
         <div className="pt-1 sm:pt-2">
-          <NoPrefetchLink href={category.buttonLink}>
-            <ShinyButton className="py-3! px-6! text-sm! sm:text-base! font-switzer ring ring-neutral-300 ring-offset-3 md:ring-offset-6">
-              {category.buttonText}
-            </ShinyButton>
+          <NoPrefetchLink
+            href={category.buttonLink}
+            className={candyDarkButtonClasses("w-full sm:w-auto")}
+          >
+            {category.buttonText}
           </NoPrefetchLink>
         </div>
       </div>
-    </div>
+    </Reveal>
   );
 });
 
 const ProductCategory = () => {
   return (
-    <section
-      className="w-full py-8 sm:py-10 md:py-12 lg:py-16 overflow-x-hidden"
-      id="product-varieties"
-    >
-      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 max-w-[1400px] mx-auto">
-        {categories.map((category, index) => (
-          <CategoryCard key={category.id} category={category} index={index} />
-        ))}
-      </div>
+    <section className="w-full bg-canvas" id="product-varieties">
+      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-6 sm:px-6 sm:py-8 lg:py-10">
+        <div className="flex flex-col gap-10 sm:gap-12 lg:gap-16">
+          {categories.map((category, index) => (
+            <div key={category.id}>
+              {index > 0 ? (
+                <div className="screen-line-top mb-10 sm:mb-12 lg:mb-16" />
+              ) : null}
+              <CategoryCard category={category} index={index} />
+            </div>
+          ))}
+        </div>
+      </RevealSection>
     </section>
   );
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import Image from "next/image";
 import {
   Briefcase,
@@ -15,12 +15,13 @@ import {
   Sparkles,
   type LucideIcon,
 } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
-import { candyDarkButtonClasses, candyWhiteButtonClasses } from "@/components/ui/candy-button";
+import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 import {
-  Reveal,
-  RevealSection,
-} from "@/components/ui/timeline-animation";
+  candyDarkButtonClasses,
+  candyWhiteButtonClasses,
+} from "@/components/ui/candy-button";
 
 const SLIDES: {
   image: string;
@@ -74,44 +75,29 @@ const SLIDES: {
   },
 ];
 
-const AUTO_ADVANCE = 3000;
+const SLIDE_DURATION_MS = 4500;
+const CROSSFADE_DURATION = 1;
 
 export const GradientBars: React.FC = memo(() => {
   const numBars = 11;
   const gradientFrom = "rgb(15, 92, 133)";
   const gradientTo = "transparent";
 
-  const bars = useMemo(() => {
-    const calculateHeight = (index: number, total: number) => {
-      const position = index / (total - 1);
-      const maxHeight = 100;
-      const minHeight = 30;
-      const center = 0.5;
-      const distanceFromCenter = Math.abs(position - center);
-      const heightPercentage = Math.pow(distanceFromCenter * 2, 1.2);
-      return minHeight + (maxHeight - minHeight) * heightPercentage;
-    };
+  const bars = Array.from({ length: numBars }).map((_, index) => {
+    const position = index / (numBars - 1);
+    const maxHeight = 100;
+    const minHeight = 30;
+    const center = 0.5;
+    const distanceFromCenter = Math.abs(position - center);
+    const heightPercentage = Math.pow(distanceFromCenter * 2, 1.2);
+    const scale = (minHeight + (maxHeight - minHeight) * heightPercentage) / 100;
 
-    return Array.from({ length: numBars }).map((_, index) => {
-      const height = calculateHeight(index, numBars);
-      return {
-        index,
-        scale: height / 100,
-      };
-    });
-  }, [numBars]);
+    return { index, scale };
+  });
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden">
-      <div
-        className="flex h-full"
-        style={{
-          width: "100%",
-          transform: "translateZ(0)",
-          backfaceVisibility: "hidden",
-          WebkitFontSmoothing: "antialiased",
-        }}
-      >
+      <div className="flex h-full w-full">
         {bars.map(({ index, scale }) => (
           <div
             key={index}
@@ -122,9 +108,7 @@ export const GradientBars: React.FC = memo(() => {
               background: `linear-gradient(to top, ${gradientFrom}, ${gradientTo})`,
               transform: `scaleY(${scale})`,
               transformOrigin: "bottom",
-              outline: "1px solid rgba(0, 0, 0, 0)",
-              boxSizing: "border-box",
-            } as React.CSSProperties}
+            }}
           />
         ))}
       </div>
@@ -134,148 +118,152 @@ export const GradientBars: React.FC = memo(() => {
 
 GradientBars.displayName = "GradientBars";
 
-type HeroShowcaseCardProps = {
-  index: number;
-};
-
-// Product showcase card — cross-fades through the category images.
-const HeroShowcaseCard = memo(({ index }: HeroShowcaseCardProps) => {
-  const activeSlide = SLIDES[index];
-  const CategoryIcon = activeSlide.icon;
+function HeroCarousel({ activeIndex }: { activeIndex: number }) {
+  const slide = SLIDES[activeIndex];
+  const CategoryIcon = slide.icon;
 
   return (
-    <div className="relative mx-auto w-full max-w-md rounded-2xl border border-hairline bg-canvas p-2.5 shadow-[0_24px_64px_-24px_rgba(0,0,0,0.28)] sm:p-3 lg:max-w-none">
-      <div className="relative aspect-4/3 w-full overflow-hidden rounded-xl bg-surface-card">
-        {SLIDES.map((slide, i) => (
+    <div className="relative h-full w-full">
+      <AnimatePresence mode="sync" initial={false}>
+        <motion.div
+          key={slide.image}
+          className="absolute inset-0"
+          initial={{ opacity: 0, scale: 1.04, x: "0%" }}
+          animate={{
+            opacity: 1,
+            scale: 1.1,
+            x: "-2%",
+          }}
+          exit={{
+            opacity: 0,
+            transition: {
+              duration: CROSSFADE_DURATION,
+              ease: [0.4, 0, 0.2, 1],
+            },
+          }}
+          transition={{
+            opacity: {
+              duration: CROSSFADE_DURATION,
+              ease: [0.4, 0, 0.2, 1],
+            },
+            scale: {
+              duration: SLIDE_DURATION_MS / 1000,
+              ease: "linear",
+            },
+            x: {
+              duration: SLIDE_DURATION_MS / 1000,
+              ease: "linear",
+            },
+          }}
+        >
           <Image
-            key={slide.title}
             src={slide.image}
             alt={slide.title}
             fill
-            sizes="(min-width: 1024px) 44vw, (min-width: 640px) 28rem, 92vw"
-            priority={i === 0}
-            className={`object-cover transition-opacity duration-700 ease-out ${
-              i === index ? "opacity-100" : "opacity-0"
-            }`}
+            sizes="(max-width: 768px) 100vw, (min-width: 1024px) 1024px, 100vw"
+            priority={activeIndex === 0}
+            className="object-cover object-center"
+            draggable={false}
           />
-        ))}
+        </motion.div>
+      </AnimatePresence>
 
-        {/* Category label chip */}
-        <div className="absolute bottom-3 left-3">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-24 bg-linear-to-t from-black/45 via-black/15 to-transparent" />
+
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={slide.title}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+          className="absolute bottom-10 left-3 z-20 sm:bottom-11 sm:left-4"
+        >
           <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/40 bg-white/25 px-3 py-1.5 text-caption font-medium text-warning shadow-[0_2px_10px_rgba(0,0,0,0.12)] ring-1 ring-white/20 backdrop-blur-md dark:border-white/15 dark:bg-white/10">
-            <CategoryIcon className="h-3.5 w-3.5 shrink-0 text-warning" />
-            | {activeSlide.title}
+            <CategoryIcon className="h-3.5 w-3.5 shrink-0 text-warning" />|
+            {slide.title}
           </span>
-        </div>
-      </div>
+        </motion.div>
+      </AnimatePresence>
 
-      {/* Progress dots */}
-      <div className="mt-3 flex items-center justify-center gap-1.5">
-        {SLIDES.map((slide, i) => (
-          <span
-            key={slide.title}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              i === index ? "w-5 bg-ink" : "w-1.5 bg-surface-strong"
-            }`}
-            aria-hidden="true"
+      <div className="absolute inset-x-0 bottom-3 z-20 flex items-center justify-center gap-1.5 sm:bottom-4">
+        {SLIDES.map((item, i) => (
+          <motion.span
+            key={item.title}
+            layout
+            className="h-1.5 rounded-full bg-white/90"
+            animate={{
+              width: i === activeIndex ? 20 : 6,
+              opacity: i === activeIndex ? 1 : 0.45,
+            }}
+            transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+            aria-hidden
           />
         ))}
       </div>
     </div>
   );
-});
-
-HeroShowcaseCard.displayName = "HeroShowcaseCard";
+}
 
 export default function HeroSection() {
-  const [index, setIndex] = useState(0);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    timeoutRef.current = setTimeout(() => {
-      setIndex((prev) => (prev + 1) % SLIDES.length);
-    }, AUTO_ADVANCE);
+    const intervalId = window.setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % SLIDES.length);
+    }, SLIDE_DURATION_MS);
 
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, [index]);
+    return () => window.clearInterval(intervalId);
+  }, []);
 
   return (
-    <section className="relative w-full bg-canvas">
-      <RevealSection className="relative mx-auto max-w-7xl overflow-hidden border-x border-hairline px-5 pt-24 pb-14 sm:px-6 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-28">
-        <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              opacity: 0.14,
-              pointerEvents: "none",
-              backgroundImage:
-                "repeating-linear-gradient(0deg, transparent 0px, transparent 3px, var(--primary) 3px, var(--primary) 4px)",
-              maskImage: "linear-gradient(to bottom, #000 0%, transparent 75%)",
-              WebkitMaskImage:
-                "linear-gradient(to bottom, #000 0%, transparent 75%)",
-            }}
-          />
-        </div>
-
-        <div className="relative z-10 grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
-          <div className="text-center lg:col-span-6 lg:text-left">
-            <Reveal
-              animationNum={0}
-              className="mb-5 flex justify-center lg:justify-start"
-            >
-              <span className="inline-flex items-center gap-1.5 rounded-lg border border-hairline border-dashed bg-surface-card px-3 py-1 text-caption font-medium text-body">
-                <Sparkles className="h-3.5 w-3.5 text-brand-accent" />
-                Corporate Gifts in Dubai &amp; UAE
+    <section className="w-full bg-canvas">
+      <div className="mx-auto max-w-7xl border-x border-hairline">
+        <ContainerScroll
+          className="px-3 pt-20 pb-2 sm:px-4 sm:pt-24 md:px-6 md:pt-32 md:pb-0 lg:pt-36"
+          titleComponent={
+            <>
+              <span className="inline-flex max-w-full items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-2.5 py-1 text-[11px] font-medium text-body shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.12)] sm:px-3 sm:text-caption dark:shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.35)]">
+                <Sparkles className="h-3 w-3 shrink-0 text-brand-accent sm:h-3.5 sm:w-3.5" />
+                <span className="text-left sm:text-center">
+                  Corporate Gifts in Dubai &amp; UAE
+                </span>
               </span>
-            </Reveal>
 
-            <Reveal as="h1" animationNum={1} className="text-display-lg text-ink">
-              Corporate Gifts Supplier in Dubai for Custom, Luxury &amp;
-              Promotional Gifts
-            </Reveal>
+              <h1 className="mt-4 text-display-lg text-ink sm:mt-5 md:text-display-xl">
+                Corporate Gifts Supplier in Dubai for Custom, Luxury &amp;
+                Promotional Gifts
+              </h1>
 
-            <Reveal
-              animationNum={2}
-              className="mx-auto mt-5 max-w-xl text-body-md text-muted sm:mt-6 lg:mx-0"
-            >
-              Baharnani Advertising helps UAE businesses choose custom corporate
-              gifts in Dubai for clients, employees, events, and brand awareness.
-              We provide a wide range of smart corporate gifts, premium hampers,
-              affordable corporate gifts, branded stationery, bags, drinkware,
-              and apparel. Practical gifts with logo printing, packaging and bulk
-              delivery support in Dubai and the UAE.
-            </Reveal>
+              <p className="mx-auto mt-4 max-w-2xl text-body-md text-muted sm:mt-6 sm:text-[17px] sm:leading-7">
+                Baharnani Advertising helps UAE businesses choose custom corporate
+                gifts in Dubai for clients, employees, events, and brand awareness.
+                We provide a wide range of smart corporate gifts, premium hampers,
+                affordable corporate gifts, branded stationery, bags, drinkware,
+                and apparel. Practical gifts with logo printing, packaging and bulk
+                delivery support in Dubai and the UAE.
+              </p>
 
-            <Reveal
-              animationNum={3}
-              className="mt-7 flex flex-col justify-center gap-3 sm:flex-row sm:items-center lg:justify-start"
-            >
-              <NoPrefetchLink
-                href="/products"
-                className={candyDarkButtonClasses("group w-full sm:w-auto")}
-              >
-                Explore Corporate Gifts
-              </NoPrefetchLink>
-              <NoPrefetchLink
-                href="/contact-us"
-                className={candyWhiteButtonClasses("w-full sm:w-auto")}
-              >
-                Get Bulk Quote
-              </NoPrefetchLink>
-            </Reveal>
-          </div>
-
-          <Reveal animationNum={4} className="lg:col-span-6">
-            <HeroShowcaseCard index={index} />
-          </Reveal>
-        </div>
-      </RevealSection>
+              <div className="mt-5 flex w-full flex-col gap-2.5 sm:mt-7 sm:flex-row sm:items-center sm:justify-center sm:gap-3">
+                <NoPrefetchLink
+                  href="/products"
+                  className={candyDarkButtonClasses("w-full sm:w-auto")}
+                >
+                  Explore Corporate Gifts
+                </NoPrefetchLink>
+                <NoPrefetchLink
+                  href="/contact-us"
+                  className={candyWhiteButtonClasses("w-full sm:w-auto")}
+                >
+                  Get Bulk Quote
+                </NoPrefetchLink>
+              </div>
+            </>
+          }
+        >
+          <HeroCarousel activeIndex={activeIndex} />
+        </ContainerScroll>
+      </div>
     </section>
   );
 }

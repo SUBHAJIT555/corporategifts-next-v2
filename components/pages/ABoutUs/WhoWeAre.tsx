@@ -1,54 +1,10 @@
 "use client";
 
-import { BrandWithUs } from "@/components/ui/BrandWithUs";
+import { Building2 } from "lucide-react";
+import SectionDivider from "@/components/ui/SectionDivider";
 import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 
 const aboutVideo = "/assets/video/aboutVideo.webm";
-
-const cardGridBg = {
-  backgroundImage: `
-    linear-gradient(to right, #e7e5e4 1px, transparent 1px),
-    linear-gradient(to bottom, #e7e5e4 1px, transparent 1px)
-  `,
-  backgroundSize: "1px 1px",
-  backgroundPosition: "0 0, 0 0",
-  maskImage: `
-    repeating-linear-gradient(
-      to right,
-      black 0px,
-      black 3px,
-      transparent 3px,
-      transparent 8px
-    ),
-    repeating-linear-gradient(
-      to bottom,
-      black 0px,
-      black 3px,
-      transparent 3px,
-      transparent 8px
-    ),
-    radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)
-  `,
-  WebkitMaskImage: `
-    repeating-linear-gradient(
-      to right,
-      black 0px,
-      black 3px,
-      transparent 3px,
-      transparent 8px
-    ),
-    repeating-linear-gradient(
-      to bottom,
-      black 0px,
-      black 3px,
-      transparent 3px,
-      transparent 8px
-    ),
-    radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)
-  `,
-  maskComposite: "intersect" as const,
-  WebkitMaskComposite: "source-in" as const,
-};
 
 const cards = [
   "Based in Dubai, Baharnani Advertising LLC specializes in premium corporate gifts, offering a comprehensive range of customized, luxury, promotional, and eco-friendly solutions for businesses across Dubai, Abu Dhabi, and the UAE.",
@@ -58,63 +14,62 @@ const cards = [
 
 const WhoWeAre = () => {
   return (
-    <div className="w-full">
-      <RevealSection className="w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-3 sm:py-4 md:py-5 lg:py-6">
-        <Reveal animationNum={0}>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor leading-tight">
-            Who We Are ?
-          </h2>
+    <section className="w-full bg-canvas">
+      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-3 sm:px-6 sm:py-4 lg:py-6">
+        <Reveal animationNum={0} className="max-w-3xl">
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-3 py-1 text-caption font-medium text-body shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.12)] dark:shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.35)]">
+            <Building2 className="h-3.5 w-3.5 text-brand-accent" />
+            Who We Are
+          </span>
+          <h2 className="mt-4 text-display-md text-ink">Who We Are ?</h2>
         </Reveal>
-      </RevealSection>
 
-      <RevealSection className="w-full overflow-hidden py-4 sm:py-6 md:py-8 lg:py-10 xl:py-12 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        <div className="w-full mx-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
-          {cards.map((text, index) => (
-            <Reveal
-              key={text}
-              animationNum={index}
-              className="relative rounded-xl p-6 sm:p-7 md:p-8 lg:p-10 border border-neutral-200 ring ring-neutral-300 ring-offset-3 md:ring-offset-6 bg-bg overflow-hidden"
-            >
-              <div
-                className="pointer-events-none absolute inset-0 z-0"
-                style={cardGridBg}
-              />
-              <p className="relative z-10 text-center font-switzer font-medium text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
-                {text}
-              </p>
-            </Reveal>
-          ))}
+        <div className="mt-3 overflow-hidden rounded-2xl border border-hairline bg-surface-soft p-4 sm:mt-4 sm:p-5">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
+            {cards.map((text, index) => (
+              <Reveal
+                key={text}
+                animationNum={index + 1}
+                as="article"
+                className="flex h-full flex-col rounded-xl border border-hairline bg-canvas p-5 sm:p-6"
+              >
+                <span
+                  className="mb-4 text-3xl font-semibold tracking-tight text-muted-soft sm:text-4xl"
+                  style={{
+                    WebkitTextStroke: "1px var(--cal-hairline)",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <p className="text-body-md text-muted sm:text-[17px] sm:leading-7">
+                  {text}
+                </p>
+              </Reveal>
+            ))}
+          </div>
         </div>
-      </RevealSection>
 
-      <RevealSection className="w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        <Reveal animationNum={0}>
-          <div className="relative w-full h-[30vh] sm:h-[40vh] md:h-[40vh] lg:h-[55vh] xl:h-[70vh] overflow-hidden rounded-2xl border border-neutral-200 ring ring-neutral-300 ring-offset-4 md:ring-offset-10">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover"
-            >
-              <source src={aboutVideo} type="video/webm" />
-              Your browser does not support the video tag.
-            </video>
+        <Reveal animationNum={4} className="mt-3 sm:mt-4">
+          <div className="overflow-hidden rounded-2xl border border-hairline bg-surface-card">
+            <div className="relative aspect-video w-full sm:aspect-21/9">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 h-full w-full object-cover"
+              >
+                <source src={aboutVideo} type="video/webm" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
           </div>
         </Reveal>
       </RevealSection>
 
-      <RevealSection className="w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 mt-8 sm:mt-10">
-        <Reveal animationNum={0}>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold text-textcolor leading-tight mb-3 sm:mb-4 md:mb-5 lg:mb-6">
-            Brands We Work With.
-          </h2>
-        </Reveal>
-        <Reveal animationNum={1}>
-          <BrandWithUs />
-        </Reveal>
-      </RevealSection>
-    </div>
+      <SectionDivider />
+    </section>
   );
 };
 
