@@ -45,7 +45,7 @@ export default function SectionDivider({
 }: SectionDividerProps) {
   return (
     <div
-      className={`relative flex h-8 w-full items-center bg-canvas ${className}`}
+      className={`relative flex h-5 w-full items-center bg-canvas ${className}`}
       aria-hidden="true"
     >
       {/* Continuous full-width hairline */}

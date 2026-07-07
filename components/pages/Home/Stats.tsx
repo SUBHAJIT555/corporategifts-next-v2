@@ -151,7 +151,7 @@ const Stats = () => {
 
   return (
     <section className="w-full bg-canvas">
-      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-16 sm:px-6 sm:py-20 lg:py-24">
+      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-10 sm:px-6 sm:py-12 lg:py-14">
         {/* Desktop / tablet grid */}
         <Reveal animationNum={0}>
           <div className="hidden overflow-hidden rounded-2xl border border-hairline bg-canvas sm:block">
@@ -223,7 +223,7 @@ const Stats = () => {
         </Reveal>
 
         <Reveal animationNum={1}>
-          <p className="mx-auto mt-10 max-w-4xl text-center text-2xl font-medium leading-relaxed text-muted sm:mt-12 sm:text-3xl lg:mt-14">
+          <p className="mx-auto mt-6 max-w-4xl text-center text-2xl font-medium leading-relaxed text-muted sm:mt-8 sm:text-3xl lg:mt-10">
             From startups to corporate teams, Baharnani supports bulk corporate
             gifts in Dubai with practical product choices, customisation options,
             and reliable delivery coordination.

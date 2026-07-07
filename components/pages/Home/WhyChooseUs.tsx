@@ -112,10 +112,10 @@ const subtitle =
 export default function HomeWhyChooseUs() {
   return (
     <section className="w-full overflow-x-hidden bg-canvas">
-      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-16 sm:px-6 sm:py-20 lg:py-24">
+      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-10 sm:px-6 sm:py-12 lg:py-14">
         <Reveal
           animationNum={0}
-          className="mx-auto mb-10 max-w-4xl text-center sm:mb-12"
+          className="mx-auto mb-6 max-w-4xl text-center sm:mb-8"
         >
           <span className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-3 py-1 text-caption font-medium text-body shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.12)] dark:shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.35)]">
             <Award className="h-3.5 w-3.5 text-brand-accent" />

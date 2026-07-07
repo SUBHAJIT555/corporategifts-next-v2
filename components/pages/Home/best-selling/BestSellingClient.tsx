@@ -18,7 +18,7 @@ const PER_PAGE = 12;
 
 function BestSellingHelpCta() {
   return (
-    <div className="mt-10 overflow-hidden border border-hairline border-dotted bg-canvas sm:mt-12">
+    <div className="mt-6 overflow-hidden border border-hairline border-dotted bg-canvas sm:mt-8">
       <div className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
           <div
@@ -176,11 +176,11 @@ export default function BestSellingClient({
       id="best-selling"
       className="relative w-full overflow-x-hidden bg-canvas"
     >
-      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-16 sm:px-6 sm:py-20 lg:py-24">
+      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-10 sm:px-6 sm:py-12 lg:py-14">
         {/* Header */}
         <Reveal
           animationNum={0}
-          className="mb-10 grid grid-cols-1 gap-6 sm:mb-12 lg:grid-cols-12 lg:gap-10"
+          className="mb-6 grid grid-cols-1 gap-6 sm:mb-8 lg:grid-cols-12 lg:gap-10"
         >
           <div className="lg:col-span-5">
             <span className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-3 py-1 text-caption font-medium text-body shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.12)] dark:shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.35)]">
@@ -206,7 +206,7 @@ export default function BestSellingClient({
 
         {/* Product grid panel — filter button only visible while this block is in view */}
         <Reveal animationNum={1}>
-          <div ref={gridRef} className="relative pb-20 sm:pb-24">
+          <div ref={gridRef} className="relative pb-14 sm:pb-16">
             <ProductGrid
               variant="home"
               productData={productData}

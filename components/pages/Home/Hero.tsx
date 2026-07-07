@@ -203,7 +203,26 @@ export default function HeroSection() {
 
   return (
     <section className="relative w-full bg-canvas">
-      <RevealSection className="relative mx-auto max-w-7xl border-x border-hairline px-5 pt-24 pb-14 sm:px-6 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-28">
+      <RevealSection className="relative mx-auto max-w-7xl overflow-hidden border-x border-hairline px-5 pt-24 pb-14 sm:px-6 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-28">
+        <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              opacity: 0.14,
+              pointerEvents: "none",
+              backgroundImage:
+                "repeating-linear-gradient(0deg, transparent 0px, transparent 3px, var(--primary) 3px, var(--primary) 4px)",
+              maskImage: "linear-gradient(to bottom, #000 0%, transparent 75%)",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, #000 0%, transparent 75%)",
+            }}
+          />
+        </div>
+
         <div className="relative z-10 grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
           <div className="text-center lg:col-span-6 lg:text-left">
             <Reveal

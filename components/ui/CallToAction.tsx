@@ -121,7 +121,7 @@ const CallToAction = ({
 }: CallToActionProps) => {
   return (
     <section className="relative w-full overflow-x-hidden bg-canvas">
-      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-16 sm:px-6 sm:py-20 lg:py-24">
+      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-10 sm:px-6 sm:py-12 lg:py-14">
         {/* Top CTA */}
         <div className="mx-auto max-w-4xl text-center">
           <div className="space-y-4">
@@ -159,28 +159,28 @@ const CallToAction = ({
 
         {/* Bottom info panel */}
         <Reveal animationNum={4}>
-          <div className="relative mt-12 overflow-hidden border border-hairline sm:mt-14 lg:mt-16">
+          <div className="relative mt-8 overflow-hidden border border-hairline sm:mt-10 lg:mt-12">
             <div
               className="pointer-events-none absolute inset-0 z-0"
               aria-hidden
               style={{
                 background:
-                  "linear-gradient(to bottom, var(--cal-canvas) 0%, var(--cal-canvas) 20%, transparent 100%), radial-gradient(ellipse at 50% -10%, var(--cal-brand-accent) 0%, var(--cal-canvas) 100%)",
-                opacity: 0.7,
+                  "linear-gradient(to bottom, var(--cal-canvas) 0%, var(--cal-canvas) 28%, transparent 100%), radial-gradient(ellipse 120% 80% at 50% -5%, color-mix(in srgb, var(--cal-brand-accent) 30%, var(--cal-canvas)) 0%, var(--cal-canvas) 78%)",
+                opacity: 0.65,
               }}
             >
               <div
                 className="dark:hidden"
                 style={{
                   WebkitMaskImage:
-                    "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%)",
+                    "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 65%)",
                   maskImage:
-                    "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%)",
+                    "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 65%)",
                   backgroundImage:
                     "repeating-conic-gradient(from 0deg at 50% 0%, var(--cal-brand-accent) 0deg, var(--cal-brand-accent) 2deg, transparent 2deg, transparent 12deg)",
                   height: "100%",
                   left: "50%",
-                  opacity: 0.2,
+                  opacity: 0.16,
                   pointerEvents: "none",
                   position: "absolute",
                   top: "0",
@@ -192,14 +192,14 @@ const CallToAction = ({
                 className="hidden dark:block"
                 style={{
                   WebkitMaskImage:
-                    "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%)",
+                    "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 65%)",
                   maskImage:
-                    "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%)",
+                    "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 65%)",
                   backgroundImage:
                     "repeating-conic-gradient(from 0deg at 50% 0%, var(--cal-brand-accent) 0deg, var(--cal-brand-accent) 2deg, transparent 2deg, transparent 12deg)",
                   height: "100%",
                   left: "50%",
-                  opacity: 0.6,
+                  opacity: 0.48,
                   pointerEvents: "none",
                   position: "absolute",
                   top: "0",
