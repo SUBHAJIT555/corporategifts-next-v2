@@ -8,6 +8,7 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 export interface FloatingCategoryMenuItem {
   label: string;
+  count?: number;
   onClick?: () => void;
   active?: boolean;
 }
@@ -21,10 +22,12 @@ interface FloatingCategoryMenuProps {
 
 function CategoryItem({
   label,
+  count,
   onClick,
   active,
 }: {
   label: string;
+  count?: number;
   onClick?: () => void;
   active?: boolean;
 }) {
@@ -33,11 +36,21 @@ function CategoryItem({
       type="button"
       onClick={onClick}
       className={cn(
-        "group relative w-full cursor-pointer truncate py-2.5 text-left text-sm font-medium transition-colors",
+        "group relative flex w-full cursor-pointer items-center justify-between gap-3 py-2.5 text-left text-sm font-medium transition-colors",
         active ? "text-brand-accent" : "text-body hover:text-ink"
       )}
     >
-      <span className="relative z-10 block truncate pr-1">{label}</span>
+      <span className="relative z-10 min-w-0 truncate pr-1">{label}</span>
+      {count !== undefined ? (
+        <span
+          className={cn(
+            "relative z-10 shrink-0 text-xs tabular-nums",
+            active ? "text-brand-accent/80" : "text-muted"
+          )}
+        >
+          {count}
+        </span>
+      ) : null}
       <span
         aria-hidden
         className="absolute inset-x-0 bottom-1 h-px bg-hairline"
@@ -124,6 +137,7 @@ export default function FloatingCategoryMenu({
                   <CategoryItem
                     key={item.label}
                     label={item.label}
+                    count={item.count}
                     active={item.active}
                     onClick={() => {
                       item.onClick?.();

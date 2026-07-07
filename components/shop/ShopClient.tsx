@@ -1,7 +1,8 @@
 "use client";
 
 import { memo } from "react";
-import ShopHero, { pageDashedGridStyle } from "./ShopHero";
+import SectionDivider from "@/components/ui/SectionDivider";
+import ShopHero from "./ShopHero";
 import ShopContent from "./ShopContent";
 
 type ShopClientProps = {
@@ -10,18 +11,12 @@ type ShopClientProps = {
 
 const ShopClient = memo(function ShopClient({ initialPage = 1 }: ShopClientProps) {
   return (
-    <div className="relative min-h-screen w-full overflow-x-clip bg-bg">
-      <div
-        className="pointer-events-none fixed inset-0 z-0"
-        style={pageDashedGridStyle}
-        aria-hidden
-      />
-
-      <div className="relative z-10">
-        <ShopHero />
-        <ShopContent initialPage={initialPage} />
-      </div>
-    </div>
+    <main className="relative min-h-screen w-full overflow-x-hidden bg-canvas">
+      <ShopHero />
+      <SectionDivider />
+      <ShopContent initialPage={initialPage} />
+      <SectionDivider />
+    </main>
   );
 });
 

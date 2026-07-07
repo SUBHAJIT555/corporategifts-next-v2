@@ -15,34 +15,45 @@ const ViewToggle = memo(function ViewToggle({ className }: ViewToggleProps) {
 
   return (
     <div
+      role="group"
+      aria-label="View mode"
       className={cn(
-        "flex items-center gap-0 border border-neutral-200 rounded-lg overflow-hidden ring-1 ring-neutral-200/80",
+        "relative inline-grid h-10 w-20 shrink-0 grid-cols-2 overflow-hidden rounded-xl border border-hairline bg-canvas",
         className,
       )}
     >
+      <span
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-y-0 left-0 w-1/2 bg-ink transition-transform duration-200 ease-out",
+          viewMode === "list" && "translate-x-full",
+        )}
+      />
+
       <button
+        type="button"
         onClick={() => setViewMode("grid")}
-        className={cn(
-          "p-2.5 transition-colors duration-200",
-          viewMode === "grid"
-            ? "bg-highlight text-white"
-            : "bg-white text-textcolor hover:bg-neutral-100",
-        )}
+        aria-pressed={viewMode === "grid"}
         aria-label="Grid view"
-      >
-        <FiGrid className="w-5 h-5" />
-      </button>
-      <button
-        onClick={() => setViewMode("list")}
         className={cn(
-          "p-2.5 transition-colors duration-200",
-          viewMode === "list"
-            ? "bg-highlight text-white"
-            : "bg-white text-textcolor hover:bg-neutral-100",
+          "relative z-10 flex items-center justify-center transition-colors duration-200",
+          viewMode === "grid" ? "text-on-primary" : "text-ink",
         )}
-        aria-label="List view"
       >
-        <FiList className="w-5 h-5" />
+        <FiGrid className="h-[18px] w-[18px]" />
+      </button>
+
+      <button
+        type="button"
+        onClick={() => setViewMode("list")}
+        aria-pressed={viewMode === "list"}
+        aria-label="List view"
+        className={cn(
+          "relative z-10 flex items-center justify-center transition-colors duration-200",
+          viewMode === "list" ? "text-on-primary" : "text-ink",
+        )}
+      >
+        <FiList className="h-[18px] w-[18px]" />
       </button>
     </div>
   );

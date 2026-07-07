@@ -31,19 +31,22 @@ const CategoryButton = memo(function CategoryButton({
 
   return (
     <button
+      type="button"
       onClick={handleClick}
       className={cn(
-        "w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 font-switzer text-sm sm:text-base",
+        "w-full rounded-lg px-3 py-2.5 text-left text-sm transition-colors duration-200 sm:text-base",
         productCount !== undefined && "flex items-center justify-between gap-2",
         isSelected
-          ? "bg-highlight text-white font-semibold shadow-sm"
-          : "text-textcolor hover:bg-neutral-100",
+          ? "bg-ink font-semibold text-on-primary"
+          : "text-body hover:bg-surface-card hover:text-ink",
       )}
     >
       <span>{name}</span>
-      {productCount !== undefined && (
-        <span className="text-sm opacity-75">({productCount})</span>
-      )}
+      {productCount !== undefined ? (
+        <span className={cn("text-xs", isSelected ? "opacity-80" : "text-muted")}>
+          ({productCount})
+        </span>
+      ) : null}
     </button>
   );
 });
@@ -55,12 +58,12 @@ const CategoryFilter = memo(function CategoryFilter({
   const { selectCategory } = useShopNavigation();
 
   return (
-    <aside className="hidden lg:block w-full lg:w-64 xl:w-80 shrink-0">
-      <div className="bg-white/90 backdrop-blur-sm border border-neutral-200 rounded-2xl p-6 sticky top-28 ring-1 ring-neutral-200/80 ring-offset-4">
-        <h2 className="text-xl sm:text-2xl font-sentient font-semibold text-textcolor mb-6">
+    <aside className="hidden w-full shrink-0 lg:block lg:w-64 xl:w-72">
+      <div className="sticky top-28 overflow-hidden rounded-2xl border border-hairline bg-surface-card p-5">
+        <h2 className="mb-4 text-lg font-semibold text-ink sm:text-xl">
           All Categories
         </h2>
-        <ul className="space-y-2">
+        <ul className="space-y-1">
           <li>
             <CategoryButton
               slug={null}

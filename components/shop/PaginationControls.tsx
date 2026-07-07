@@ -4,6 +4,7 @@ import { memo } from "react";
 import { IoChevronBack, IoChevronForward } from "@/components/icons";
 import { useShopNavigation } from "@/hooks/useShopRouterSync";
 import { useShopStore } from "@/stores/useShopStore";
+import { cn } from "@/lib/utilts";
 
 type PaginationControlsProps = {
   totalPages: number;
@@ -20,31 +21,35 @@ const PaginationControls = memo(function PaginationControls({
   }
 
   return (
-    <div className="flex items-center justify-center gap-4 mt-8 py-4">
+    <div className="mt-6 flex items-center justify-center gap-4 border-t border-hairline pt-5">
       <button
+        type="button"
         onClick={() => goToPage(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-2 rounded-xl border border-neutral-300 ring ring-neutral-200 ring-offset-2 bg-white text-textcolor disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-100 transition-colors cursor-pointer"
+        className={cn(
+          "rounded-lg border border-hairline bg-canvas p-2 text-ink transition-colors hover:bg-surface-card disabled:cursor-not-allowed disabled:opacity-40",
+        )}
         aria-label="Previous page"
       >
-        <IoChevronBack className="w-5 h-5" />
+        <IoChevronBack className="h-5 w-5" />
       </button>
 
-      <div className="flex items-center gap-2 font-switzer text-textcolor text-sm sm:text-base">
-        <span className="text-neutral-700 rounded-md font-medium">
-          {currentPage}
-        </span>
-        <span>/</span>
-        <span>{totalPages}</span>
+      <div className="flex items-center gap-2 text-sm text-body sm:text-base">
+        <span className="font-semibold text-ink">{currentPage}</span>
+        <span className="text-muted">/</span>
+        <span className="text-muted">{totalPages}</span>
       </div>
 
       <button
+        type="button"
         onClick={() => goToPage(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-2 rounded-xl border border-neutral-300 ring ring-neutral-200 ring-offset-2 bg-white text-textcolor disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-100 transition-colors cursor-pointer"
+        className={cn(
+          "rounded-lg border border-hairline bg-canvas p-2 text-ink transition-colors hover:bg-surface-card disabled:cursor-not-allowed disabled:opacity-40",
+        )}
         aria-label="Next page"
       >
-        <IoChevronForward className="w-5 h-5" />
+        <IoChevronForward className="h-5 w-5" />
       </button>
     </div>
   );

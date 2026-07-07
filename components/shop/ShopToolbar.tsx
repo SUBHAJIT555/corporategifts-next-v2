@@ -13,21 +13,12 @@ const ShopToolbar = memo(function ShopToolbar({
   categories,
 }: ShopToolbarProps) {
   return (
-    <>
-      <div className="lg:hidden flex items-center justify-between gap-4 mb-6">
-        <div className="flex-1 min-w-0">
-          <SelectedCategoryLabel categories={categories} />
-        </div>
-
-        <ViewToggle />
+    <div className="mb-5 flex items-center justify-between gap-4">
+      <div className="min-w-0 flex-1">
+        <SelectedCategoryLabel categories={categories} />
       </div>
-
-      <div className="hidden lg:flex flex-col sm:flex-row sm:items-center sm:justify-end gap-4 mb-6">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <ViewToggle />
-        </div>
-      </div>
-    </>
+      <ViewToggle />
+    </div>
   );
 });
 
@@ -52,9 +43,9 @@ const SelectedCategoryLabel = memo(function SelectedCategoryLabel({
   }, [categories, selectedCategory]);
 
   return (
-    <div className="text-base font-sentient font-light text-textcolor truncate">
+    <p className="truncate text-sm font-medium text-muted sm:text-base">
       {selectedCategoryLabel}
-    </div>
+    </p>
   );
 });
 

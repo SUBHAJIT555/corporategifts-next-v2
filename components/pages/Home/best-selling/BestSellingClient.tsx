@@ -119,16 +119,18 @@ export default function BestSellingClient({
     () => [
       {
         label: "All",
+        count: initial.total,
         active: selectedCategory === null,
         onClick: () => setCategory(null),
       },
       ...safeCategories.map((category) => ({
         label: category.name,
+        count: category.product_count,
         active: selectedCategory === category.slug,
         onClick: () => setCategory(category.slug),
       })),
     ],
-    [safeCategories, selectedCategory, setCategory]
+    [initial.total, safeCategories, selectedCategory, setCategory]
   );
 
   const productData = useMemo(() => {
