@@ -13,7 +13,7 @@ const ShopToolbar = memo(function ShopToolbar({
   categories,
 }: ShopToolbarProps) {
   return (
-    <div className="mb-5 flex items-center justify-between gap-4">
+    <div className="mb-5 flex items-center justify-between gap-4 sm:mb-6">
       <div className="min-w-0 flex-1">
         <SelectedCategoryLabel categories={categories} />
       </div>

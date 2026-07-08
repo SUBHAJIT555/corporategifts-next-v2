@@ -92,15 +92,13 @@ const ShopContent = memo(function ShopContent({ initialPage }: ShopContentProps)
     <section className="relative w-full bg-canvas">
       <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-3 sm:px-6 sm:py-4 lg:py-4">
         <div ref={gridRef} className="relative">
-          <div className="overflow-hidden rounded-2xl border border-hairline bg-surface-soft p-4 sm:p-5">
-            <ShopToolbar categories={categories} />
-            <ProductGrid
-              products={products}
-              isLoading={productsQuery.isLoading}
-              error={productsQuery.error}
-            />
-            <PaginationControls totalPages={totalPages} />
-          </div>
+          <ShopToolbar categories={categories} />
+          <ProductGrid
+            products={products}
+            isLoading={productsQuery.isLoading}
+            error={productsQuery.error}
+          />
+          <PaginationControls totalPages={totalPages} />
         </div>
       </RevealSection>
 

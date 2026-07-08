@@ -38,7 +38,7 @@ interface ProductGridProps {
   | "custom";
 
   id?: string;
-  variant?: "default" | "home";
+  variant?: "default" | "home" | "category";
 }
 
 // ─────────────────────────────────────
@@ -60,12 +60,13 @@ const FilterButton = memo(function FilterButton({
   isAll?: boolean;
   selectedCategory: string | null;
   onSelect: (slug: string | null) => void;
-  variant?: "default" | "home";
+  variant?: "default" | "home" | "category";
 }) {
   const slug = category?.slug ?? null;
   const active = isAll ? selectedCategory === null : selectedCategory === slug;
+  const filterVariant = variant === "category" ? "home" : variant;
 
-  if (variant === "home") {
+  if (filterVariant === "home") {
     return (
       <button
         type="button"
@@ -194,6 +195,7 @@ const ProductGrid = ({
   // MEMOIZED CATEGORY BUTTONS
   // ─────────────────────────────────────
   const isHome = variant === "home";
+  const isCategory = variant === "category";
 
   const categoryButtons = useMemo(() => {
     if (!safeCategories.length) return null;
@@ -224,6 +226,8 @@ const ProductGrid = ({
   // ─────────────────────────────────────
   // MEMOIZED PRODUCT LIST
   // ─────────────────────────────────────
+  const cardVariant = variant === "category" ? "home" : variant;
+
   const productList = useMemo(
     () =>
       products.map((p: Product, i: number) => (
@@ -238,15 +242,99 @@ const ProductGrid = ({
             onAddToQuote={handleAddToQuote}
             isInQuote={isInQuote(p.id)}
             currentQuantity={1}
-            variant={variant}
+            variant={cardVariant}
           />
         </div>
       )),
-    [products, handleAddToQuote, isInQuote, variant]
+    [products, handleAddToQuote, isInQuote, cardVariant]
   );
 
   const pageLabel = String(paginationInfo?.currentPage ?? 1).padStart(2, "0");
   const totalPagesLabel = String(paginationInfo?.totalPages ?? 1).padStart(2, "0");
+
+  if (isCategory) {
+    return (
+      <section ref={sectionRef} id={id} className="w-full bg-canvas">
+        <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-3 sm:px-6 sm:py-4 lg:py-6">
+          <Reveal animationNum={0}>
+            <h2 className="text-display-md text-ink">{title}</h2>
+          </Reveal>
+
+          {subtitle && (
+            <Reveal animationNum={1}>
+              <p className="mt-3 max-w-3xl text-body-md text-muted sm:text-[17px] sm:leading-7">
+                {subtitle}
+              </p>
+            </Reveal>
+          )}
+
+          {safeCategories.length > 0 && (
+            <Reveal animationNum={2} className="mt-6 mb-5 hidden lg:block sm:mb-6">
+              <div className="flex flex-wrap gap-2">{categoryButtons}</div>
+            </Reveal>
+          )}
+
+          {safeCategories.length > 0 && (
+            <div className="sticky top-0 z-50 -mx-5 mb-5 w-[calc(100%+2.5rem)] py-3 sm:-mx-6 sm:mb-6 sm:w-[calc(100%+3rem)] lg:hidden">
+              <div className="overflow-x-auto px-5 sm:px-6">
+                <div className="flex min-w-max gap-2 py-1">{categoryButtons}</div>
+              </div>
+            </div>
+          )}
+
+          <Reveal animationNum={3}>
+            {isLoading ? (
+              <div className="flex min-h-[420px] items-center justify-center">
+                <Loading size="md" message="Loading products..." />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                {productList}
+              </div>
+            )}
+
+            {paginationInfo && paginationInfo.totalPages > 1 && (
+              <div className="mt-6 flex items-center justify-between gap-4">
+                <p className="text-caption font-medium uppercase tracking-[0.14em] text-muted">
+                  <span className="text-ink">{pageLabel}</span>
+                  <span className="mx-1.5 text-muted-soft">/</span>
+                  {totalPagesLabel}
+                </p>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => onPageChange?.(paginationInfo.currentPage - 1)}
+                    disabled={paginationInfo.currentPage === 1 || !onPageChange}
+                    className={candyCarouselNavClasses("prev")}
+                    aria-label="Previous page"
+                  >
+                    <ChevronLeft className={candyNavIconClasses} strokeWidth={2.25} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onPageChange?.(paginationInfo.currentPage + 1)}
+                    disabled={
+                      paginationInfo.currentPage === paginationInfo.totalPages ||
+                      !onPageChange
+                    }
+                    className={candyCarouselNavClasses("next")}
+                    aria-label="Next page"
+                  >
+                    <ChevronRight className={candyNavIconClasses} strokeWidth={2.25} />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {error && (
+              <p className="mt-4 text-sm text-error">Error: {error.message}</p>
+            )}
+          </Reveal>
+        </RevealSection>
+      </section>
+    );
+  }
 
   if (isHome) {
     return (

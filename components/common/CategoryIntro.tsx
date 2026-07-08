@@ -1,8 +1,11 @@
 "use client";
-import { useState } from "react";
-import { LuChevronDown } from "../icons";
-import Image from "next/image";
 
+import { useState } from "react";
+import Image from "next/image";
+import { ChevronDown, Sparkles } from "lucide-react";
+import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
+import { candyWhiteButtonClasses } from "@/components/ui/candy-button";
+import { cn } from "@/lib/utilts";
 
 interface CategoryIntroProps {
   imageUrl: string;
@@ -21,62 +24,90 @@ const CategoryIntro = ({
 }: CategoryIntroProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Extract first sentence for mobile preview
-  // const introPreview = content.split(/[.!?]/)[0] + (content.match(/[.!?]/) ? "." : "");
-
   return (
-    <section aria-labelledby="category-intro">
-      <div className="mx-auto container px-6 py-8 sm:px-8 lg:py-12">
-        <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
-          <div className="flex flex-col items-start gap-4 sm:gap-5">
-            <h2
-              id="category-intro"
-              className="flex items-center gap-3 text-2xl sm:text-3xl md:text-4xl font-sentient font-semibold  text-neutral-700"
-            >
-              
-              {heading}
-            </h2>
-            <div className="hidden w-full max-w-2xl aspect-4/3 lg:aspect-video overflow-hidden rounded-2xl border border-neutral-300 ring ring-neutral-300 ring-offset-3 md:ring-offset-6 shadow-sm sm:block">
-              <Image
-                src={imageUrl}
-                alt={imageAlt}
-                width={1000}
-                height={1000}
-                className="h-full w-full object-cover"
-                loading="lazy"
-                quality={100}
-              />
+    <section aria-labelledby="category-intro" className="w-full bg-canvas">
+      <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-3 sm:px-6 sm:py-4 lg:py-4">
+        <Reveal animationNum={0}>
+          <div className="overflow-hidden rounded-2xl border border-hairline bg-surface-soft">
+            <div className="border-b border-hairline bg-canvas px-5 py-4 sm:px-6 sm:py-5">
+              <span className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-3 py-1 text-caption font-medium text-body">
+                <Sparkles className="h-3.5 w-3.5 text-brand-accent" />
+                About this category
+              </span>
             </div>
-          </div>
 
-          <div className="space-y-4 text-gray-800">
-            <p className="hidden text-lg lg:text-xl leading-relaxed lg:block font-switzer">
-              {content}
-            </p>
-
-            <div className="lg:hidden">
-              <p className="text-base leading-relaxed">
-                {isExpanded ? content : preview}
-              </p>
-              <button
-                type="button"
-                onClick={() => setIsExpanded((prev) => !prev)}
-                aria-expanded={isExpanded}
-                className="mt-3 inline-flex items-center gap-2 rounded-lg border border-neutral-300 ring ring-neutral-300 ring-offset-2 bg-neutral-100 px-4 py-2 text-sm font-switzer font-medium text-textcolor transition hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-textcolor"
-              >
-                {isExpanded ? "Read less" : "Read more"}
-                <LuChevronDown
-                  className={`transition-transform size-4 ${isExpanded ? "rotate-180" : ""}`}
+            <div className="grid lg:grid-cols-2">
+              <div className="group relative min-h-[240px] sm:min-h-[300px] lg:min-h-[380px]">
+                <Image
+                  src={imageUrl}
+                  alt={imageAlt}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                  loading="lazy"
+                  quality={100}
                 />
-              </button>
-              <p className="sr-only">{content}</p>
+                <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent" />
+              </div>
+
+              <div className="relative flex flex-col justify-center border-t border-hairline bg-canvas p-6 sm:p-8 lg:border-t-0 lg:border-l lg:p-10">
+                <div
+                  className="pointer-events-none absolute inset-0 opacity-[0.08]"
+                  aria-hidden
+                  style={{
+                    backgroundImage:
+                      "repeating-linear-gradient(0deg, transparent 0px, transparent 3px, var(--primary) 3px, var(--primary) 4px)",
+                  }}
+                />
+
+                <div className="relative z-10">
+                  <h2
+                    id="category-intro"
+                    className="text-display-sm leading-tight text-ink sm:text-display-md"
+                  >
+                    {heading}
+                  </h2>
+
+                  <div className="my-5 border-t border-dashed border-hairline sm:my-6" />
+
+                  <div className="hidden lg:block">
+                    <p className="max-w-none text-body-md text-body sm:text-[17px] sm:leading-8">
+                      {content}
+                    </p>
+                  </div>
+
+                  <div className="lg:hidden">
+                    <p className="text-body-md text-body sm:text-[17px] sm:leading-8">
+                      {isExpanded ? content : preview}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setIsExpanded((prev) => !prev)}
+                      aria-expanded={isExpanded}
+                      className={cn(
+                        candyWhiteButtonClasses(
+                          "mt-5 inline-flex items-center gap-2",
+                        ),
+                      )}
+                    >
+                      {isExpanded ? "Read less" : "Read more"}
+                      <ChevronDown
+                        className={cn(
+                          "size-4 transition-transform",
+                          isExpanded && "rotate-180",
+                        )}
+                      />
+                    </button>
+                    <p className="sr-only">{content}</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </Reveal>
+      </RevealSection>
     </section>
   );
 };
 
 export default CategoryIntro;
-

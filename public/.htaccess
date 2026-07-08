@@ -37,7 +37,7 @@ RedirectMatch 301 ^/blog/checkout/?$ /
 # 2b. SHOP MULTI-CATEGORY REDIRECTS (auto-generated)
 # -------------------------------------------------
 # SHOP_MULTI_CATEGORY_REDIRECTS_START
-# Generated 2026-07-07T19:24:53.075Z — 306 redirect(s)
+# Generated 2026-07-08T05:25:46.045Z — 306 redirect(s)
 RewriteRule ^shop/office-and-stationary/blace-change-zero-recycled-pu-15w-wireless-mousepad-desk-organizer/?$ /shop/technology-and-accessories/blace-change-zero-recycled-pu-15w-wireless-mousepad-desk-organizer/ [R=301,L]
 RewriteRule ^shop/premium-gift-sets/cork-drinkware-gift-sets-in-a-cardboard-gift-box-gs-10/?$ /shop/eco-friendly/cork-drinkware-gift-sets-in-a-cardboard-gift-box-gs-10/ [R=301,L]
 RewriteRule ^shop/office-and-stationary/bamboo-ballpoint-pen/?$ /shop/eco-friendly/bamboo-ballpoint-pen/ [R=301,L]

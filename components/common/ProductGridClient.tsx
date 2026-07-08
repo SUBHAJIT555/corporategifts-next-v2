@@ -15,6 +15,7 @@ interface ProductGridClientProps {
   id?: string;
   title: string;
   categorySlug: string;
+  variant?: "default" | "home" | "category";
 }
 
 const ProductGridClient = ({
@@ -24,6 +25,7 @@ const ProductGridClient = ({
   id,
   title,
   categorySlug,
+  variant = "default",
 }: ProductGridClientProps) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -61,6 +63,7 @@ const ProductGridClient = ({
       error={null}
       selectedCategory={selectedCategory}
       id={id}
+      variant={variant}
     />
   );
 };

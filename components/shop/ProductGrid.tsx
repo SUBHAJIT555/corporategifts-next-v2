@@ -180,7 +180,7 @@ const ProductGrid = memo(function ProductGrid({
       {viewMode === "grid" ? (
         <div
           className={cn(
-            "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 mb-8",
+            "grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
             isLoading && "opacity-50",
           )}
         >
@@ -197,7 +197,7 @@ const ProductGrid = memo(function ProductGrid({
           ))}
         </div>
       ) : (
-        <div className={cn("space-y-4 mb-8", isLoading && "opacity-50")}>
+        <div className={cn("space-y-4", isLoading && "opacity-50")}>
           {products.map((product, index) => (
             <ProductCardList
               key={product.id}

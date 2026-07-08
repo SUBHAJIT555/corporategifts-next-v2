@@ -348,13 +348,48 @@ body::-webkit-scrollbar {
   min-height: 10px !important;
 }
 
+.gift-set-carousel-pagination {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  width: auto !important;
+  max-width: min(100%, 16rem) !important;
+  min-height: 10px !important;
+  position: static !important;
+  left: auto !important;
+  bottom: auto !important;
+  top: auto !important;
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+@media (min-width: 640px) {
+  .gift-set-carousel-pagination {
+    max-width: min(100%, 20rem) !important;
+  }
+}
+
+.gift-set-carousel-pagination.swiper-pagination-horizontal {
+  width: auto !important;
+}
+
+.gift-set-carousel-pagination.swiper-pagination-hidden {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 .swiper-pagination-custom .swiper-pagination-bullet,
 .swiper-pagination-why-choose-us .swiper-pagination-bullet,
-.swiper-pagination-product-grid .swiper-pagination-bullet {
-  background: #0F5C85 !important;
+.swiper-pagination-product-grid .swiper-pagination-bullet,
+.gift-set-carousel-pagination .swiper-pagination-bullet {
+  background: var(--cal-brand-accent, #0f5c85) !important;
   opacity: 0.3 !important;
-  width: 10px !important;
-  height: 10px !important;
+  width: 8px !important;
+  height: 8px !important;
   border-radius: 50% !important;
   transition: all 0.3s ease !important;
   margin: 0 !important;
@@ -364,12 +399,12 @@ body::-webkit-scrollbar {
 
 .swiper-pagination-custom .swiper-pagination-bullet-active,
 .swiper-pagination-why-choose-us .swiper-pagination-bullet-active,
-.swiper-pagination-product-grid .swiper-pagination-bullet-active {
-  background: #0F5C85 !important;
+.swiper-pagination-product-grid .swiper-pagination-bullet-active,
+.gift-set-carousel-pagination .swiper-pagination-bullet-active {
+  background: var(--cal-brand-accent, #0f5c85) !important;
   opacity: 1 !important;
-  width: 10px !important;
-  height: 10px !important;
-
+  width: 8px !important;
+  height: 8px !important;
   border-radius: 50% !important;
 }
 
