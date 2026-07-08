@@ -1,18 +1,21 @@
 import { notFound, redirect } from "next/navigation";
-import CommonHero from "@/components/ui/CommonHero";
+import CategoryCallToAction from "@/components/pages/ProductCategory/CategoryCallToAction";
+import CategoryHero from "@/components/pages/ProductCategory/CategoryHero";
+import CategoryWhyChooseUs from "@/components/pages/ProductCategory/CategoryWhyChooseUs";
 import CategoryIntro from "@/components/common/CategoryIntro";
 import ProductGridClient from "@/components/common/ProductGridClient";
-import WhyChooseUs, { type FeatureCard } from "@/components/ui/WhyChooseUs";
-import CallToAction from "@/components/ui/CallToAction";
+import SectionDivider from "@/components/ui/SectionDivider";
+import type { FeatureCard } from "@/components/ui/WhyChooseUs";
 import { ProductsApi } from "@/lib/api/endpoints";
 import {
   LuAward,
+  LuCoffee,
   LuGift,
   LuPackage,
   LuSparkles,
   LuUsers,
-  LuCoffee,
 } from "@/components/icons";
+import { CupSoda } from "lucide-react";
 
 export const dynamic = "force-static";
 
@@ -28,7 +31,7 @@ const eatingAndDrinkingFeatures: FeatureCard[] = [
     title: "Premium Quality Food & Beverage Gifts",
     description:
       "From gourmet coffee sets to luxury tea collections, we offer high-quality eating and drinking products perfect for corporate gifting and client appreciation.",
-    icon: <LuCoffee className="w-8 h-8" />,
+    icon: <LuCoffee className="h-5 w-5" />,
     iconColor: "#4CAF50",
   },
   {
@@ -37,7 +40,7 @@ const eatingAndDrinkingFeatures: FeatureCard[] = [
     title: "Custom Branding Options",
     description:
       "Personalize your corporate gifts with custom packaging, logo printing, and branded gift boxes to strengthen your brand identity with every sip.",
-    icon: <LuAward className="w-8 h-8" />,
+    icon: <LuAward className="h-5 w-5" />,
     iconColor: "#FF6B6B",
   },
   {
@@ -46,7 +49,7 @@ const eatingAndDrinkingFeatures: FeatureCard[] = [
     title: "Wide Range of Products",
     description:
       "Explore our collection of premium coffee sets, gourmet teas, luxury chocolates, wine accessories, and insulated drinkware that make perfect corporate gifts.",
-    icon: <LuPackage className="w-8 h-8" />,
+    icon: <LuPackage className="h-5 w-5" />,
     iconColor: "#FF9800",
   },
   {
@@ -55,7 +58,7 @@ const eatingAndDrinkingFeatures: FeatureCard[] = [
     title: "Perfect for Every Occasion",
     description:
       "Whether it's client appreciation, employee recognition, corporate events, or holiday gifting, our food and beverage products suit every occasion.",
-    icon: <LuGift className="w-8 h-8" />,
+    icon: <LuGift className="h-5 w-5" />,
     iconColor: "#8BC34A",
   },
   {
@@ -64,7 +67,7 @@ const eatingAndDrinkingFeatures: FeatureCard[] = [
     title: "Flexible Ordering",
     description:
       "From individual gifts to bulk orders, we accommodate orders of all sizes with reliable delivery across Dubai and the UAE.",
-    icon: <LuUsers className="w-8 h-8" />,
+    icon: <LuUsers className="h-5 w-5" />,
     iconColor: "#3F3F9F",
   },
   {
@@ -73,8 +76,8 @@ const eatingAndDrinkingFeatures: FeatureCard[] = [
     title: "Trusted Quality",
     description:
       "Sourced from premium suppliers, our eating and drinking products combine quality, taste, and elegant presentation for lasting impressions.",
-    icon: <LuSparkles className="w-8 h-8" />,
-    iconColor: "#4CAF50",
+    icon: <LuSparkles className="h-5 w-5" />,
+    iconColor: "#B6E9C8",
   },
 ];
 
@@ -102,10 +105,7 @@ async function getEatingAndDrinkingData(page: number) {
       }),
     ]);
 
-    return {
-      categories,
-      productData,
-    };
+    return { categories, productData };
   } catch (error) {
     console.error("Failed to load eating & drinking products:", error);
     return {
@@ -167,18 +167,24 @@ export default async function EatingAndDrinkingPage({
   );
 
   return (
-    <main className="relative min-h-screen w-full overflow-hidden">
-      <CommonHero
-        title=" "
-        titleLine2Before="Premium "
-        titleLine2Highlight="Eating & Drinking "
-        titleLine2After="Products for Corporate Gifting in Dubai"
-        titlesuffix=""
+    <main className="relative min-h-screen w-full overflow-x-hidden bg-canvas">
+      <CategoryHero
+        eyebrow="Eating & drinking"
+        eyebrowIcon={
+          <CupSoda className="h-3 w-3 shrink-0 text-brand-accent sm:h-3.5 sm:w-3.5" />
+        }
+        title={
+          <>
+            Premium{" "}
+            <span className="text-brand-accent">Eating &amp; Drinking</span>{" "}
+            Products for Corporate Gifting in Dubai
+          </>
+        }
         subtitle="Discover our exclusive collection of high-quality food and beverage products, perfect for corporate gifts, client appreciation, and employee recognition programs."
-        buttonLink="#eating-drinking"
-        buttonText="Shop Eating & Drinking"
+        ctaHref="#eating-drinking"
+        ctaLabel="Shop Eating & Drinking"
       />
-
+      <SectionDivider />
       <CategoryIntro
         imageUrl={HERO_IMAGE}
         imageAlt="Eating and drinking products collection preview"
@@ -191,7 +197,7 @@ export default async function EatingAndDrinkingPage({
         }
         heading="About Eating & Drinking Gifts"
       />
-
+      <SectionDivider />
       <ProductGridClient
         title="Explore Our Collection of Eating & Drinking Products"
         productData={productData}
@@ -199,11 +205,21 @@ export default async function EatingAndDrinkingPage({
         selectedCategory={CATEGORY_SLUG}
         id="eating-drinking"
         categorySlug={CATEGORY_SLUG}
+        variant="category"
       />
-
-      <WhyChooseUs features={eatingAndDrinkingFeatures} />
-
-      <CallToAction
+      <SectionDivider />
+      <CategoryWhyChooseUs
+        title={
+          <>
+            Why Choose Baharnani for{" "}
+            <span className="whitespace-nowrap">Eating &amp; Drinking?</span>
+          </>
+        }
+        subtitle="Specialized in premium corporate food and beverage gifts, drinkware, and gourmet collections tailored for businesses across Dubai and the UAE."
+        features={eatingAndDrinkingFeatures}
+      />
+      <SectionDivider />
+      <CategoryCallToAction
         title="Your Trusted Partner for Corporate Food & Beverage Gifts in Dubai"
         subtitle={
           <>
@@ -212,25 +228,8 @@ export default async function EatingAndDrinkingPage({
             relationships and elevate your brand presence.
           </>
         }
-        backgroundImageUrl={HERO_IMAGE}
-        buttons={[
-          {
-            text: "Contact Our Team",
-            className:
-              "bg-linear-to-r from-neutral-800 to-neutral-500! text-white! border! border-neutral-200! font-sentient! font-medium! ring-1 ring-neutral-300! ring-offset-3!",
-            link: "/contact-us",
-            variant: "dark",
-          },
-          {
-            text: "Explore Product Categories",
-            className:
-              "bg-linear-to-r from-neutral-100 to-neutral-300! border! border-neutral-200! text-neutral-700! font-sentient! font-medium! ring-1 ring-neutral-300! ring-offset-3!",
-            link: "/products",
-            variant: "light",
-          },
-        ]}
       />
+      <SectionDivider />
     </main>
   );
 }
-
