@@ -1,16 +1,24 @@
 "use client";
 
 import { useMemo, useState, useCallback, useEffect } from "react";
+import { Package } from "lucide-react";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import { useRouter } from "next/navigation";
 import ImageGallery from "react-image-gallery";
 
-// import { HiMinus, HiPlus } from "react-icons/hi";
-import { BsCart4, LuArrowLeft, HiMinus, HiPlus } from "@/components/icons";
+import { BsCart4, LuArrowLeft } from "@/components/icons";
 import { useQuote } from "@/contexts/QuoteContext";
 import Loading from "@/components/ui/Loading";
 import { cn } from "@/lib/utilts";
 import type { ProductDetails } from "@/lib/api/types";
+import { QuantitySelector } from "@/lib/quantitySelector";
+import {
+  candyAccentButtonClasses,
+  candyDarkButtonClasses,
+  candyWhiteButtonClasses,
+} from "@/components/ui/candy-button";
+import SectionDivider from "@/components/ui/SectionDivider";
+import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 
 type ProductDetailsClientProps = {
   product: ProductDetails | null;
@@ -90,7 +98,7 @@ const ProductDetailsClient = ({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-bg pt-24">
+      <div className="flex min-h-screen items-center justify-center bg-canvas pt-24">
         <Loading fullScreen message="Loading..." size="lg" />
       </div>
     );
@@ -98,251 +106,214 @@ const ProductDetailsClient = ({
 
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-bg pt-24">
-        <div className="text-center">
-          <h2 className="text-2xl font-tanker text-textcolor mb-4">
-            Product Not Found
-          </h2>
-          <p className="text-textcolor mb-6">
-            {errorMessage || "Product not found"}
-          </p>
-          <NoPrefetchLink
-            href="/shop"
-            className="inline-flex items-center gap-2 bg-textcolor hover:bg-textcolor/70 text-white font-tanker font-medium py-3 px-6 rounded-md transition-colors"
-          >
-            <LuArrowLeft className="w-5 h-5" />
-            Back to Shop
-          </NoPrefetchLink>
-        </div>
+      <div className="w-full bg-canvas">
+        <section className="w-full bg-canvas">
+          <RevealSection className="relative mx-auto flex min-h-[calc(100vh-4rem)] max-w-7xl flex-col items-center justify-center border-x border-hairline px-5 py-20 text-center sm:px-6 sm:py-24">
+            <div className="relative z-10 mx-auto w-full max-w-2xl">
+              <Reveal as="h2" animationNum={0} className="text-display-md text-ink">
+                Product Not Found
+              </Reveal>
+              <Reveal
+                as="p"
+                animationNum={1}
+                className="mx-auto mt-4 max-w-md text-body-md text-muted"
+              >
+                {errorMessage || "Product not found"}
+              </Reveal>
+              <Reveal animationNum={2} className="mt-8 flex justify-center">
+                <NoPrefetchLink
+                  href="/shop"
+                  className={cn(
+                    candyDarkButtonClasses("inline-flex items-center gap-2"),
+                  )}
+                >
+                  <LuArrowLeft className="size-4 shrink-0" />
+                  Back to Shop
+                </NoPrefetchLink>
+              </Reveal>
+            </div>
+          </RevealSection>
+        </section>
+        <SectionDivider />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-bg">
-      {/* Hero Section with Dashed Bottom Fade Grid */}
-      <section className="relative w-full overflow-hidden bg-white">
-        {/* Dashed Bottom Fade Grid covers entire section, including top */}
-        <div
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage: `
-        linear-gradient(to right, #e7e5e4 1px, transparent 1px),
-        linear-gradient(to bottom, #e7e5e4 1px, transparent 1px)
-      `,
-            backgroundSize: "1px 1px",
-            backgroundPosition: "0 0, 0 0",
-            maskImage: `
-         repeating-linear-gradient(
-              to right,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            repeating-linear-gradient(
-              to bottom,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            radial-gradient(ellipse 100% 80% at 50% 100%, #000 50%, transparent 90%)
-      `,
-            WebkitMaskImage: `
-  repeating-linear-gradient(
-              to right,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            repeating-linear-gradient(
-              to bottom,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            radial-gradient(ellipse 100% 80% at 50% 100%, #000 50%, transparent 90%)
-      `,
-            maskComposite: "intersect",
-            WebkitMaskComposite: "source-in",
-          }}
-        />
-        {/* Hero Content with top padding */}
-        <div className="relative z-10 w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 pt-24 sm:pt-28 md:pt-32 pb-8 sm:pb-10 md:pb-12 border-b border-neutral-300 border-2">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-sentient font-bold text-textcolor leading-tight">
-            {product.name}
-          </h1>
-        </div>
+    <div className="w-full bg-canvas">
+      <section className="w-full bg-canvas">
+        <RevealSection className="relative mx-auto max-w-7xl overflow-hidden border-x border-hairline px-5 pt-20 pb-8 sm:px-6 sm:pt-24 sm:pb-10 md:pt-28 md:pb-12 lg:pt-32">
+          <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                opacity: 0.14,
+                pointerEvents: "none",
+                backgroundImage:
+                  "repeating-linear-gradient(0deg, transparent 0px, transparent 3px, var(--primary) 3px, var(--primary) 4px)",
+                maskImage: "linear-gradient(to bottom, #000 0%, transparent 75%)",
+                WebkitMaskImage:
+                  "linear-gradient(to bottom, #000 0%, transparent 75%)",
+              }}
+            />
+          </div>
+
+          <div className="relative z-10 mx-auto max-w-4xl">
+            <Reveal animationNum={0} className="flex justify-center sm:justify-start">
+              <span className="inline-flex max-w-full items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-2.5 py-1 text-[11px] font-medium text-body shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.12)] sm:px-3 sm:text-caption dark:shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.35)]">
+                <Package className="h-3 w-3 shrink-0 text-brand-accent sm:h-3.5 sm:w-3.5" />
+                Product details
+              </span>
+            </Reveal>
+
+            <Reveal
+              as="h1"
+              animationNum={1}
+              className="mt-4 text-center text-display-lg text-ink sm:mt-5 sm:text-left md:text-display-xl"
+            >
+              {product.name}
+            </Reveal>
+          </div>
+        </RevealSection>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumbs */}
-        <nav className="mb-6">
-          <div className="flex items-center gap-2 text-sm font-switzer text-textcolor/70">
-            <NoPrefetchLink href="/" className="hover:text-textcolor transition-colors">
-              Home
-            </NoPrefetchLink>
-            <span>/</span>
-            <NoPrefetchLink
-              href="/shop"
-              className="hover:text-textcolor transition-colors"
-            >
-              Shop
-            </NoPrefetchLink>
-            {category && (
-              <>
-                <span>/</span>
+      <SectionDivider />
+
+      <section className="w-full bg-canvas">
+        <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-6 sm:px-6 sm:py-8 lg:py-10">
+          <Reveal animationNum={0}>
+            <nav className="mb-6 sm:mb-8" aria-label="Breadcrumb">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted">
                 <NoPrefetchLink
-                  href={`/product-category/${category}`}
-                  className="hover:text-textcolor  transition-colors capitalize"
+                  href="/"
+                  className="transition-colors hover:text-ink"
                 >
-                  {category.replace(/-/g, " ")}
+                  Home
                 </NoPrefetchLink>
-              </>
-            )}
-            <span>/</span>
-            <span className="text-[#0f5c85]">{product.name}</span>
-          </div>
-        </nav>
+                <span aria-hidden>/</span>
+                <NoPrefetchLink
+                  href="/shop"
+                  className="transition-colors hover:text-ink"
+                >
+                  Shop
+                </NoPrefetchLink>
+                {category && (
+                  <>
+                    <span aria-hidden>/</span>
+                    <NoPrefetchLink
+                      href={`/product-category/${category}`}
+                      className="capitalize transition-colors hover:text-ink"
+                    >
+                      {category.replace(/-/g, " ")}
+                    </NoPrefetchLink>
+                  </>
+                )}
+                <span aria-hidden>/</span>
+                <span className="text-brand-accent">{product.name}</span>
+              </div>
+            </nav>
+          </Reveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Product Images */}
-          <div className="w-full">
-            <div className="custom-image-gallery">
-              <ImageGallery
-                items={galleryImages}
-                showPlayButton={false}
-                showFullscreenButton={true}
-                showBullets={false}
-                showThumbnails={galleryImages.length > 1}
-                thumbnailPosition="bottom"
-                slideInterval={0}
-                slideDuration={450}
-                lazyLoad={true}
-                useBrowserFullscreen={false}
-                onScreenChange={handleGalleryScreenChange}
-              />
-            </div>
-          </div>
-
-          {/* Product Details */}
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-10 xl:gap-12">
             <div>
+              <div className="rounded-2xl border border-hairline bg-surface-soft p-4 sm:p-5">
+                <div className="custom-image-gallery">
+                  <ImageGallery
+                    items={galleryImages}
+                    showPlayButton={false}
+                    showFullscreenButton={true}
+                    showBullets={false}
+                    showThumbnails={galleryImages.length > 1}
+                    thumbnailPosition="bottom"
+                    slideInterval={0}
+                    slideDuration={450}
+                    lazyLoad={true}
+                    useBrowserFullscreen={false}
+                    onScreenChange={handleGalleryScreenChange}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <Reveal animationNum={2} className="space-y-6">
               {product.categories.length > 0 && (
-                <div className="mb-6 border border-neutral-300 w-fit px-3 rounded-xl py-0.5 ring ring-offset-2 ring-neutral-200 bg-linear-to-r from-neutral-100 to-white">
-                  <span className="text-sm font-switzer text-textcolor/70">
-                    Category:{" "}
-                  </span>
-                  <span className="text-sm font-switzer text-textcolor">
+                <div className="w-fit rounded-lg border border-dashed border-hairline bg-surface-card px-3 py-1.5">
+                  <span className="text-sm text-muted">Category: </span>
+                  <span className="text-sm font-medium text-ink">
                     {product.categories.join(", ")}
                   </span>
                 </div>
               )}
-            </div>
 
-            {product.description && (
-              <div className="prose max-w-none">
-                <h3 className="text-xl font-sentient text-neutral-700 font-semibold mb-3">
-                  Description
-                </h3>
-                <div
-                  className="text-base font-switzer text-textcolor leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: product.description }}
+              {product.description && (
+                <div className="rounded-xl border border-hairline bg-surface-soft p-5 sm:p-6">
+                  <h3 className="mb-3 text-lg font-semibold text-ink sm:text-xl">
+                    Description
+                  </h3>
+                  <div
+                    className="prose prose-sm max-w-none text-body-md text-body sm:prose-base [&_a]:text-brand-accent [&_a]:underline [&_li]:text-body [&_p]:leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: product.description }}
+                  />
+                </div>
+              )}
+
+              <div className="flex flex-wrap items-center gap-4">
+                <label className="text-base font-semibold text-ink">
+                  Quantity:
+                </label>
+                <QuantitySelector
+                  quantity={quantity}
+                  onQuantityChange={handleQuantityChange}
+                  variant="cal"
+                  className="max-w-40"
                 />
               </div>
-            )}
 
-            {/* Quantity Selector */}
-            <div className="flex items-center gap-4">
-              <label className="text-base font-sentient  font-semibold">
-                Quantity:
-              </label>
-              <div className="flex items-center rounded-xl bg-white overflow-hidden border border-gray-300">
-                <button
-                  onClick={() => handleQuantityChange(quantity - 1)}
-                  disabled={quantity <= 1}
+              <button
+                type="button"
+                onClick={handleAddToQuote}
+                disabled={isInQuote(product.id)}
+                className={cn(
+                  "group relative w-full overflow-hidden text-lg",
+                  isInQuote(product.id)
+                    ? "cursor-not-allowed rounded-xl bg-surface-strong px-6 py-4 font-medium text-muted opacity-60"
+                    : candyAccentButtonClasses("w-full py-4 text-base sm:text-lg"),
+                )}
+              >
+                <span
                   className={cn(
-                    "w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors",
-                    quantity <= 1 && "opacity-50 cursor-not-allowed",
+                    "inline-block transition-all duration-300 ease-in-out",
+                    !isInQuote(product.id) &&
+                      "group-hover:-translate-y-full group-hover:opacity-0",
                   )}
                 >
-                  <HiMinus className="w-4 h-4 text-textcolor" />
-                </button>
-                <input
-                  type="number"
-                  value={quantity}
-                  onChange={(e) =>
-                    handleQuantityChange(parseInt(e.target.value) || 1)
-                  }
-                  min={1}
-                  className="w-16 px-2 py-2 text-center font-switzer text-textcolor border-x border-gray-300 no-spinner outline-none focus:outline-none focus:ring-0"
-                />
-                <button
-                  onClick={() => handleQuantityChange(quantity + 1)}
-                  className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors"
-                >
-                  <HiPlus className="w-4 h-4 text-textcolor" />
-                </button>
-              </div>
-            </div>
+                  {isInQuote(product.id) ? "Added To your Cart" : "Add to Quote"}
+                </span>
+                {!isInQuote(product.id) && (
+                  <BsCart4 className="absolute left-1/2 top-1/2 size-5 -translate-x-1/2 translate-y-full opacity-0 transition-all duration-300 ease-in-out group-hover:-translate-y-1/2 group-hover:opacity-100" />
+                )}
+              </button>
 
-            {/* Add to Quote Button */}
-            <button
-              onClick={handleAddToQuote}
-              disabled={isInQuote(product.id)}
-              className={cn(
-                "group relative w-full font-switzer font-medium py-4 px-6 rounded-xl ring ring-offset-2 ring-[#0f5c85] transition-colors duration-200 text-lg overflow-hidden cursor-pointer",
-                isInQuote(product.id)
-                  ? "bg-gray-400 text-white cursor-not-allowed opacity-60"
-                  : "bg-[#0f5c85] hover:bg-[#0f5c85]/70 text-white ",
-              )}
-            >
-              <span
-                className={`inline-block transition-all duration-300 ease-in-out ${isInQuote(product.id)
-                  ? ""
-                  : "group-hover:-translate-y-full group-hover:opacity-0"
-                  }`}
+              <button
+                type="button"
+                onClick={() => router.back()}
+                className={cn(
+                  candyWhiteButtonClasses("w-full sm:w-auto"),
+                  "inline-flex items-center justify-center gap-2",
+                )}
               >
-                {isInQuote(product.id) ? "Added To your Cart" : "Add to Quote"}
-              </span>
-              {!isInQuote(product.id) && (
-                <BsCart4 className="absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 translate-y-full opacity-0 transition-all duration-300 ease-in-out group-hover:-translate-y-1/2 group-hover:opacity-100" />
-              )}
-            </button>
-
-            {/* Back Button */}
-            <button
-              onClick={() => router.back()}
-              className="flex items-center gap-2 text-[#0f5c85] hover:text-[#0f5c85]/70 font-switzer transition-colors cursor-pointer"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-5 h-5"
-              >
-
-                <path d="M5 12h6m3 0h1.5m3 0h.5" />
-                <path d="M5 12l4 4" />
-                <path d="M5 12l4 -4" />
-              </svg>
-              Back to Products
-            </button>
+                <LuArrowLeft className="size-4 shrink-0" />
+                Back to Products
+              </button>
+            </Reveal>
           </div>
-        </div>
-      </div>
+        </RevealSection>
+      </section>
+
+      <SectionDivider />
     </div>
   );
 };
 
 export default ProductDetailsClient;
-
