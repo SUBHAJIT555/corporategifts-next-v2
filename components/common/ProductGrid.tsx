@@ -74,7 +74,7 @@ const FilterButton = memo(function FilterButton({
         className={cn(
           "cursor-pointer rounded-lg border px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors sm:px-4 sm:py-2",
           active
-            ? "border-ink bg-ink text-white dark:border-white dark:bg-white dark:text-ink"
+            ? "border-ink bg-ink text-white dark:border-white dark:bg-white dark:text-on-primary"
             : "border-hairline bg-surface-soft text-body hover:bg-surface-card"
         )}
       >

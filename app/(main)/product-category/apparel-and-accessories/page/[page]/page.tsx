@@ -1,8 +1,11 @@
 import { notFound, redirect } from "next/navigation";
-import CommonHero from "@/components/ui/CommonHero";
+import CategoryCallToAction from "@/components/pages/ProductCategory/CategoryCallToAction";
+import CategoryHero from "@/components/pages/ProductCategory/CategoryHero";
+import CategoryWhyChooseUs from "@/components/pages/ProductCategory/CategoryWhyChooseUs";
 import CategoryIntro from "@/components/common/CategoryIntro";
-import WhyChooseUs, { type FeatureCard } from "@/components/ui/WhyChooseUs";
-import CallToAction from "@/components/ui/CallToAction";
+import ProductGridClient from "@/components/common/ProductGridClient";
+import SectionDivider from "@/components/ui/SectionDivider";
+import type { FeatureCard } from "@/components/ui/WhyChooseUs";
 import { ProductsApi } from "@/lib/api/endpoints";
 import {
   LuAward,
@@ -11,8 +14,6 @@ import {
   LuSparkles,
   LuUsers,
 } from "@/components/icons";
-import ProductGridClient from "@/components/common/ProductGridClient";
-
 
 export const dynamic = "force-static";
 
@@ -21,7 +22,6 @@ const PER_PAGE = 12;
 const HERO_IMAGE =
   "/assets/images/Home-page-hero-images/Apparel-&-accessories.webp";
 
-
 const apparelAndAccessoriesFeatures: FeatureCard[] = [
   {
     id: 1,
@@ -29,8 +29,8 @@ const apparelAndAccessoriesFeatures: FeatureCard[] = [
     title: "Premium Quality Apparel",
     description:
       "From corporate polo shirts to elegant uniforms, we source high‑quality apparel that keeps your team looking professional and on‑brand.",
-    icon: <LuShirt className="w-8 h-8" />,
-    iconColor: "#FF6B6B",
+    icon: <LuShirt className="h-5 w-5" />,
+    iconColor: "#FFE5EC",
   },
   {
     id: 2,
@@ -38,8 +38,8 @@ const apparelAndAccessoriesFeatures: FeatureCard[] = [
     title: "Custom Branding Options",
     description:
       "Embroidery, screen printing, and full‑color logo applications help your brand stand out at events, exhibitions, and in the office.",
-    icon: <LuAward className="w-8 h-8" />,
-    iconColor: "#4CAF50",
+    icon: <LuAward className="h-5 w-5" />,
+    iconColor: "#E0F7FA",
   },
   {
     id: 3,
@@ -47,8 +47,8 @@ const apparelAndAccessoriesFeatures: FeatureCard[] = [
     title: "Accessories That Impress",
     description:
       "Pair apparel with accessories like caps, bags, and lanyards to create cohesive gift sets for clients and employees.",
-    icon: <LuSparkles className="w-8 h-8" />,
-    iconColor: "#3F3F9F",
+    icon: <LuSparkles className="h-5 w-5" />,
+    iconColor: "#EDE7F6",
   },
   {
     id: 4,
@@ -56,8 +56,8 @@ const apparelAndAccessoriesFeatures: FeatureCard[] = [
     title: "Flexible Order Quantities",
     description:
       "From small teams to large enterprises, we handle both low‑volume and bulk orders with consistent quality control.",
-    icon: <LuPackage className="w-8 h-8" />,
-    iconColor: "#FF9800",
+    icon: <LuPackage className="h-5 w-5" />,
+    iconColor: "#FFF8E1",
   },
   {
     id: 5,
@@ -65,8 +65,8 @@ const apparelAndAccessoriesFeatures: FeatureCard[] = [
     title: "Dubai‑Focused Service",
     description:
       "Fast turnarounds and reliable delivery across Dubai and the wider UAE make corporate gifting projects smooth and stress‑free.",
-    icon: <LuUsers className="w-8 h-8" />,
-    iconColor: "#8BC34A",
+    icon: <LuUsers className="h-5 w-5" />,
+    iconColor: "#F1F8E9",
   },
 ];
 
@@ -94,10 +94,7 @@ async function getApparelData(page: number) {
       }),
     ]);
 
-    return {
-      categories,
-      productData,
-    };
+    return { categories, productData };
   } catch (error) {
     console.error("Failed to load apparel & accessories products:", error);
     return {
@@ -112,8 +109,6 @@ async function getApparelData(page: number) {
     };
   }
 }
-
-
 
 export async function generateStaticParams() {
   try {
@@ -133,7 +128,6 @@ export async function generateStaticParams() {
       "Failed to generate static params for apparel & accessories pages:",
       error,
     );
-    // Fallback: only generate page 2 if something goes wrong
     return [{ page: "1" }];
   }
 }
@@ -160,17 +154,24 @@ export default async function ApparelAndAccessoriesPage({
   );
 
   return (
-    <main className="relative min-h-screen w-full overflow-hidden">
-      <CommonHero
-        title=" "
-        titleLine2Before="Premium "
-        titleLine2Highlight="Apparel & Accessories "
-        titleLine2After="for Corporate Gifting in Dubai"
+    <main className="relative min-h-screen w-full overflow-x-hidden bg-canvas">
+      <CategoryHero
+        eyebrow="Apparel & accessories"
+        eyebrowIcon={
+          <LuShirt className="h-3 w-3 shrink-0 text-brand-accent sm:h-3.5 sm:w-3.5" />
+        }
+        title={
+          <>
+            Premium{" "}
+            <span className="text-brand-accent">Apparel &amp; Accessories</span>{" "}
+            for Corporate Gifting in Dubai
+          </>
+        }
         subtitle="Discover our exclusive collection of high-quality apparel and accessories, perfect for corporate gifts, client appreciation, and team uniforms across Dubai and the UAE."
-        buttonLink="#apparel-accessories"
-        buttonText="Shop Apparel & Accessories"
+        ctaHref="#apparel-accessories"
+        ctaLabel="Shop Apparel & Accessories"
       />
-
+      <SectionDivider />
       <CategoryIntro
         imageUrl={HERO_IMAGE}
         imageAlt="Corporate apparel and accessories collection"
@@ -181,8 +182,9 @@ export default async function ApparelAndAccessoriesPage({
             and professionalism?
           </>
         }
+        heading="About Apparel & Accessories"
       />
-
+      <SectionDivider />
       <ProductGridClient
         title="Explore Our Collection of Apparel & Accessories"
         productData={productData}
@@ -190,22 +192,25 @@ export default async function ApparelAndAccessoriesPage({
         selectedCategory={CATEGORY_SLUG}
         id="apparel-accessories"
         categorySlug={CATEGORY_SLUG}
+        variant="category"
       />
-
-      <WhyChooseUs
-        features={apparelAndAccessoriesFeatures}
+      <SectionDivider />
+      <CategoryWhyChooseUs
         title={
           <>
             Why Choose Baharnani for{" "}
-            <span className="whitespace-nowrap">
-              Apparel &amp; Accessories?
-            </span>
+            <span className="whitespace-nowrap">Apparel &amp; Accessories?</span>
           </>
         }
         subtitle="Specialized in premium corporate apparel, uniforms, and accessories tailored for businesses across Dubai and the UAE."
+        features={apparelAndAccessoriesFeatures}
+        showCtaCard
+        ctaShopHref="#apparel-accessories"
+        ctaTitle="Ready to order corporate apparel?"
+        ctaDescription="Speak with our team for bulk quotes, or browse the collection and add items to your quotation cart."
       />
-
-      <CallToAction
+      <SectionDivider />
+      <CategoryCallToAction
         title="Your Trusted Partner for Corporate Apparel & Accessories"
         subtitle={
           <>
@@ -214,25 +219,8 @@ export default async function ApparelAndAccessoriesPage({
             every touchpoint.
           </>
         }
-        backgroundImageUrl={HERO_IMAGE}
-        buttons={[
-          {
-            text: "Contact Our Team",
-            className:
-              "bg-linear-to-r from-neutral-800 to-neutral-500! text-white! border! border-neutral-200! font-sentient! font-medium! ring-1 ring-neutral-300! ring-offset-3!",
-            link: "/contact-us",
-            variant: "dark",
-          },
-          {
-            text: "Explore Product Categories",
-            className:
-              "bg-linear-to-r from-neutral-100 to-neutral-300! border! border-neutral-200! text-neutral-700! font-sentient! font-medium! ring-1 ring-neutral-300! ring-offset-3!",
-            link: "/products",
-            variant: "light",
-          },
-        ]}
       />
+      <SectionDivider />
     </main>
   );
 }
-

@@ -1,15 +1,17 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
+import type { LucideIcon } from "lucide-react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
-import { candyIconButtonClasses, candyAccentIconClasses } from "./candy-button";
+import PastelIconBox from "./PastelIconBox";
 
 export type NavbarProductCategory = {
   id: string;
   title: string;
   link: string;
   description?: string;
-  icon?: React.ReactNode;
+  iconColor: string;
+  Icon: LucideIcon;
 };
 
 type ProductsDropdownProps = {
@@ -118,9 +120,9 @@ const ProductsDropdown = memo(function ProductsDropdown({
                     className="group/item flex items-center gap-3 rounded-xl p-2.5 transition-colors hover:bg-surface-card"
                     onClick={handleCategoryClick}
                   >
-                    <span className={candyIconButtonClasses("white", "sm")}>
-                      {category.icon}
-                    </span>
+                    <PastelIconBox color={category.iconColor} size="sm">
+                      <category.Icon className="h-4 w-4" strokeWidth={2} />
+                    </PastelIconBox>
                     <span className="min-w-0 py-0.5">
                       <span className="block text-sm font-semibold text-ink leading-6">
                         {category.title}

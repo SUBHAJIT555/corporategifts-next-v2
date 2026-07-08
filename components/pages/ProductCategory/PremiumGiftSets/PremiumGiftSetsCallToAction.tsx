@@ -1,12 +1,9 @@
-"use client";
-
-import CallToAction from "@/components/ui/CallToAction";
+import CategoryCallToAction from "../CategoryCallToAction";
 
 export default function PremiumGiftSetsCallToAction() {
   return (
-    <CallToAction
+    <CategoryCallToAction
       title="Your Trusted Partner for Premium Gift Sets in Dubai"
-      headlineBottomText=""
       subtitle={
         <>
           From luxury gift sets to perfume gift sets, we deliver premium quality
@@ -14,18 +11,6 @@ export default function PremiumGiftSetsCallToAction() {
           and demonstrate your commitment to gifting.
         </>
       }
-      buttons={[
-        {
-          text: "Contact Our Team",
-          link: "/contact-us",
-          variant: "dark",
-        },
-        {
-          text: "Explore Product Categories",
-          link: "/products",
-          variant: "light",
-        },
-      ]}
     />
   );
 }

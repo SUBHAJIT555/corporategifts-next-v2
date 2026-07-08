@@ -24,7 +24,7 @@ import { buildSiteUrl } from "@/lib/config/site";
 import SearchModal from "./SearchModal";
 import { LuSearch } from "@/components/icons";
 import ThemeToggle from "./ThemeToggle";
-import { candyAccentIconClasses, candyDarkButtonClasses } from "./candy-button";
+import { candyDarkButtonClasses } from "./candy-button";
 
 type MenuItem = {
   key: number;
@@ -47,49 +47,56 @@ const PRODUCT_CATEGORIES: NavbarProductCategory[] = [
     title: "Premium gift sets",
     link: "/product-category/premium-gift-sets",
     description: "Curated luxury hampers & gift boxes",
-    icon: <Gift className={candyAccentIconClasses} />,
+    iconColor: "#FFD6F8",
+    Icon: Gift,
   },
   {
     id: "2",
     title: "Luxury corporate gifts",
     link: "/product-category/luxury-corporate-gifts-dubai",
     description: "High-end executive gifting",
-    icon: <Gem className={candyAccentIconClasses} />,
+    iconColor: "#EDE7F6",
+    Icon: Gem,
   },
   {
     id: "3",
     title: "Apparel and accessories",
     link: "/product-category/apparel-and-accessories",
     description: "Branded clothing & wearables",
-    icon: <Shirt className={candyAccentIconClasses} />,
+    iconColor: "#FFE5EC",
+    Icon: Shirt,
   },
   {
     id: "4",
     title: "Bags and travel",
     link: "/product-category/bags-and-travel",
     description: "Custom bags, backpacks & travel kits",
-    icon: <Briefcase className={candyAccentIconClasses} />,
+    iconColor: "#C1D8FD",
+    Icon: Briefcase,
   },
   {
     id: "5",
     title: "Office and stationary",
     link: "/product-category/office-and-stationary",
     description: "Notebooks, pens & desk essentials",
-    icon: <NotebookPen className={candyAccentIconClasses} />,
+    iconColor: "#FFF8E1",
+    Icon: NotebookPen,
   },
   {
     id: "6",
     title: "Technology and accessories",
     link: "/product-category/technology-and-accessories",
     description: "Smart gadgets & tech giveaways",
-    icon: <Laptop className={candyAccentIconClasses} />,
+    iconColor: "#E0F7FA",
+    Icon: Laptop,
   },
   {
     id: "7",
     title: "Eating and drinking",
     link: "/product-category/eating-and-drinking",
     description: "Drinkware, mugs & kitchen gifts",
-    icon: <CupSoda className={candyAccentIconClasses} />,
+    iconColor: "#FFF7BD",
+    Icon: CupSoda,
   },
 
   {
@@ -97,14 +104,16 @@ const PRODUCT_CATEGORIES: NavbarProductCategory[] = [
     title: "Sports and recreation",
     link: "/product-category/sports-and-recreation",
     description: "Fitness & outdoor branded gear",
-    icon: <Dumbbell className={candyAccentIconClasses} />,
+    iconColor: "#FFECB3",
+    Icon: Dumbbell,
   },
   {
     id: "9",
     title: "Eco friendly",
     link: "/product-category/eco-friendly",
     description: "Sustainable & reusable gifts",
-    icon: <Leaf className={candyAccentIconClasses} />,
+    iconColor: "#B6E9C8",
+    Icon: Leaf,
   },
 ];
 
