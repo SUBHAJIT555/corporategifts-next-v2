@@ -1,18 +1,18 @@
-import CommonHero from "@/components/ui/CommonHero";
+import CategoryCallToAction from "@/components/pages/ProductCategory/CategoryCallToAction";
+import CategoryHero from "@/components/pages/ProductCategory/CategoryHero";
+import CategoryWhyChooseUs from "@/components/pages/ProductCategory/CategoryWhyChooseUs";
 import CategoryIntro from "@/components/common/CategoryIntro";
 import ProductGridClient from "@/components/common/ProductGridClient";
-import WhyChooseUs, {
-  type FeatureCard,
-} from "@/components/ui/WhyChooseUs";
-import CallToAction from "@/components/ui/CallToAction";
+import SectionDivider from "@/components/ui/SectionDivider";
+import type { FeatureCard } from "@/components/ui/WhyChooseUs";
 import { ProductsApi } from "@/lib/api/endpoints";
 import {
-  LuDumbbell,
-  LuTrophy,
   LuActivity,
-  LuTarget,
-  LuHeart,
+  LuDumbbell,
   LuGift,
+  LuHeart,
+  LuTarget,
+  LuTrophy,
 } from "@/components/icons";
 
 const CATEGORY_SLUG = "sports-and-recreation";
@@ -27,8 +27,8 @@ const sportsAndRecreationFeatures: FeatureCard[] = [
     title: "Premium Quality Sports Equipment",
     description:
       "From fitness trackers to yoga mats, we offer high-quality sports and recreation products perfect for corporate wellness programs and employee recognition.",
-    icon: <LuDumbbell className="w-8 h-8" />,
-    iconColor: "#C8F7C5", // light green
+    icon: <LuDumbbell className="h-5 w-5" />,
+    iconColor: "#4CAF50",
   },
   {
     id: 2,
@@ -36,8 +36,8 @@ const sportsAndRecreationFeatures: FeatureCard[] = [
     title: "Custom Branding Options",
     description:
       "Personalize your corporate gifts with custom logo printing, embroidery, and branded packaging to strengthen your brand identity with every activity.",
-    icon: <LuTrophy className="w-8 h-8" />,
-    iconColor: "#FFCDD2", // light red/pink
+    icon: <LuTrophy className="h-5 w-5" />,
+    iconColor: "#FF6B6B",
   },
   {
     id: 3,
@@ -45,8 +45,8 @@ const sportsAndRecreationFeatures: FeatureCard[] = [
     title: "Wide Range of Products",
     description:
       "Explore our collection of fitness trackers, yoga mats, golf sets, tennis rackets, gym bags, and resistance bands that make perfect corporate gifts.",
-    icon: <LuActivity className="w-8 h-8" />,
-    iconColor: "#FFE082", // light orange/yellow
+    icon: <LuActivity className="h-5 w-5" />,
+    iconColor: "#FF9800",
   },
   {
     id: 4,
@@ -54,8 +54,8 @@ const sportsAndRecreationFeatures: FeatureCard[] = [
     title: "Perfect for Wellness Programs",
     description:
       "Whether it's employee wellness initiatives, corporate sports events, or team building activities, our sports products suit every occasion.",
-    icon: <LuHeart className="w-8 h-8" />,
-    iconColor: "#E6EE9C", // light green/yellow
+    icon: <LuHeart className="h-5 w-5" />,
+    iconColor: "#8BC34A",
   },
   {
     id: 5,
@@ -63,8 +63,8 @@ const sportsAndRecreationFeatures: FeatureCard[] = [
     title: "Flexible Ordering",
     description:
       "From individual gifts to bulk orders, we accommodate orders of all sizes with reliable delivery across Dubai and the UAE.",
-    icon: <LuTarget className="w-8 h-8" />,
-    iconColor: "#B3B8F9", // light indigo/violet
+    icon: <LuTarget className="h-5 w-5" />,
+    iconColor: "#3F3F9F",
   },
   {
     id: 6,
@@ -72,8 +72,8 @@ const sportsAndRecreationFeatures: FeatureCard[] = [
     title: "Trusted Quality",
     description:
       "Sourced from premium suppliers, our sports and recreation products combine quality, durability, and elegant presentation for lasting impressions.",
-    icon: <LuGift className="w-8 h-8" />,
-    iconColor: "#BBDEFB", // light blue
+    icon: <LuGift className="h-5 w-5" />,
+    iconColor: "#C1D8FD",
   },
 ];
 
@@ -101,10 +101,7 @@ async function getSportsData(page: number) {
       }),
     ]);
 
-    return {
-      categories,
-      productData,
-    };
+    return { categories, productData };
   } catch (error) {
     console.error("Failed to load sports & recreation products:", error);
     return {
@@ -128,123 +125,69 @@ export default async function SportsAndRecreation() {
   );
 
   return (
-    <main className="relative min-h-screen w-full overflow-hidden">
-      {/* Dashed Center Fade Grid (sticky background) */}
-      <div
-        className="pointer-events-none fixed inset-0 z-0"
-        style={{
-          backgroundImage: `
-        linear-gradient(to right, #e7e5e4 1px, transparent 1px),
-        linear-gradient(to bottom, #e7e5e4 1px, transparent 1px)
-      `,
-          backgroundSize: "5px 5px",
-          backgroundPosition: "0 0, 0 0",
-          maskImage: `
-       repeating-linear-gradient(
-              to right,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            repeating-linear-gradient(
-              to bottom,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-          radial-gradient(ellipse 60% 60% at 50% 50%, #000 30%, transparent 70%)
-      `,
-          WebkitMaskImage: `
- repeating-linear-gradient(
-              to right,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            repeating-linear-gradient(
-              to bottom,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-          radial-gradient(ellipse 60% 60% at 50% 50%, #000 30%, transparent 70%)
-      `,
-          maskComposite: "intersect",
-          WebkitMaskComposite: "source-in",
-        }}
+    <main className="relative min-h-screen w-full overflow-x-hidden bg-canvas">
+      <CategoryHero
+        eyebrow="Sports & recreation"
+        eyebrowIcon={
+          <LuDumbbell className="h-3 w-3 shrink-0 text-brand-accent sm:h-3.5 sm:w-3.5" />
+        }
+        title={
+          <>
+            Premium{" "}
+            <span className="text-brand-accent">Sports &amp; Recreation</span>{" "}
+            Products for Corporate Gifting in Dubai
+          </>
+        }
+        subtitle="Discover our exclusive collection of high-quality sports equipment and recreational items, perfect for corporate gifts, employee wellness programs, and team building activities."
+        ctaHref="#sports-recreation"
+        ctaLabel="Shop Sports & Recreation"
       />
-
-      {/* Page content */}
-      <div className="relative z-10">
-        <CommonHero
-          title=" "
-          titleLine2Before="Premium "
-          titleLine2Highlight="Sports & Recreation "
-          titleLine2After="Products for Corporate Gifting in Dubai"
-          titlesuffix=""
-          subtitle="Discover our exclusive collection of high-quality sports equipment and recreational items, perfect for corporate gifts, employee wellness programs, and team building activities."
-          // imageUrl={HERO_IMAGE}
-          buttonLink="#sports-recreation"
-          buttonText="Shop Sports & Recreation"
-        />
-
-        <CategoryIntro
-          imageUrl={HERO_IMAGE}
-          imageAlt="Sports and recreation products collection preview"
-          content={fullIntroText}
-          preview={
-            <>
-              Looking for the perfect corporate gift that promotes health,
-              wellness, and active living?
-            </>
-          }
-          heading="About Sports & Recreation Gifts"
-        />
-
-        <ProductGridClient
-          title="Explore Our Collection of Sports & Recreation Products"
-          productData={productData}
-          categories={filteredCategories}
-          selectedCategory={CATEGORY_SLUG}
-          id="sports-recreation"
-          categorySlug={CATEGORY_SLUG}
-        />
-
-        <WhyChooseUs features={sportsAndRecreationFeatures} />
-
-        <CallToAction
-          title="Your Trusted Partner for Corporate Sports & Recreation Gifts in Dubai"
-          subtitle={
-            <>
-              From custom-branded fitness equipment to premium sports accessories,
-              we deliver high-quality products that promote wellness, strengthen
-              relationships, and elevate your brand presence.
-            </>
-          }
-          backgroundImageUrl={HERO_IMAGE}
-          buttons={[
-            {
-              text: "Contact Our Team",
-              className:
-                "bg-linear-to-r from-neutral-800 to-neutral-500! text-white! border! border-neutral-200! font-sentient! font-medium! ring-1 ring-neutral-300! ring-offset-3!",
-              link: "/contact-us",
-              variant: "dark",
-            },
-            {
-              text: "Explore Product Categories",
-              className:
-                "bg-linear-to-r from-neutral-100 to-neutral-300! border! border-neutral-200! text-neutral-700! font-sentient! font-medium! ring-1 ring-neutral-300! ring-offset-3!",
-              link: "/products",
-              variant: "light",
-            },
-          ]}
-        />
-      </div>
+      <SectionDivider />
+      <CategoryIntro
+        imageUrl={HERO_IMAGE}
+        imageAlt="Sports and recreation products collection preview"
+        content={fullIntroText}
+        preview={
+          <>
+            Looking for the perfect corporate gift that promotes health,
+            wellness, and active living?
+          </>
+        }
+        heading="About Sports & Recreation Gifts"
+      />
+      <SectionDivider />
+      <ProductGridClient
+        title="Explore Our Collection of Sports & Recreation Products"
+        productData={productData}
+        categories={filteredCategories}
+        selectedCategory={CATEGORY_SLUG}
+        id="sports-recreation"
+        categorySlug={CATEGORY_SLUG}
+        variant="category"
+      />
+      <SectionDivider />
+      <CategoryWhyChooseUs
+        title={
+          <>
+            Why Choose Baharnani for{" "}
+            <span className="whitespace-nowrap">Sports &amp; Recreation?</span>
+          </>
+        }
+        subtitle="Specialized in premium sports equipment, wellness gifts, and recreational products for corporate gifting across Dubai and the UAE."
+        features={sportsAndRecreationFeatures}
+      />
+      <SectionDivider />
+      <CategoryCallToAction
+        title="Your Trusted Partner for Corporate Sports & Recreation Gifts in Dubai"
+        subtitle={
+          <>
+            From custom-branded fitness equipment to premium sports accessories,
+            we deliver high-quality products that promote wellness, strengthen
+            relationships, and elevate your brand presence.
+          </>
+        }
+      />
+      <SectionDivider />
     </main>
   );
 }
-

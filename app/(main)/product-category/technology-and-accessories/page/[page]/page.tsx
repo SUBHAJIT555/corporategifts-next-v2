@@ -1,17 +1,20 @@
 import { notFound, redirect } from "next/navigation";
-import CommonHero from "@/components/ui/CommonHero";
+import CategoryCallToAction from "@/components/pages/ProductCategory/CategoryCallToAction";
+import CategoryHero from "@/components/pages/ProductCategory/CategoryHero";
+import CategoryWhyChooseUs from "@/components/pages/ProductCategory/CategoryWhyChooseUs";
 import CategoryIntro from "@/components/common/CategoryIntro";
 import ProductGridClient from "@/components/common/ProductGridClient";
-import WhyChooseUs, { type FeatureCard } from "@/components/ui/WhyChooseUs";
-import CallToAction from "@/components/ui/CallToAction";
+import SectionDivider from "@/components/ui/SectionDivider";
+import type { FeatureCard } from "@/components/ui/WhyChooseUs";
 import { ProductsApi } from "@/lib/api/endpoints";
 import {
+  BiWorld,
   LuAward,
   LuPackage,
   LuSparkles,
   LuUsers,
-  BiWorld,
 } from "@/components/icons";
+import { Laptop } from "lucide-react";
 
 export const dynamic = "force-static";
 
@@ -27,7 +30,7 @@ const technologyAndAccessoriesFeatures: FeatureCard[] = [
     title: "Premium Technology & Accessories",
     description:
       "From wireless chargers to smart desk lamps, we offer high-quality technology products and accessories perfect for corporate gifting and modern workspaces.",
-    icon: <BiWorld className="w-8 h-8" />,
+    icon: <LuPackage className="h-5 w-5" />,
     iconColor: "#4CAF50",
   },
   {
@@ -36,7 +39,7 @@ const technologyAndAccessoriesFeatures: FeatureCard[] = [
     title: "Custom Branding Options",
     description:
       "Personalize your corporate gifts with custom logo engraving, laser etching, and branded packaging to strengthen your brand identity with every use.",
-    icon: <LuSparkles className="w-8 h-8" />,
+    icon: <LuSparkles className="h-5 w-5" />,
     iconColor: "#FF6B6B",
   },
   {
@@ -45,7 +48,7 @@ const technologyAndAccessoriesFeatures: FeatureCard[] = [
     title: "Wide Range of Products",
     description:
       "Explore our collection of wireless speakers, USB-C hubs, laptop stands, power banks, and smart accessories that make perfect corporate gifts for clients and employees.",
-    icon: <LuPackage className="w-8 h-8" />,
+    icon: <LuPackage className="h-5 w-5" />,
     iconColor: "#FF9800",
   },
   {
@@ -54,7 +57,7 @@ const technologyAndAccessoriesFeatures: FeatureCard[] = [
     title: "Perfect for Modern Workspaces",
     description:
       "Our technology accessories are designed for professionals, featuring sleek designs, advanced functionality, and modern aesthetics that enhance any workspace.",
-    icon: <LuUsers className="w-8 h-8" />,
+    icon: <LuUsers className="h-5 w-5" />,
     iconColor: "#8BC34A",
   },
   {
@@ -63,7 +66,7 @@ const technologyAndAccessoriesFeatures: FeatureCard[] = [
     title: "Flexible Ordering",
     description:
       "From individual gifts to bulk orders, we accommodate orders of all sizes with reliable delivery across Dubai and the UAE.",
-    icon: <BiWorld className="w-8 h-8" />,
+    icon: <BiWorld className="h-5 w-5" />,
     iconColor: "#3F3F9F",
   },
   {
@@ -72,8 +75,8 @@ const technologyAndAccessoriesFeatures: FeatureCard[] = [
     title: "Trusted Quality",
     description:
       "Sourced from leading manufacturers, our technology and accessories combine innovation, durability, and style for lasting impressions.",
-    icon: <LuAward className="w-8 h-8" />,
-    iconColor: "#2196F3",
+    icon: <LuAward className="h-5 w-5" />,
+    iconColor: "#C1D8FD",
   },
 ];
 
@@ -101,10 +104,7 @@ async function getTechnologyData(page: number) {
       }),
     ]);
 
-    return {
-      categories,
-      productData,
-    };
+    return { categories, productData };
   } catch (error) {
     console.error("Failed to load technology & accessories products:", error);
     return {
@@ -164,18 +164,24 @@ export default async function TechnologyAndAccessoriesPage({
   );
 
   return (
-    <main className="relative min-h-screen w-full overflow-hidden">
-      <CommonHero
-        title=" "
-        titleLine2Before="Premium "
-        titleLine2Highlight="Technology & Accessories "
-        titleLine2After=" for Corporate Gifting in Dubai"
-        titlesuffix=""
+    <main className="relative min-h-screen w-full overflow-x-hidden bg-canvas">
+      <CategoryHero
+        eyebrow="Technology & accessories"
+        eyebrowIcon={
+          <Laptop className="h-3 w-3 shrink-0 text-brand-accent sm:h-3.5 sm:w-3.5" />
+        }
+        title={
+          <>
+            Premium{" "}
+            <span className="text-brand-accent">Technology &amp; Accessories</span>{" "}
+            for Corporate Gifting in Dubai
+          </>
+        }
         subtitle="Discover our exclusive collection of high-quality technology products and smart accessories, perfect for corporate gifts, client appreciation, and employee recognition programs."
-        buttonLink="#technology-and-accessories"
-        buttonText="Shop Technology & Accessories"
+        ctaHref="#technology-and-accessories"
+        ctaLabel="Shop Technology & Accessories"
       />
-
+      <SectionDivider />
       <CategoryIntro
         imageUrl={HERO_IMAGE}
         imageAlt="Technology and accessories collection preview"
@@ -188,7 +194,7 @@ export default async function TechnologyAndAccessoriesPage({
         }
         heading="About Technology & Accessories Gifts"
       />
-
+      <SectionDivider />
       <ProductGridClient
         title="Explore Our Collection of Technology & Accessories"
         productData={productData}
@@ -196,37 +202,31 @@ export default async function TechnologyAndAccessoriesPage({
         selectedCategory={CATEGORY_SLUG}
         id="technology-and-accessories"
         categorySlug={CATEGORY_SLUG}
+        variant="category"
       />
-
-      <WhyChooseUs features={technologyAndAccessoriesFeatures} />
-
-      <CallToAction
+      <SectionDivider />
+      <CategoryWhyChooseUs
+        title={
+          <>
+            Why Choose Baharnani for{" "}
+            <span className="whitespace-nowrap">Technology &amp; Accessories?</span>
+          </>
+        }
+        subtitle="Specialized in premium tech gifts, smart office accessories, and branded gadgets for corporate gifting across Dubai and the UAE."
+        features={technologyAndAccessoriesFeatures}
+      />
+      <SectionDivider />
+      <CategoryCallToAction
         title="Your Trusted Partner for Corporate Technology & Accessories in Dubai"
         subtitle={
           <>
-            From custom-branded wireless chargers to smart office accessories,
-            we deliver premium quality corporate gifts that strengthen
-            relationships and elevate your brand presence.
+            From custom-branded wireless chargers to smart office accessories, we
+            deliver premium quality corporate gifts that strengthen relationships
+            and elevate your brand presence.
           </>
         }
-        backgroundImageUrl={HERO_IMAGE}
-        buttons={[
-          {
-            text: "Contact Our Team",
-            className:
-              "bg-linear-to-r from-neutral-800 to-neutral-500! text-white! border! border-neutral-200! font-sentient! font-medium! ring-1 ring-neutral-300! ring-offset-3!",
-            link: "/contact-us",
-            variant: "dark",
-          },
-          {
-            text: "Explore Product Categories",
-            className:
-              "bg-linear-to-r from-neutral-100 to-neutral-300! border! border-neutral-200! text-neutral-700! font-sentient! font-medium! ring-1 ring-neutral-300! ring-offset-3!",
-            link: "/products",
-            variant: "light",
-          },
-        ]}
       />
+      <SectionDivider />
     </main>
   );
 }

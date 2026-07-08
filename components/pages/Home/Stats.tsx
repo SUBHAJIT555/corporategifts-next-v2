@@ -7,10 +7,9 @@ import {
   Reveal,
   RevealSection,
 } from "@/components/ui/timeline-animation";
+import { Award, ShieldCheck, Target } from "lucide-react";
 import {
   candyDarkButtonClasses,
-  candyIconButtonClasses,
-  candyAccentIconClasses,
   candyWhiteButtonClasses,
 } from "@/components/ui/candy-button";
 
@@ -76,54 +75,6 @@ const AnimatedNumber = ({
   return <span ref={ref}>0{suffix}</span>;
 };
 
-const StatIcon = ({ icon }: { icon: string }) => {
-  const common = {
-    xmlns: "http://www.w3.org/2000/svg",
-    width: 24,
-    height: 24,
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 2,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-    "aria-hidden": true,
-    className: candyAccentIconClasses,
-  };
-
-  if (icon === "award") {
-    return (
-      <svg {...common}>
-        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-        <path d="M6 9a6 6 0 1 0 12 0a6 6 0 1 0 -12 0" />
-        <path d="M12 15l3.4 5.89l1.598 -3.233l3.598 .232l-3.4 -5.889" />
-        <path d="M6.802 12l-3.4 5.89l3.598 -.233l1.598 3.232l3.4 -5.889" />
-      </svg>
-    );
-  }
-
-  if (icon === "target") {
-    return (
-      <svg {...common}>
-        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-        <path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-        <path d="M12 7a5 5 0 1 0 5 5" />
-        <path d="M13 3.055a9 9 0 1 0 7.941 7.945" />
-        <path d="M15 6v3h3l3 -3h-3v-3l-3 3" />
-        <path d="M15 9l-3 3" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg {...common}>
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M5 7.2a2.2 2.2 0 0 1 2.2 -2.2h1a2.2 2.2 0 0 0 1.55 -.64l.7 -.7a2.2 2.2 0 0 1 3.12 0l.7 .7c.412 .41 .97 .64 1.55 .64h1a2.2 2.2 0 0 1 2.2 2.2v1c0 .58 .23 1.138 .64 1.55l.7 .7a2.2 2.2 0 0 1 0 3.12l-.7 .7a2.2 2.2 0 0 0 -.64 1.55v1a2.2 2.2 0 0 1 -2.2 2.2h-1a2.2 2.2 0 0 0 -1.55 .64l-.7 .7a2.2 2.2 0 0 1 -3.12 0l-.7 -.7a2.2 2.2 0 0 0 -1.55 -.64h-1a2.2 2.2 0 0 1 -2.2 -2.2v-1a2.2 2.2 0 0 0 -.64 -1.55l-.7 -.7a2.2 2.2 0 0 1 0 -3.12l.7 -.7a2.2 2.2 0 0 0 .64 -1.55v-1" />
-      <path d="M9 12l2 2l4 -4" />
-    </svg>
-  );
-};
-
 const Stats = () => {
   const stats = [
     {
@@ -131,21 +82,27 @@ const Stats = () => {
       suffix: "+",
       label: "YEARS",
       description: "in Corporate Gifting",
-      icon: "award",
+      icon: <Award className="h-5 w-5" aria-hidden />,
+      iconBgClass: "bg-[#A8DDF0] dark:bg-[#A8DDF0]/15",
+      iconClass: "text-ink dark:text-[#A8DDF0]",
     },
     {
       value: 12,
       suffix: "+",
       label: "PRODUCTS CATEGORIES",
       description: "in Our Range",
-      icon: "target",
+      icon: <Target className="h-5 w-5" aria-hidden />,
+      iconBgClass: "bg-[#F9C46B] dark:bg-[#F9C46B]/15",
+      iconClass: "text-ink dark:text-[#F9C46B]",
     },
     {
       value: 98,
       suffix: "%",
       label: "CLIENT SATISFACTION",
       description: "of Our Products",
-      icon: "discount",
+      icon: <ShieldCheck className="h-5 w-5" aria-hidden />,
+      iconBgClass: "bg-[#94EBC5] dark:bg-[#94EBC5]/15",
+      iconClass: "text-ink dark:text-[#94EBC5]",
     },
   ];
 
@@ -183,8 +140,10 @@ const Stats = () => {
                     index > 0 ? "border-l border-hairline" : ""
                   }`}
                 >
-                  <span className={candyIconButtonClasses("white", "sm")}>
-                    <StatIcon icon={stat.icon} />
+                  <span
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-hairline sm:h-11 sm:w-11 ${stat.iconBgClass}`}
+                  >
+                    <span className={stat.iconClass}>{stat.icon}</span>
                   </span>
                   <p className="flex-1 text-right text-sm font-medium text-body">
                     {stat.description}
@@ -210,8 +169,10 @@ const Stats = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-3 border-t border-hairline px-4 py-4">
-                  <span className={candyIconButtonClasses("white", "sm")}>
-                    <StatIcon icon={stat.icon} />
+                  <span
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-hairline sm:h-11 sm:w-11 ${stat.iconBgClass}`}
+                  >
+                    <span className={stat.iconClass}>{stat.icon}</span>
                   </span>
                   <p className="flex-1 text-sm font-medium text-body">
                     {stat.description}

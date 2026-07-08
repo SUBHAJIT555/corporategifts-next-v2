@@ -1,18 +1,21 @@
 import { notFound, redirect } from "next/navigation";
-import CommonHero from "@/components/ui/CommonHero";
+import CategoryCallToAction from "@/components/pages/ProductCategory/CategoryCallToAction";
+import CategoryHero from "@/components/pages/ProductCategory/CategoryHero";
+import CategoryWhyChooseUs from "@/components/pages/ProductCategory/CategoryWhyChooseUs";
 import CategoryIntro from "@/components/common/CategoryIntro";
 import ProductGridClient from "@/components/common/ProductGridClient";
-import WhyChooseUs, { type FeatureCard } from "@/components/ui/WhyChooseUs";
-import CallToAction from "@/components/ui/CallToAction";
+import SectionDivider from "@/components/ui/SectionDivider";
+import type { FeatureCard } from "@/components/ui/WhyChooseUs";
 import { ProductsApi } from "@/lib/api/endpoints";
 import {
+  BiWorld,
   LuAward,
   LuPackage,
   LuPackageSearch,
   LuSparkles,
   LuUsers,
-  BiWorld,
 } from "@/components/icons";
+import { Briefcase } from "lucide-react";
 
 export const dynamic = "force-static";
 
@@ -28,7 +31,7 @@ const bagsAndTravelsFeatures: FeatureCard[] = [
     title: "Premium Quality Bags & Travel Accessories",
     description:
       "From executive briefcases to luxury luggage sets, we offer high-quality bags and travel accessories perfect for corporate gifting and business professionals.",
-    icon: <LuPackage className="w-8 h-8" />,
+    icon: <LuPackage className="h-5 w-5" />,
     iconColor: "#4CAF50",
   },
   {
@@ -37,7 +40,7 @@ const bagsAndTravelsFeatures: FeatureCard[] = [
     title: "Custom Branding Options",
     description:
       "Personalize your corporate gifts with custom logo printing, embroidery, and branded packaging to strengthen your brand identity with every journey.",
-    icon: <LuSparkles className="w-8 h-8" />,
+    icon: <LuSparkles className="h-5 w-5" />,
     iconColor: "#FF6B6B",
   },
   {
@@ -46,7 +49,7 @@ const bagsAndTravelsFeatures: FeatureCard[] = [
     title: "Wide Range of Products",
     description:
       "Explore our collection of briefcases, backpacks, travel bags, luggage sets, and document holders that make perfect corporate gifts for clients and employees.",
-    icon: <LuPackageSearch className="w-8 h-8" />,
+    icon: <LuPackageSearch className="h-5 w-5" />,
     iconColor: "#FF9800",
   },
   {
@@ -55,7 +58,7 @@ const bagsAndTravelsFeatures: FeatureCard[] = [
     title: "Perfect for Business Travelers",
     description:
       "Our travel accessories are designed for professionals on the go, featuring durable materials, smart compartments, and modern designs.",
-    icon: <LuUsers className="w-8 h-8" />,
+    icon: <LuUsers className="h-5 w-5" />,
     iconColor: "#8BC34A",
   },
   {
@@ -64,7 +67,7 @@ const bagsAndTravelsFeatures: FeatureCard[] = [
     title: "Flexible Ordering",
     description:
       "From individual gifts to bulk orders, we accommodate orders of all sizes with reliable delivery across Dubai and the UAE.",
-    icon: <BiWorld className="w-8 h-8" />,
+    icon: <BiWorld className="h-5 w-5" />,
     iconColor: "#3F3F9F",
   },
   {
@@ -73,8 +76,8 @@ const bagsAndTravelsFeatures: FeatureCard[] = [
     title: "Trusted Quality",
     description:
       "Sourced from leading manufacturers, our bags and travel accessories combine style, durability, and functionality for lasting impressions.",
-    icon: <LuAward className="w-8 h-8" />,
-    iconColor: "#4CAF50",
+    icon: <LuAward className="h-5 w-5" />,
+    iconColor: "#B6E9C8",
   },
 ];
 
@@ -102,10 +105,7 @@ async function getBagsData(page: number) {
       }),
     ]);
 
-    return {
-      categories,
-      productData,
-    };
+    return { categories, productData };
   } catch (error) {
     console.error("Failed to load bags & travel products:", error);
     return {
@@ -165,17 +165,24 @@ export default async function BagsAndTravelPage({
   );
 
   return (
-    <main className="relative min-h-screen w-full overflow-hidden">
-      <CommonHero
-        title=" "
-        titleLine2Before="Premium "
-        titleLine2Highlight="Bags & Travel "
-        titleLine2After="Accessories for Corporate Gifting in Dubai"
+    <main className="relative min-h-screen w-full overflow-x-hidden bg-canvas">
+      <CategoryHero
+        eyebrow="Bags & travel"
+        eyebrowIcon={
+          <Briefcase className="h-3 w-3 shrink-0 text-brand-accent sm:h-3.5 sm:w-3.5" />
+        }
+        title={
+          <>
+            Premium{" "}
+            <span className="text-brand-accent">Bags &amp; Travel</span>{" "}
+            Accessories for Corporate Gifting in Dubai
+          </>
+        }
         subtitle="Discover our exclusive collection of high-quality bags and luxury travel accessories, perfect for corporate gifts, client appreciation, and employee recognition programs."
-        buttonLink="#bags-travel"
-        buttonText="Shop Bags & Travel"
+        ctaHref="#bags-travel"
+        ctaLabel="Shop Bags & Travel"
       />
-
+      <SectionDivider />
       <CategoryIntro
         imageUrl={HERO_IMAGE}
         imageAlt="Bags and travel accessories collection preview"
@@ -188,7 +195,7 @@ export default async function BagsAndTravelPage({
         }
         heading="About Bags & Travel Gifts"
       />
-
+      <SectionDivider />
       <ProductGridClient
         title="Explore Our Collection of Bags & Travel Accessories"
         productData={productData}
@@ -196,22 +203,21 @@ export default async function BagsAndTravelPage({
         selectedCategory={CATEGORY_SLUG}
         id="bags-travel"
         categorySlug={CATEGORY_SLUG}
+        variant="category"
       />
-
-      <WhyChooseUs
-        features={bagsAndTravelsFeatures}
+      <SectionDivider />
+      <CategoryWhyChooseUs
         title={
           <>
             Why Choose Baharnani for{" "}
-            <span className="whitespace-nowrap">
-              Bags &amp; Travel?
-            </span>
+            <span className="whitespace-nowrap">Bags &amp; Travel?</span>
           </>
         }
         subtitle="Specialized in premium bags, luggage, and travel accessories for corporate gifting across Dubai and the UAE."
+        features={bagsAndTravelsFeatures}
       />
-
-      <CallToAction
+      <SectionDivider />
+      <CategoryCallToAction
         title="Your Trusted Partner for Corporate Bags & Travel Accessories in Dubai"
         subtitle={
           <>
@@ -220,24 +226,8 @@ export default async function BagsAndTravelPage({
             elevate your brand presence.
           </>
         }
-        backgroundImageUrl={HERO_IMAGE}
-        buttons={[
-          {
-            text: "Contact Our Team",
-            className:
-              "bg-linear-to-r from-neutral-800 to-neutral-500! text-white! border! border-neutral-200! font-sentient! font-medium! ring-1 ring-neutral-300! ring-offset-3!",
-            link: "/contact-us",
-            variant: "dark",
-          },
-          {
-            text: "Explore Product Categories",
-            className:
-              "bg-linear-to-r from-neutral-100 to-neutral-300! border! border-neutral-200! text-neutral-700! font-sentient! font-medium! ring-1 ring-neutral-300! ring-offset-3!",
-            link: "/products",
-            variant: "light",
-          },
-        ]}
       />
+      <SectionDivider />
     </main>
   );
 }

@@ -23,9 +23,9 @@ import {
   Reveal,
   RevealSection,
 } from "@/components/ui/timeline-animation";
+import PastelIconBox from "@/components/ui/PastelIconBox";
 import {
   candyIconButtonClasses,
-  candyAccentIconClasses,
   candyNavIconClasses,
 } from "@/components/ui/candy-button";
 
@@ -36,6 +36,7 @@ interface ProductCategory {
   image: string;
   link: string;
   icon: LucideIcon;
+  iconColor: string;
 }
 
 const productCategories: ProductCategory[] = [
@@ -47,6 +48,7 @@ const productCategories: ProductCategory[] = [
     image: "/assets/images/Home-page-hero-images/Apparel-&-accessories.webp",
     link: "/product-category/apparel-and-accessories",
     icon: Shirt,
+    iconColor: "#FFE5EC",
   },
   {
     id: "2",
@@ -56,6 +58,7 @@ const productCategories: ProductCategory[] = [
     image: "/assets/images/Home-page-hero-images/Bags-&-travel.webp",
     link: "/product-category/bags-and-travel",
     icon: Briefcase,
+    iconColor: "#C1D8FD",
   },
   {
     id: "3",
@@ -65,6 +68,7 @@ const productCategories: ProductCategory[] = [
     image: "/assets/images/Home-page-hero-images/Office-&-stationary.webp",
     link: "/product-category/office-and-stationary",
     icon: NotebookPen,
+    iconColor: "#FFF8E1",
   },
   {
     id: "4",
@@ -74,6 +78,7 @@ const productCategories: ProductCategory[] = [
     image: "/assets/images/Home-page-hero-images/Technology-&-accessories.webp",
     link: "/product-category/technology-and-accessories",
     icon: Laptop,
+    iconColor: "#E0F7FA",
   },
   {
     id: "5",
@@ -83,6 +88,7 @@ const productCategories: ProductCategory[] = [
     image: "/assets/images/Home-page-hero-images/Eating-&-drinking.webp",
     link: "/product-category/eating-and-drinking",
     icon: CupSoda,
+    iconColor: "#FFF7BD",
   },
   {
     id: "6",
@@ -92,6 +98,7 @@ const productCategories: ProductCategory[] = [
     image: "/assets/images/Home-page-hero-images/Premiums-gift-sets.webp",
     link: "/product-category/premium-gift-sets",
     icon: Gift,
+    iconColor: "#FFD6F8",
   },
   {
     id: "7",
@@ -101,6 +108,7 @@ const productCategories: ProductCategory[] = [
     image: "/assets/images/Home-page-hero-images/Sports-&-recreation.webp",
     link: "/product-category/sports-and-recreation",
     icon: Dumbbell,
+    iconColor: "#FFECB3",
   },
   {
     id: "8",
@@ -110,6 +118,7 @@ const productCategories: ProductCategory[] = [
     image: "/assets/images/Home-page-hero-images/Eco-friendly.webp",
     link: "/product-category/eco-friendly",
     icon: Leaf,
+    iconColor: "#B6E9C8",
   },
   {
     id: "9",
@@ -119,6 +128,7 @@ const productCategories: ProductCategory[] = [
     image: "/assets/images/Home-page-hero-images/Luxury-corporate-gifts.webp",
     link: "/product-category/luxury-corporate-gifts-dubai",
     icon: Gem,
+    iconColor: "#EDE7F6",
   },
 ];
 
@@ -134,23 +144,25 @@ const CategoryCard = memo(function CategoryCard({ category }: CategoryCardProps)
       href={category.link}
       className="group flex h-full min-h-[320px] flex-col overflow-hidden rounded-xl border border-hairline bg-surface-card transition-colors duration-200 hover:bg-canvas sm:min-h-[240px] sm:flex-row"
     >
-      <div className="relative h-48 w-full shrink-0 overflow-hidden bg-surface-soft sm:h-auto sm:w-[42%]">
-        <Image
-          src={category.image}
-          alt={category.title}
-          width={1000}
-          height={1000}
-          loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-        />
-        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent sm:bg-linear-to-r sm:from-transparent sm:via-transparent sm:to-black/5" />
+      <div className="shrink-0 p-4 sm:w-[42%] sm:py-4 sm:pl-5 sm:pr-3">
+        <div className="relative h-48 w-full overflow-hidden rounded-xl bg-surface-soft sm:h-full sm:min-h-[200px]">
+          <Image
+            src={category.image}
+            alt={category.title}
+            width={1000}
+            height={1000}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          />
+          <div className="pointer-events-none absolute inset-0 rounded-xl bg-linear-to-t from-black/25 via-transparent to-transparent sm:bg-linear-to-r sm:from-transparent sm:via-transparent sm:to-black/5" />
+        </div>
       </div>
 
       <div className="flex flex-1 flex-col border-t border-hairline bg-canvas p-5 sm:border-t-0 sm:border-l sm:p-6">
         <div className="mb-3 flex items-start gap-3">
-          <span className={candyIconButtonClasses("white", "sm")}>
-            <Icon className={candyAccentIconClasses} />
-          </span>
+          <PastelIconBox color={category.iconColor} size="sm">
+            <Icon className="h-5 w-5" strokeWidth={2} />
+          </PastelIconBox>
           <h3 className="pt-1.5 text-lg font-semibold leading-snug tracking-tight text-ink">
             {category.title}
           </h3>
