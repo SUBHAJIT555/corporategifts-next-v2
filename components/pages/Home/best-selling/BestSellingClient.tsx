@@ -11,7 +11,7 @@ import {
   Reveal,
   RevealSection,
 } from "@/components/ui/timeline-animation";
-import { candyDarkButtonClasses } from "@/components/ui/candy-button";
+import { candyDarkButtonClasses, candyWhiteButtonClasses } from "@/components/ui/candy-button";
 import { cn } from "@/lib/utilts";
 
 const PER_PAGE = 12;
@@ -56,12 +56,22 @@ function BestSellingHelpCta() {
               your budget, audience, quantity, and delivery timeline.
             </p>
 
-            <NoPrefetchLink
-              href="/contact-us"
-              className={cn(candyDarkButtonClasses("w-full sm:w-auto"), "shrink-0")}
-            >
-              Contact Us Now
-            </NoPrefetchLink>
+            <div className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:justify-end">
+              <NoPrefetchLink
+                href="/contact-us"
+                className={cn(candyDarkButtonClasses("w-full sm:w-auto"), "shrink-0")}
+              >
+                Contact Us Now
+              </NoPrefetchLink>
+              <NoPrefetchLink
+                href="https://wa.me/+971556545950"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(candyWhiteButtonClasses("w-full sm:w-auto"), "shrink-0")}
+              >
+                WhatsApp for Gift Ideas
+              </NoPrefetchLink>
+            </div>
           </div>
         </div>
       </div>

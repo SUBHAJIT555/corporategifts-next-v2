@@ -139,7 +139,7 @@ const CallToAction = ({
 
             {headlineBottomText && (
               <Reveal animationNum={2}>
-                <p className="mx-auto max-w-3xl text-body-md capitalize text-muted sm:text-[17px] sm:leading-7">
+                <p className="mx-auto max-w-3xl text-body-md capitalize text-brand-accent font-semibold! sm:text-[17px] sm:leading-7">
                   {headlineBottomText}
                 </p>
               </Reveal>

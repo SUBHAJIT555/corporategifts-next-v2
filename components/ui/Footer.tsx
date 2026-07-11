@@ -321,17 +321,17 @@ const Footer = () => {
           <div className="flex w-full items-center justify-center px-4 py-6">
             <p className="text-center text-body-md leading-relaxed text-muted">
               &copy; {new Date().getFullYear()}{" "}
-              <NoPrefetchLink href="/" className="text-brand-accent hover:underline">
+              <NoPrefetchLink href="/" className="text-ink hover:underline">
                 Baharnani Advertising L.L.C.
               </NoPrefetchLink>{" "}
-              All Rights Reserved.&nbsp; Made with{" "}
+              All Rights Reserved.&nbsp; Design with{" "}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
                 height="20"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="inline align-middle text-[#e11d48]"
+                className="inline align-middle text-brand-accent"
                 aria-hidden="true"
               >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -339,15 +339,15 @@ const Footer = () => {
               </svg>
               &nbsp;by&nbsp;
               <a
-                href="https://www.codecobble.com"
+                href="https://subhajit-dhali.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-brand-accent hover:underline"
+                className="text-ink hover:underline"
               >
-                CodeCobble
+                subhajit
               </a>{" "}
               |{" "}
-              <NoPrefetchLink href="/sitemap" className="hover:text-ink hover:underline">
+              <NoPrefetchLink href="/sitemap" className="text-ink hover:underline">
                 Site Map
               </NoPrefetchLink>
             </p>
