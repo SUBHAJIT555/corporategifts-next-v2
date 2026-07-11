@@ -135,13 +135,19 @@ const Navbar = () => {
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
+      document.documentElement.classList.add("mobile-menu-open");
     } else {
       document.body.style.overflow = "auto";
+      document.documentElement.classList.remove("mobile-menu-open");
       // Reset mobile dropdown when menu closes
       setTimeout(() => {
         setIsMobileProductsOpen(false);
       }, 100);
     }
+
+    return () => {
+      document.documentElement.classList.remove("mobile-menu-open");
+    };
   }, [isMenuOpen]);
 
   const toggleMenu = useCallback(() => {
@@ -279,15 +285,15 @@ const Navbar = () => {
         initial={{ y: "100vh" }}
         animate={isMenuOpen ? { y: "calc(100dvh - 110%)" } : { y: "100vh" }}
         transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
-        className="fixed bottom-0 left-0 right-0 z-100 bg-canvas shadow-xl rounded-t-2xl border-t border-hairline overflow-y-auto lg:hidden"
+        className="fixed bottom-0 left-0 right-0 z-120 flex max-h-[calc(100dvh-4rem)] flex-col rounded-t-2xl border-t border-hairline bg-canvas shadow-xl lg:hidden"
         style={{ height: "calc(100dvh - 12dvh)" }}
       >
         {/* Grabber */}
-        <div className="sticky top-0 z-10 flex items-center justify-center bg-canvas pt-3 pb-2">
+        <div className="shrink-0 flex items-center justify-center bg-canvas pt-3 pb-2">
           <span className="h-1.5 w-10 rounded-full bg-surface-strong" aria-hidden="true" />
         </div>
 
-        <div className="relative z-0 flex flex-col px-5 pb-8 pt-2">
+        <div className="cal-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-10 pt-2">
           <ul className="flex flex-col divide-y divide-hairline">
             {MENU_ITEMS.map((item) =>
               item.hasDropdown ? (

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { IoLogoWhatsapp } from "../icons";
 import { cn } from "@/lib/utilts";
 import { candyIconButtonClasses } from "@/components/ui/candy-button";
+import { getWhatsAppUrl } from "@/lib/whatsapp";
 
 const WhatsAppButton = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -24,9 +25,6 @@ const WhatsAppButton = () => {
     };
   }, []);
 
-  const phoneNumber = "+971556545950";
-  const message = "Hello! I'm interested in your services.";
-
   return (
     <AnimatePresence>
       {isVisible && (
@@ -35,10 +33,10 @@ const WhatsAppButton = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 24 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
-          className="group fixed bottom-[calc(1.5rem+2.5rem+0.75rem)] right-4 z-50 sm:right-6"
+          className="group fixed bottom-6 right-4 z-50 hidden md:block sm:right-6"
         >
           <a
-            href={`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`}
+            href={getWhatsAppUrl()}
             target="_blank"
             rel="noopener noreferrer"
             className={cn(candyIconButtonClasses("white", "md"), "relative")}

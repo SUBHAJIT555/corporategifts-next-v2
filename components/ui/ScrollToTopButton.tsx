@@ -40,7 +40,8 @@ const ScrollToTopButton = () => {
       aria-label="Scroll to top"
       className={cn(
         candyIconButtonClasses("white", "md"),
-        "fixed bottom-6 right-4 z-50 sm:right-6",
+        "fixed right-4 z-51 hidden sm:right-6 md:inline-flex",
+        "bottom-[calc(1.5rem+2.5rem+0.75rem)]",
         "transition-all duration-300 ease-out",
         isVisible
           ? "translate-y-0 opacity-100"

@@ -44,7 +44,7 @@ const FloatingCartButton = () => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.85, y: -8 }}
           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed top-20 right-3 z-220 sm:right-6 lg:right-8"
+          className="fixed top-20 right-3 z-220 hidden sm:right-6 md:block lg:right-8"
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => setIsOpen(false)}
         >
