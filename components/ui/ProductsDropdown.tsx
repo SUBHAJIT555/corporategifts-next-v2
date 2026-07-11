@@ -14,22 +14,20 @@ export type NavbarProductCategory = {
   Icon: LucideIcon;
 };
 
-type ProductsDropdownProps = {
-  href: string;
-  name: string;
+type CategoriesDropdownProps = {
   categories: NavbarProductCategory[];
   onCloseMenu: () => void;
+  label?: string;
 };
 
 const HOVER_DELAY_MS = 100;
 
-const ProductsDropdown = memo(function ProductsDropdown({
-  href,
-  name,
+const CategoriesDropdown = memo(function CategoriesDropdown({
   categories,
   onCloseMenu,
-}: ProductsDropdownProps) {
-  const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
+  label = "Categories",
+}: CategoriesDropdownProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -43,19 +41,23 @@ const ProductsDropdown = memo(function ProductsDropdown({
   const openDropdown = useCallback(() => {
     clearHoverTimeout();
     hoverTimeoutRef.current = setTimeout(() => {
-      setIsProductsDropdownOpen(true);
+      setIsOpen(true);
     }, HOVER_DELAY_MS);
   }, [clearHoverTimeout]);
 
   const closeDropdown = useCallback(() => {
     clearHoverTimeout();
     hoverTimeoutRef.current = setTimeout(() => {
-      setIsProductsDropdownOpen(false);
+      setIsOpen(false);
     }, HOVER_DELAY_MS);
   }, [clearHoverTimeout]);
 
+  const toggleDropdown = useCallback(() => {
+    setIsOpen((prev) => !prev);
+  }, []);
+
   const handleCategoryClick = useCallback(() => {
-    setIsProductsDropdownOpen(false);
+    setIsOpen(false);
     onCloseMenu();
   }, [onCloseMenu]);
 
@@ -69,18 +71,18 @@ const ProductsDropdown = memo(function ProductsDropdown({
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setIsProductsDropdownOpen(false);
+        setIsOpen(false);
       }
     };
 
-    if (isProductsDropdownOpen) {
+    if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isProductsDropdownOpen]);
+  }, [isOpen]);
 
   return (
     <div
@@ -89,30 +91,33 @@ const ProductsDropdown = memo(function ProductsDropdown({
       onMouseEnter={openDropdown}
       onMouseLeave={closeDropdown}
     >
-      <NoPrefetchLink
-        href={href}
-        className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-body transition-colors hover:bg-surface-soft hover:text-ink"
+      <button
+        type="button"
+        onClick={toggleDropdown}
+        aria-expanded={isOpen}
+        aria-haspopup="true"
+        className="inline-flex items-center gap-1 rounded-lg px-3.5 py-2 text-sm font-semibold text-ink transition-colors hover:bg-surface-soft"
       >
-        {name}
+        {label}
         <span className="pointer-events-none text-muted">
-          {isProductsDropdownOpen ? (
-            <ChevronUp className="w-3.5 h-3.5" />
+          {isOpen ? (
+            <ChevronUp className="h-3.5 w-3.5" />
           ) : (
-            <ChevronDown className="w-3.5 h-3.5" />
+            <ChevronDown className="h-3.5 w-3.5" />
           )}
         </span>
-      </NoPrefetchLink>
+      </button>
 
       <AnimatePresence>
-        {isProductsDropdownOpen && (
+        {isOpen && (
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.16 }}
-            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[640px] max-w-[calc(100vw-2rem)] bg-canvas rounded-2xl border border-hairline shadow-[0_4px_24px_rgba(0,0,0,0.1)] overflow-hidden z-50"
+            className="absolute top-full left-1/2 z-50 mt-2 w-[640px] max-w-[calc(100vw-2rem)] -translate-x-1/2 overflow-hidden rounded-2xl border border-hairline bg-canvas shadow-[0_4px_24px_rgba(0,0,0,0.1)]"
           >
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1 p-2.5">
+            <ul className="grid grid-cols-1 gap-1 p-2.5 sm:grid-cols-2">
               {categories.map((category) => (
                 <li key={category.id}>
                   <NoPrefetchLink
@@ -124,7 +129,7 @@ const ProductsDropdown = memo(function ProductsDropdown({
                       <category.Icon className="h-4 w-4" strokeWidth={2} />
                     </PastelIconBox>
                     <span className="min-w-0 py-0.5">
-                      <span className="block text-sm font-semibold text-ink leading-6">
+                      <span className="block text-sm font-semibold leading-6 text-ink">
                         {category.title}
                       </span>
                       {category.description ? (
@@ -144,4 +149,7 @@ const ProductsDropdown = memo(function ProductsDropdown({
   );
 });
 
-export default ProductsDropdown;
+export default CategoriesDropdown;
+
+/** @deprecated Use default export CategoriesDropdown */
+export const ProductsDropdown = CategoriesDropdown;

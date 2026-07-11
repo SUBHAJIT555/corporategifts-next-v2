@@ -48,9 +48,8 @@ const FloatingCartButton = () => {
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => setIsOpen(false)}
         >
-          <button
-            type="button"
-            onClick={() => setIsOpen((open) => !open)}
+          <NoPrefetchLink
+            href="/cart"
             className={cn(
               candyIconButtonClasses(
                 "dark",
@@ -58,7 +57,7 @@ const FloatingCartButton = () => {
                 "relative size-12! rounded-full sm:size-14!",
               ),
             )}
-            aria-label="Open quote cart"
+            aria-label="View quote cart"
             aria-expanded={isOpen}
           >
             <LuShoppingCart className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -70,7 +69,7 @@ const FloatingCartButton = () => {
             >
               {totalItems > 9 ? "9+" : totalItems}
             </motion.span>
-          </button>
+          </NoPrefetchLink>
 
           <AnimatePresence>
             {isOpen ? (

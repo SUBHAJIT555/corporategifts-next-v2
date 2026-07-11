@@ -22,6 +22,7 @@ import {
   candyDarkButtonClasses,
   candyWhiteButtonClasses,
 } from "@/components/ui/candy-button";
+import GoogleRatingStatic from "@/components/ui/GoogleRatingStatic";
 
 const SLIDES: {
   image: string;
@@ -131,8 +132,8 @@ function HeroCarousel({ activeIndex }: { activeIndex: number }) {
           initial={{ opacity: 0, scale: 1.04, x: "0%" }}
           animate={{
             opacity: 1,
-            scale: 1.1,
-            x: "-2%",
+            scale: 1.06,
+            x: "-1%",
           }}
           exit={{
             opacity: 0,
@@ -220,7 +221,7 @@ export default function HeroSection() {
     <section className="w-full bg-canvas">
       <div className="mx-auto max-w-7xl border-x border-hairline">
         <ContainerScroll
-          className="px-3 pt-20 pb-2 sm:px-4 sm:pt-24 md:px-6 md:pt-32 md:pb-0 lg:pt-36"
+          className="px-3 pt-20 pb-6 sm:px-4 sm:pt-24 sm:pb-8 md:px-6 md:pt-32 md:pb-0 lg:pt-36"
           titleComponent={
             <>
               <span className="inline-flex max-w-full items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-surface-card px-2.5 py-1 text-[11px] font-medium text-body shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.12)] sm:px-3 sm:text-caption dark:shadow-[8px_2px_16px_-2px_rgba(0,0,0,0.35)]">
@@ -243,6 +244,10 @@ export default function HeroSection() {
                 and apparel. Practical gifts with logo printing, packaging and bulk
                 delivery support in Dubai and the UAE.
               </p>
+
+              <div className="mt-5 flex justify-center sm:mt-6">
+                <GoogleRatingStatic />
+              </div>
 
               <div className="mt-5 flex w-full flex-col gap-2.5 sm:mt-7 sm:flex-row sm:items-center sm:justify-center sm:gap-3">
                 <NoPrefetchLink

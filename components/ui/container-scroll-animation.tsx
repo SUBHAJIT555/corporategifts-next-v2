@@ -44,7 +44,7 @@ function MobileHeroLayout({
       </div>
       <div
         className={cn(
-          "mx-auto w-full max-w-5xl overflow-hidden rounded-2xl border border-hairline bg-surface-card p-1.5 shadow-[0_16px_48px_-20px_rgba(0,0,0,0.25)] sm:p-2",
+          "mx-auto mb-1 w-full max-w-5xl overflow-hidden rounded-2xl border border-hairline bg-surface-card p-1.5 shadow-[0_16px_48px_-20px_rgba(0,0,0,0.25)] sm:mb-0 sm:p-2",
           "dark:shadow-[0_16px_48px_-20px_rgba(0,0,0,0.5)]",
         )}
       >
@@ -52,7 +52,7 @@ function MobileHeroLayout({
           {children}
         </div>
       </div>
-      <div className="h-8 sm:h-10" aria-hidden />
+      <div className="h-10 sm:h-12" aria-hidden />
     </div>
   );
 }
@@ -75,7 +75,7 @@ function DesktopScrollLayout({
   return (
     <div
       ref={containerRef}
-      className={cn("relative hidden h-288 md:block", className)}
+      className={cn("relative hidden h-304 md:block", className)}
     >
       <div
         className="sticky top-24 w-full"

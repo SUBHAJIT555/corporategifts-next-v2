@@ -16,15 +16,22 @@ import {
 } from "lucide-react";
 import logo from "@/public/logo.svg"
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Fragment } from "react";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import Image from "next/image";
-import ProductsDropdown, { type NavbarProductCategory } from "./ProductsDropdown";
+import CategoriesDropdown, {
+  type NavbarProductCategory,
+} from "./ProductsDropdown";
 import { buildSiteUrl } from "@/lib/config/site";
 import SearchModal from "./SearchModal";
 import { LuSearch } from "@/components/icons";
 import ThemeToggle from "./ThemeToggle";
-import { candyDarkButtonClasses } from "./candy-button";
+import {
+  candyDarkButtonClasses,
+  candyIconButtonClasses,
+  candyNavIconClasses,
+} from "./candy-button";
+import { cn } from "@/lib/utilts";
 
 type MenuItem = {
   key: number;
@@ -117,6 +124,9 @@ const PRODUCT_CATEGORIES: NavbarProductCategory[] = [
   },
 ];
 
+const SEARCH_TRIGGER_CLASSES =
+  "inline-flex h-10 cursor-pointer items-center gap-2.5 rounded-lg border border-hairline bg-surface-soft px-3 text-left text-sm text-muted transition-colors hover:bg-surface-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent/25";
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileProductsOpen, setIsMobileProductsOpen] = useState(false);
@@ -168,80 +178,97 @@ const Navbar = () => {
             </NoPrefetchLink>
           </div>
 
-          <ul className="hidden lg:flex items-center gap-1 list-none">
-            {MENU_ITEMS.map((item) => (
-              <li key={item.key} className="relative">
-                {item.hasDropdown ? (
-                  <ProductsDropdown
-                    href={item.href}
-                    name={item.name}
-                    categories={PRODUCT_CATEGORIES}
-                    onCloseMenu={closeMenu}
-                  />
-                ) : item.name === "Blog" ? (
+          <ul className="hidden lg:flex items-center gap-0.5 list-none">
+            {MENU_ITEMS.map((item) =>
+              item.hasDropdown ? (
+                <Fragment key={item.key}>
+                  <li className="relative">
+                    <NoPrefetchLink
+                      href={item.href}
+                      onClick={closeMenu}
+                      className="inline-flex items-center rounded-lg px-3.5 py-2 text-sm font-semibold text-ink transition-colors hover:bg-surface-soft"
+                    >
+                      {item.name}
+                    </NoPrefetchLink>
+                  </li>
+                  <li className="relative">
+                    <CategoriesDropdown
+                      categories={PRODUCT_CATEGORIES}
+                      onCloseMenu={closeMenu}
+                    />
+                  </li>
+                </Fragment>
+              ) : item.name === "Blog" ? (
+                <li key={item.key} className="relative">
                   <a
                     href={item.href}
                     onClick={closeMenu}
-                    className="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-body transition-colors hover:bg-surface-soft hover:text-ink"
+                    className="inline-flex items-center rounded-lg px-3.5 py-2 text-sm font-semibold text-ink transition-colors hover:bg-surface-soft"
                   >
                     {item.name}
                   </a>
-                ) : (
+                </li>
+              ) : (
+                <li key={item.key} className="relative">
                   <NoPrefetchLink
                     href={item.href}
                     onClick={closeMenu}
-                    className="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-body transition-colors hover:bg-surface-soft hover:text-ink"
+                    className="inline-flex items-center rounded-lg px-3.5 py-2 text-sm font-semibold text-ink transition-colors hover:bg-surface-soft"
                   >
                     {item.name}
                   </NoPrefetchLink>
-                )}
-              </li>
-            ))}
+                </li>
+              ),
+            )}
           </ul>
 
-          <div className="hidden lg:flex items-center gap-2 ml-4">
+          <div className="hidden lg:flex items-center gap-2.5 ml-5">
             <button
               type="button"
               onClick={() => setIsSearchOpen(true)}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-hairline bg-canvas text-ink transition-colors hover:bg-surface-card cursor-pointer"
+              className={cn(SEARCH_TRIGGER_CLASSES, "min-w-[220px]")}
               aria-label="Open search"
             >
-              <LuSearch className="w-4 h-4" />
+              <LuSearch className="size-4 shrink-0 text-muted" />
+              <span className="truncate">Search products...</span>
             </button>
-            <ThemeToggle />
             <NoPrefetchLink
               href="/contact-us"
               onClick={closeMenu}
-              className={candyDarkButtonClasses("group h-9 px-4")}
+              className={candyDarkButtonClasses("group h-10 gap-2 px-4")}
             >
               Contact
               <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
             </NoPrefetchLink>
+            <ThemeToggle variant="subtle" />
           </div>
 
-          {/* Hamburger icon for mobile view */}
-          <div className="flex items-center gap-2 lg:hidden">
+          {/* Mobile: search field + icon-only menu */}
+          <div className="flex min-w-0 flex-1 items-center justify-end gap-2 pl-3 lg:hidden">
             <button
               type="button"
               onClick={() => setIsSearchOpen(true)}
-              className="inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-md border border-hairline bg-canvas text-ink transition-colors hover:bg-surface-card"
+              className={cn(SEARCH_TRIGGER_CLASSES, "min-w-0 flex-1")}
               aria-label="Open search"
             >
-              <LuSearch className="h-4 w-4" />
+              <LuSearch className="size-4 shrink-0 text-muted" />
+              <span className="truncate">Search products...</span>
             </button>
-
-            <ThemeToggle className="rounded-md" />
 
             <button
               type="button"
               onClick={toggleMenu}
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-              className="inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-md border border-hairline bg-canvas text-ink transition-colors hover:bg-surface-card"
+              aria-expanded={isMenuOpen}
+              className={cn(
+                candyIconButtonClasses("white", "sm"),
+                isMenuOpen && "bg-surface-soft",
+              )}
             >
               {isMenuOpen ? (
-                <X className="w-4 h-4" />
+                <X className={candyNavIconClasses} />
               ) : (
-                <AlignJustify className="w-4 h-4" />
+                <AlignJustify className={candyNavIconClasses} />
               )}
             </button>
           </div>
@@ -262,45 +289,51 @@ const Navbar = () => {
 
         <div className="relative z-0 flex flex-col px-5 pb-8 pt-2">
           <ul className="flex flex-col divide-y divide-hairline">
-            {MENU_ITEMS.map((item) => (
-              <li key={item.key} className="w-full">
-                {item.hasDropdown ? (
-                  <div className="flex flex-col">
-                    <div className="flex items-center justify-between">
-                      <NoPrefetchLink
-                        href={item.href}
-                        onClick={closeMenu}
-                        className="flex-1 py-4 text-lg font-medium text-ink transition-colors active:text-muted"
-                      >
-                        {item.name}
-                      </NoPrefetchLink>
-                      <button
-                        onClick={toggleMobileProducts}
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-card hover:text-ink"
-                        aria-label="Toggle products menu"
-                      >
-                        {isMobileProductsOpen ? (
-                          <ChevronUp className="w-5 h-5" />
-                        ) : (
-                          <ChevronDown className="w-5 h-5" />
-                        )}
-                      </button>
-                    </div>
+            {MENU_ITEMS.map((item) =>
+              item.hasDropdown ? (
+                <Fragment key={item.key}>
+                  <li key={`${item.key}-link`} className="w-full">
+                    <NoPrefetchLink
+                      href={item.href}
+                      onClick={closeMenu}
+                      className="block py-4 text-lg font-medium text-ink transition-colors active:text-muted"
+                    >
+                      {item.name}
+                    </NoPrefetchLink>
+                  </li>
+                  <li key={`${item.key}-categories`} className="w-full">
+                    <button
+                      type="button"
+                      onClick={toggleMobileProducts}
+                      aria-expanded={isMobileProductsOpen}
+                      aria-controls="mobile-product-categories"
+                      className="flex w-full items-center justify-between gap-3 py-4 text-left transition-colors active:text-muted"
+                    >
+                      <span className="text-lg font-medium text-ink">
+                        Categories
+                      </span>
+                      {isMobileProductsOpen ? (
+                        <ChevronUp className="size-5 shrink-0 text-muted" />
+                      ) : (
+                        <ChevronDown className="size-5 shrink-0 text-muted" />
+                      )}
+                    </button>
                     <AnimatePresence>
                       {isMobileProductsOpen && (
                         <motion.ul
+                          id="mobile-product-categories"
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
                           transition={{ duration: 0.25 }}
-                          className="overflow-hidden pb-2"
+                          className="overflow-hidden pb-3"
                         >
                           {PRODUCT_CATEGORIES.map((category) => (
                             <li key={category.id}>
                               <NoPrefetchLink
                                 href={category.link}
                                 onClick={handleMobileCategoryClick}
-                                className="block rounded-md px-3 py-2.5 text-base font-medium text-body transition-colors hover:bg-surface-card hover:text-ink"
+                                className="block rounded-lg px-3 py-2.5 text-base font-medium text-body transition-colors hover:bg-surface-card hover:text-ink"
                               >
                                 {category.title}
                               </NoPrefetchLink>
@@ -309,18 +342,30 @@ const Navbar = () => {
                         </motion.ul>
                       )}
                     </AnimatePresence>
-                  </div>
-                ) : (
-                  <NoPrefetchLink
-                    href={item.href}
-                    onClick={closeMenu}
-                    className="block py-4 text-lg font-medium text-ink transition-colors active:text-muted"
-                  >
-                    {item.name}
-                  </NoPrefetchLink>
-                )}
-              </li>
-            ))}
+                  </li>
+                </Fragment>
+              ) : (
+                <li key={item.key} className="w-full">
+                  {item.name === "Blog" ? (
+                    <a
+                      href={item.href}
+                      onClick={closeMenu}
+                      className="block py-4 text-lg font-medium text-ink transition-colors active:text-muted"
+                    >
+                      {item.name}
+                    </a>
+                  ) : (
+                    <NoPrefetchLink
+                      href={item.href}
+                      onClick={closeMenu}
+                      className="block py-4 text-lg font-medium text-ink transition-colors active:text-muted"
+                    >
+                      {item.name}
+                    </NoPrefetchLink>
+                  )}
+                </li>
+              ),
+            )}
           </ul>
 
           <NoPrefetchLink
@@ -331,6 +376,11 @@ const Navbar = () => {
             Contact
             <ArrowRight className="w-4 h-4" />
           </NoPrefetchLink>
+
+          <div className="mt-6 flex items-center justify-between border-t border-hairline pt-4">
+            <span className="text-xs font-medium text-muted">Appearance</span>
+            <ThemeToggle variant="subtle" />
+          </div>
         </div>
       </motion.div>
       <SearchModal

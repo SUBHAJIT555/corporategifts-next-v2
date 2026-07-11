@@ -12,9 +12,13 @@ function getInitialTheme(): Theme {
 
 interface ThemeToggleProps {
   className?: string;
+  variant?: "default" | "subtle";
 }
 
-export default function ThemeToggle({ className }: ThemeToggleProps) {
+export default function ThemeToggle({
+  className,
+  variant = "default",
+}: ThemeToggleProps) {
   const [theme, setTheme] = useState<Theme>("light");
   const [mounted, setMounted] = useState(false);
 
@@ -44,7 +48,10 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       title={isDark ? "Switch to light mode" : "Switch to dark mode"}
       className={cn(
-        "inline-flex h-9 w-9 items-center justify-center rounded-full border border-hairline bg-canvas text-ink transition-colors hover:bg-surface-card",
+        "inline-flex shrink-0 items-center justify-center transition-colors",
+        variant === "subtle"
+          ? "h-9 w-9 rounded-full border border-hairline bg-canvas text-body hover:bg-surface-soft hover:text-ink"
+          : "h-9 w-9 rounded-full border border-hairline bg-canvas text-ink hover:bg-surface-card",
         className
       )}
     >
@@ -53,8 +60,8 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
         // Sun icon
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="18"
-          height="18"
+          width={18}
+          height={18}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -70,8 +77,8 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
         // Moon icon
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="18"
-          height="18"
+          width={18}
+          height={18}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
