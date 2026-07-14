@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowUp } from "lucide-react";
 import { cn } from "@/lib/utilts";
 
@@ -10,8 +10,18 @@ const PROGRESS_CIRCUMFERENCE = 2 * Math.PI * PROGRESS_RADIUS;
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [isScrollingDown, setIsScrollingDown] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const syncMobile = () => setIsMobile(media.matches);
+    syncMobile();
+    media.addEventListener("change", syncMobile);
+
+    lastScrollY.current = window.scrollY || document.documentElement.scrollTop;
+
     const update = () => {
       const scrollY = window.scrollY || document.documentElement.scrollTop;
       const maxScroll =
@@ -20,6 +30,17 @@ const ScrollToTopButton = () => {
       const nextVisible = scrollY > 120;
       const nextProgress =
         maxScroll > 0 ? Math.min(100, (scrollY / maxScroll) * 100) : 0;
+
+      if (media.matches) {
+        const delta = scrollY - lastScrollY.current;
+        if (Math.abs(delta) > 4) {
+          setIsScrollingDown(delta > 0);
+          lastScrollY.current = scrollY;
+        }
+      } else {
+        setIsScrollingDown(false);
+        lastScrollY.current = scrollY;
+      }
 
       setIsVisible((prev) => (prev === nextVisible ? prev : nextVisible));
       setProgress((prev) =>
@@ -32,6 +53,7 @@ const ScrollToTopButton = () => {
     window.addEventListener("resize", update);
 
     return () => {
+      media.removeEventListener("change", syncMobile);
       window.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
     };
@@ -47,21 +69,25 @@ const ScrollToTopButton = () => {
     });
   };
 
+  const dimWhileScrollingDown = isMobile && isVisible && isScrollingDown;
+
   return (
     <div
       className={cn(
-        "fixed bottom-6 right-4 z-51 hidden sm:right-6 md:block md:bottom-8 md:right-8",
+        "scroll-to-top-fab fixed z-51 right-4 sm:right-6 md:right-8",
+        "bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px)+0.75rem)]",
+        "md:bottom-8",
         "transition-opacity duration-300 ease-out",
-        isVisible
-          ? "pointer-events-auto opacity-100"
-          : "pointer-events-none opacity-0",
+        !isVisible && "pointer-events-none opacity-0",
+        isVisible && dimWhileScrollingDown && "pointer-events-auto opacity-10",
+        isVisible && !dimWhileScrollingDown && "pointer-events-auto opacity-100",
       )}
     >
       <button
         type="button"
         onClick={scrollToTop}
         aria-label={`Scroll to top — ${Math.round(progress)}% of page`}
-        className="group relative flex size-12 cursor-pointer items-center justify-center rounded-full lg:size-14"
+        className="group relative flex size-11 cursor-pointer items-center justify-center rounded-full md:size-12 lg:size-14"
       >
         <svg
           aria-hidden
@@ -93,7 +119,7 @@ const ScrollToTopButton = () => {
 
         <span
           className={cn(
-            "relative flex size-9 items-center justify-center rounded-full lg:size-10",
+            "relative flex size-8 items-center justify-center rounded-full md:size-9 lg:size-10",
             "border border-dashed border-hairline bg-canvas text-ink",
             "shadow-[0_4px_16px_-6px_rgba(0,0,0,0.12)]",
             "transition-colors duration-200",

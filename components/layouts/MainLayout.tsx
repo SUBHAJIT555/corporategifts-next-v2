@@ -17,7 +17,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen flex flex-col w-full overflow-x-hidden">
       <LenisProvider>
         <Navbar />
-        <div className="flex flex-col grow pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-0">
+        <div className="flex flex-col grow pb-[calc(8rem+env(safe-area-inset-bottom,0px))] md:pb-0">
           <main className="relative grow w-full overflow-x-hidden md:pb-0">
             <div
               id="page-scroll-threshold"

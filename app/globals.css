@@ -854,6 +854,10 @@ html.mobile-menu-open .mobile-sticky-actions {
   display: none;
 }
 
+html.mobile-menu-open .scroll-to-top-fab {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
