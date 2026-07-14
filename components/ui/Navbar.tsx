@@ -28,8 +28,6 @@ import { LuSearch } from "@/components/icons";
 import ThemeToggle from "./ThemeToggle";
 import {
   candyDarkButtonClasses,
-  candyIconButtonClasses,
-  candyNavIconClasses,
 } from "./candy-button";
 import { cn } from "@/lib/utilts";
 
@@ -266,15 +264,12 @@ const Navbar = () => {
               onClick={toggleMenu}
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMenuOpen}
-              className={cn(
-                candyIconButtonClasses("white", "sm"),
-                isMenuOpen && "bg-surface-soft",
-              )}
+              className="inline-flex size-10 shrink-0 items-center justify-center text-ink"
             >
               {isMenuOpen ? (
-                <X className={candyNavIconClasses} />
+                <X className="size-5" strokeWidth={2} />
               ) : (
-                <AlignJustify className={candyNavIconClasses} />
+                <AlignJustify className="size-5" strokeWidth={2} />
               )}
             </button>
           </div>

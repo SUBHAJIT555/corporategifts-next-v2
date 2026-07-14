@@ -184,7 +184,7 @@ const Stats = () => {
         </Reveal>
 
         <Reveal animationNum={1}>
-          <p className="mx-auto mt-2 max-w-4xl text-center text-2xl font-medium leading-relaxed text-muted sm:mt-3 sm:text-3xl lg:mt-5">
+          <p className="mx-auto mt-2 max-w-4xl text-center text-xl font-medium leading-relaxed text-muted sm:mt-3 sm:text-3xl lg:mt-5">
             From startups to corporate teams, Baharnani supports bulk corporate
             gifts in Dubai with practical product choices, customisation options,
             and reliable delivery coordination.

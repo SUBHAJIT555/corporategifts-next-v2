@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Building2 } from "lucide-react";
 import SectionDivider from "@/components/ui/SectionDivider";
 import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
@@ -13,6 +14,37 @@ const cards = [
 ];
 
 const WhoWeAre = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // iOS Safari: keep playback inline — never jump to native fullscreen
+    video.defaultMuted = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "true");
+    video.setAttribute("webkit-playsinline", "true");
+    video.setAttribute("x5-playsinline", "true");
+    video.setAttribute("x5-video-player-type", "h5");
+    video.setAttribute("x5-video-player-fullscreen", "false");
+    video.removeAttribute("controls");
+
+    const tryPlay = () => {
+      video.play().catch(() => {
+        /* Autoplay may still be blocked until gesture — layout stays intact */
+      });
+    };
+
+    tryPlay();
+    video.addEventListener("loadeddata", tryPlay);
+
+    return () => {
+      video.removeEventListener("loadeddata", tryPlay);
+    };
+  }, []);
+
   return (
     <section className="w-full bg-canvas">
       <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-3 sm:px-6 sm:py-4 lg:py-6">
@@ -52,16 +84,22 @@ const WhoWeAre = () => {
 
         <Reveal animationNum={4} className="mt-3 sm:mt-4">
           <div className="overflow-hidden rounded-2xl border border-hairline bg-surface-card">
-            <div className="relative aspect-video w-full sm:aspect-21/9">
+            <div className="relative aspect-video w-full overflow-hidden sm:aspect-21/9">
               <video
+                ref={videoRef}
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="absolute inset-0 h-full w-full object-cover"
+                controls={false}
+                disablePictureInPicture
+                disableRemotePlayback
+                preload="auto"
+                aria-hidden
+                tabIndex={-1}
+                className="pointer-events-none absolute inset-0 h-full w-full object-cover [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-enclosure]:hidden [&::-webkit-media-controls-panel]:hidden [&::-webkit-media-controls-start-playback-button]:hidden"
               >
                 <source src={aboutVideo} type="video/webm" />
-                Your browser does not support the video tag.
               </video>
             </div>
           </div>

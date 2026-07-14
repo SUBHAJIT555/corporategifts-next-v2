@@ -11,8 +11,11 @@ import {
   Laptop,
   Leaf,
   NotebookPen,
+  Package,
   Shirt,
   Sparkles,
+  Sticker,
+  Truck,
   type LucideIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -23,6 +26,7 @@ import {
   candyWhiteButtonClasses,
 } from "@/components/ui/candy-button";
 import GoogleRatingStatic from "@/components/ui/GoogleRatingStatic";
+import CursorCard from "@/components/ui/CursorCard";
 
 const SLIDES: {
   image: string;
@@ -237,12 +241,38 @@ export default function HeroSection() {
               </h1>
 
               <p className="mx-auto mt-4 max-w-2xl text-body-md text-muted sm:mt-6 sm:text-[17px] sm:leading-7">
-                Baharnani Advertising helps UAE businesses choose custom corporate
-                gifts in Dubai for clients, employees, events, and brand awareness.
-                We provide a wide range of smart corporate gifts, premium hampers,
-                affordable corporate gifts, branded stationery, bags, drinkware,
-                and apparel. Practical gifts with logo printing, packaging and bulk
-                delivery support in Dubai and the UAE.
+                Baharnani Advertising helps UAE businesses choose{" "}
+                <CursorCard
+                  icon={<Gift className="size-9" strokeWidth={1.6} />}
+                  description="Custom corporate gifts tailored for clients, employees, and brand moments across Dubai & the UAE."
+                >
+                  custom corporate gifts in Dubai
+                </CursorCard>{" "}
+                for clients, employees, events, and brand awareness. We provide a
+                wide range of smart corporate gifts, premium hampers, affordable
+                corporate gifts, branded stationery, bags, drinkware, and apparel.
+                Practical gifts with{" "}
+                <CursorCard
+                  icon={<Sticker className="size-9" strokeWidth={1.6} />}
+                  description="All kinds of branding: t-shirts, bags, keychains, bottles, pens, notebooks & more-customized for your brand."
+                >
+                  logo branding
+                </CursorCard>
+           
+                ,{" "}
+                <CursorCard
+                  icon={<Package className="size-9" strokeWidth={1.6} />}
+                  description="Thoughtful packaging and presentation that elevates every gift - ready for events and client handovers."
+                >
+                  packaging
+                </CursorCard>{" "}
+                and{" "}
+                <CursorCard
+                  icon={<Truck className="size-9" strokeWidth={1.6} />}
+                  description="Bulk delivery support across Dubai and the UAE - timelines, quantities, and logistics handled with you."
+                >
+                  bulk delivery support in Dubai and the UAE.
+                </CursorCard>
               </p>
 
               <div className="mt-5 flex justify-center sm:mt-6">
