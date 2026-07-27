@@ -29,6 +29,30 @@ const productRequests = new Map<string, Promise<PaginatedProductsResponse>>();
 let categoriesCache: ProductCategory[] | undefined;
 let categoriesRequest: Promise<ProductCategory[]> | null = null;
 
+/** Seed browser cache from SSR/build data so first paint can reuse it. */
+export function seedProductsCache(args: {
+  category: string | null;
+  page: number;
+  perPage?: number;
+  data: PaginatedProductsResponse;
+}) {
+  if (!Array.isArray(args.data?.products) || args.data.products.length === 0) {
+    return;
+  }
+  const perPage = args.perPage ?? SHOP_PER_PAGE;
+  const key = getProductsKey({
+    category: args.category,
+    page: args.page < 1 ? 1 : args.page,
+    perPage,
+  });
+  productsCache.set(key, args.data);
+}
+
+export function seedCategoriesCache(data: ProductCategory[]) {
+  if (!Array.isArray(data) || data.length === 0) return;
+  categoriesCache = data;
+}
+
 const normalizeError = (error: unknown) => {
   return error instanceof Error ? error : new Error("Something went wrong");
 };

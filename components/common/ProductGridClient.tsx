@@ -1,13 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import ProductGrid from "@/components/common/ProductGrid";
-import { ProductsApi } from "@/lib/api/endpoints";
 import type {
   PaginatedProductsResponse,
   ProductCategory,
 } from "@/lib/api/types";
+import {
+  seedCategoriesCache,
+  seedProductsCache,
+  useProductCategories,
+  useProducts,
+} from "@/hooks/useProducts";
 
 interface ProductGridClientProps {
   productData: PaginatedProductsResponse;
@@ -19,6 +24,18 @@ interface ProductGridClientProps {
   variant?: "default" | "home" | "category";
 }
 
+const EMPTY: PaginatedProductsResponse = {
+  products: [],
+  total: 0,
+  total_pages: 1,
+  page: 1,
+  per_page: 12,
+};
+
+/**
+ * Category grids use the same browser fetch path as /shop (works on Vercel).
+ * SSR/build data is only used to seed cache when present.
+ */
 const ProductGridClient = ({
   productData,
   categories,
@@ -30,71 +47,42 @@ const ProductGridClient = ({
 }: ProductGridClientProps) => {
   const router = useRouter();
   const pathname = usePathname();
-  const [resolvedData, setResolvedData] =
-    useState<PaginatedProductsResponse>(productData);
-  const [resolvedCategories, setResolvedCategories] =
-    useState<ProductCategory[]>(categories);
-  const [isLoading, setIsLoading] = useState(false);
-
+  const seededRef = useRef(false);
   const targetId = id ?? "apparel-accessories";
+  const page =
+    typeof productData?.page === "number" && productData.page > 0
+      ? productData.page
+      : 1;
+  const perPage =
+    typeof productData?.per_page === "number" && productData.per_page > 0
+      ? productData.per_page
+      : 12;
 
-  // Keep in sync when navigating between statically generated pages.
-  useEffect(() => {
-    setResolvedData(productData);
-    setResolvedCategories(categories);
-  }, [productData, categories]);
+  if (!seededRef.current) {
+    seededRef.current = true;
+    seedCategoriesCache(categories);
+    seedProductsCache({
+      category: categorySlug,
+      page,
+      perPage,
+      data: productData,
+    });
+  }
 
-  // If build baked empty products (WP failed on Vercel), refetch in the browser.
-  useEffect(() => {
-    if (productData.products.length > 0) return;
+  const categoriesQuery = useProductCategories();
+  const productsQuery = useProducts({
+    category: categorySlug,
+    page,
+    perPage,
+  });
 
-    let cancelled = false;
-    const page = productData.page || 1;
-
-    async function loadFallback() {
-      setIsLoading(true);
-      try {
-        const [cats, data] = await Promise.all([
-          ProductsApi.categories(),
-          ProductsApi.byCategory({
-            categorySlug,
-            page,
-            per_page: productData.per_page || 12,
-          }),
-        ]);
-
-        if (cancelled) return;
-
-        const matched = (Array.isArray(cats) ? cats : []).filter(
-          (category) => category.slug === categorySlug,
-        );
-
-        if (data && Array.isArray(data.products) && data.products.length > 0) {
-          setResolvedData(data);
-        }
-        if (matched.length > 0) {
-          setResolvedCategories(matched);
-        }
-      } catch (error) {
-        console.error(
-          `Category client fallback failed for "${categorySlug}":`,
-          error,
-        );
-      } finally {
-        if (!cancelled) setIsLoading(false);
-      }
-    }
-
-    void loadFallback();
-    return () => {
-      cancelled = true;
-    };
-  }, [
-    productData.products.length,
-    productData.page,
-    productData.per_page,
-    categorySlug,
-  ]);
+  const resolvedData = productsQuery.data ?? productData ?? EMPTY;
+  const resolvedCategories =
+    Array.isArray(categories) && categories.length > 0
+      ? categories
+      : Array.isArray(categoriesQuery.data)
+        ? categoriesQuery.data.filter((c) => c.slug === categorySlug)
+        : [];
 
   const handlePageChange = (newPage: number) => {
     const basePath = `/product-category/${categorySlug}`;
@@ -112,6 +100,10 @@ const ProductGridClient = ({
     });
   }, [pathname, targetId]);
 
+  const isLoading =
+    productsQuery.isLoading ||
+    (productsQuery.isPlaceholderData && !productsQuery.data);
+
   return (
     <ProductGrid
       title={title}
@@ -120,7 +112,7 @@ const ProductGridClient = ({
       onPageChange={handlePageChange}
       categories={resolvedCategories}
       isLoading={isLoading}
-      error={null}
+      error={productsQuery.error}
       selectedCategory={selectedCategory}
       id={id}
       variant={variant}
