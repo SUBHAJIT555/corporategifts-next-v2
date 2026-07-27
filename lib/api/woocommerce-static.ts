@@ -41,6 +41,43 @@ export async function getProductBySlugForStaticBuild(
   return getProductBySlug(slug);
 }
 
+export async function getCategoryListingForStaticBuild(
+  slug: string,
+  page = 1,
+  perPage = 12,
+): Promise<{
+  categories: ProductCategory[];
+  productData: PaginatedProductsResponse;
+}> {
+  try {
+    const [allCategories, productData] = await Promise.all([
+      getCategoriesForStaticBuild(),
+      getCategoryPageForStaticBuild(slug, page, perPage),
+    ]);
+
+    const categories = (Array.isArray(allCategories) ? allCategories : []).filter(
+      (category) => category.slug === slug,
+    );
+
+    return { categories, productData };
+  } catch (error) {
+    console.error(
+      `Failed to load static category listing for "${slug}" page=${page}:`,
+      error,
+    );
+    return {
+      categories: [],
+      productData: {
+        products: [],
+        total: 0,
+        total_pages: 1,
+        page,
+        per_page: perPage,
+      },
+    };
+  }
+}
+
 export async function getCategoryPaginationStaticParamsForBuild(
   slug: string,
   perPage = 12,

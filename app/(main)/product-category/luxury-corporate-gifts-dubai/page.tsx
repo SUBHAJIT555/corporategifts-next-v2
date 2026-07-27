@@ -8,7 +8,7 @@ import { AnimatedTestimonials } from "@/components/ui/AnimatedTestimonial";
 import SectionDivider from "@/components/ui/SectionDivider";
 import type { FAQItem } from "@/components/common/FAQ";
 import type { FeatureCard } from "@/components/ui/WhyChooseUs";
-import { ProductsApi } from "@/lib/api/endpoints";
+import { getCategoryListingForStaticBuild } from "@/lib/api/woocommerce-static";
 import {
   BiWorld,
   LuAward,
@@ -188,30 +188,12 @@ const fullIntroText = (
 );
 
 async function getLuxuryData(page: number) {
-  try {
-    const [categories, productData] = await Promise.all([
-      ProductsApi.categories(),
-      ProductsApi.byCategory({
-        categorySlug: CATEGORY_SLUG,
-        page,
-        per_page: PER_PAGE,
-      }),
-    ]);
-
-    return { categories, productData };
-  } catch (error) {
-    console.error("Failed to load luxury corporate gifts products:", error);
-    return {
-      categories: [],
-      productData: {
-        products: [],
-        total: 0,
-        total_pages: 1,
-        page,
-        per_page: PER_PAGE,
-      },
-    };
-  }
+  const { categories, productData } = await getCategoryListingForStaticBuild(
+    CATEGORY_SLUG,
+    page,
+    PER_PAGE,
+  );
+  return { categories, productData };
 }
 
 export default async function LuxuryCorporateGifts() {

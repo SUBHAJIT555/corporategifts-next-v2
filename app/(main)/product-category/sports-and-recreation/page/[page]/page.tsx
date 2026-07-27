@@ -6,7 +6,10 @@ import CategoryIntro from "@/components/common/CategoryIntro";
 import ProductGridClient from "@/components/common/ProductGridClient";
 import SectionDivider from "@/components/ui/SectionDivider";
 import type { FeatureCard } from "@/components/ui/WhyChooseUs";
-import { ProductsApi } from "@/lib/api/endpoints";
+import {
+  getCategoryListingForStaticBuild,
+  getCategoryPageForStaticBuild,
+} from "@/lib/api/woocommerce-static";
 import {
   LuActivity,
   LuDumbbell,
@@ -94,39 +97,21 @@ const fullIntroText = (
 );
 
 async function getSportsData(page: number) {
-  try {
-    const [categories, productData] = await Promise.all([
-      ProductsApi.categories(),
-      ProductsApi.byCategory({
-        categorySlug: CATEGORY_SLUG,
-        page,
-        per_page: PER_PAGE,
-      }),
-    ]);
-
-    return { categories, productData };
-  } catch (error) {
-    console.error("Failed to load sports & recreation products:", error);
-    return {
-      categories: [],
-      productData: {
-        products: [],
-        total: 0,
-        total_pages: 1,
-        page,
-        per_page: PER_PAGE,
-      },
-    };
-  }
+  const { categories, productData } = await getCategoryListingForStaticBuild(
+    CATEGORY_SLUG,
+    page,
+    PER_PAGE,
+  );
+  return { categories, productData };
 }
 
 export async function generateStaticParams() {
   try {
-    const firstPage = await ProductsApi.byCategory({
-      categorySlug: CATEGORY_SLUG,
-      page: 1,
-      per_page: PER_PAGE,
-    });
+    const firstPage = await getCategoryPageForStaticBuild(
+      CATEGORY_SLUG,
+      1,
+      PER_PAGE,
+    );
 
     const totalPages = firstPage.total_pages || 1;
 

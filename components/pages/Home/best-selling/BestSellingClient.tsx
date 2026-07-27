@@ -93,14 +93,110 @@ export default function BestSellingClient({
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [overrideProductData, setOverrideProductData] =
     useState<PaginatedProductsResponse | null>(null);
+  const [fallbackInitial, setFallbackInitial] =
+    useState<PaginatedProductsResponse | null>(null);
+  const [fallbackCategories, setFallbackCategories] = useState<
+    ProductCategory[] | null
+  >(null);
+  const [fallbackByCategory, setFallbackByCategory] = useState<Record<
+    string,
+    PaginatedProductsResponse
+  > | null>(null);
   const [isLoadingPage, setIsLoadingPage] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  const resolvedInitial = fallbackInitial ?? initial;
+  const resolvedCategories = fallbackCategories ?? categories;
+  const resolvedByCategory = fallbackByCategory ?? byCategory;
 
   const setCategory = useCallback((slug: string | null) => {
     setSelectedCategory(slug);
     setOverrideProductData(null);
   }, []);
+
+  // If static export baked empty data (WP failed at build), refetch in the browser.
+  useEffect(() => {
+    if (initial.products.length > 0 || categories.length > 0) return;
+
+    let cancelled = false;
+
+    async function loadFallback() {
+      setIsLoadingPage(true);
+      try {
+        const [categoriesResult, productsResult] = await Promise.all([
+          ProductsApi.categories(),
+          ProductsApi.all({ page: 1, per_page: PER_PAGE }),
+        ]);
+
+        if (cancelled) return;
+
+        const nextCategories = Array.isArray(categoriesResult)
+          ? categoriesResult
+          : [];
+        const nextInitial =
+          productsResult && Array.isArray(productsResult.products)
+            ? productsResult
+            : null;
+
+        if (nextInitial) setFallbackInitial(nextInitial);
+        if (nextCategories.length) setFallbackCategories(nextCategories);
+
+        const slugs = nextCategories
+          .slice(0, 10)
+          .map((c) => c.slug)
+          .filter(Boolean);
+
+        const entries = await Promise.all(
+          slugs.map(async (slug) => {
+            try {
+              const data = await ProductsApi.byCategory({
+                categorySlug: slug,
+                page: 1,
+                per_page: PER_PAGE,
+              });
+              return [
+                slug,
+                data && Array.isArray(data.products)
+                  ? data
+                  : {
+                      products: [],
+                      total: 0,
+                      total_pages: 1,
+                      page: 1,
+                      per_page: PER_PAGE,
+                    },
+              ] as const;
+            } catch {
+              return [
+                slug,
+                {
+                  products: [],
+                  total: 0,
+                  total_pages: 1,
+                  page: 1,
+                  per_page: PER_PAGE,
+                },
+              ] as const;
+            }
+          }),
+        );
+
+        if (!cancelled) {
+          setFallbackByCategory(Object.fromEntries(entries));
+        }
+      } catch (error) {
+        console.error("BestSelling client fallback failed:", error);
+      } finally {
+        if (!cancelled) setIsLoadingPage(false);
+      }
+    }
+
+    void loadFallback();
+    return () => {
+      cancelled = true;
+    };
+  }, [initial.products.length, categories.length]);
 
   useEffect(() => {
     const grid = gridRef.current;
@@ -121,15 +217,15 @@ export default function BestSellingClient({
   }, []);
 
   const safeCategories = useMemo(
-    () => (Array.isArray(categories) ? categories : []),
-    [categories]
+    () => (Array.isArray(resolvedCategories) ? resolvedCategories : []),
+    [resolvedCategories]
   );
 
   const categoryMenuItems = useMemo(
     () => [
       {
         label: "All",
-        count: initial.total,
+        count: resolvedInitial.total,
         active: selectedCategory === null,
         onClick: () => setCategory(null),
       },
@@ -140,14 +236,14 @@ export default function BestSellingClient({
         onClick: () => setCategory(category.slug),
       })),
     ],
-    [initial.total, safeCategories, selectedCategory, setCategory]
+    [resolvedInitial.total, safeCategories, selectedCategory, setCategory]
   );
 
   const productData = useMemo(() => {
     if (overrideProductData) return overrideProductData;
-    if (!selectedCategory) return initial;
+    if (!selectedCategory) return resolvedInitial;
     return (
-      byCategory[selectedCategory] ?? {
+      resolvedByCategory[selectedCategory] ?? {
         products: [],
         total: 0,
         total_pages: 0,
@@ -155,7 +251,12 @@ export default function BestSellingClient({
         per_page: PER_PAGE,
       }
     );
-  }, [initial, byCategory, selectedCategory, overrideProductData]);
+  }, [
+    resolvedInitial,
+    resolvedByCategory,
+    selectedCategory,
+    overrideProductData,
+  ]);
 
   const onPageChange = useCallback(
     async (newPage: number) => {
@@ -222,7 +323,7 @@ export default function BestSellingClient({
             <ProductGrid
               variant="home"
               productData={productData}
-              categories={categories}
+              categories={resolvedCategories}
               isLoading={isLoadingPage}
               error={null}
               selectedCategory={selectedCategory}
