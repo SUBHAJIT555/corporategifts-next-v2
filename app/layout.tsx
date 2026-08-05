@@ -7,7 +7,12 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "react-image-gallery/styles/image-gallery.css";
 
-const isProd = process.env.NEXT_PUBLIC_ENV === "production";
+// Default: indexable. Only block when explicitly marked as non-production
+// (preview / staging / development). Avoids accidental sitewide noindex when
+// NEXT_PUBLIC_ENV is unset. `yarn build` also sets NEXT_PUBLIC_ENV=production.
+const env = (process.env.NEXT_PUBLIC_ENV ?? "").toLowerCase();
+const isNonIndexableEnv =
+  env === "preview" || env === "staging" || env === "development";
 
 // Prevents a flash of the wrong theme before hydration.
 const themeInitScript = `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();`;
@@ -16,11 +21,11 @@ export const metadata: Metadata = {
   title: "Corporate Gifts",
   description: "Corporate Gifts",
   robots: {
-    index: isProd,
-    follow: isProd,
+    index: !isNonIndexableEnv,
+    follow: !isNonIndexableEnv,
     googleBot: {
-      index: isProd,
-      follow: isProd,
+      index: !isNonIndexableEnv,
+      follow: !isNonIndexableEnv,
     },
   },
 };

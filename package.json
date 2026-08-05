@@ -8,7 +8,7 @@
     "build": "npm run generate:shop-redirects && cross-env NEXT_PUBLIC_ENV=production next build",
     "start": "next start",
     "lint": "eslint",
-    "preview": "npx serve -s out",
+    "preview": "npx serve out",
     "audit:collect-routes": "tsx scripts/export-audit/collect-routes.ts",
     "audit:merge-report": "tsx scripts/export-audit/merge-report.ts",
     "audit:root-cause": "tsx scripts/export-audit/diagnostics/root-cause-analysis.ts",

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { EFBreadCrumbStructureSchema } from "@/components/schema/EFBreadCrumbStructureSchema";
 import {
   buildCategoryPageOneMetadata,
   CATEGORY_SEO,
@@ -13,5 +14,10 @@ export default function EcoFriendlyLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <EFBreadCrumbStructureSchema />
+      {children}
+    </>
+  );
 }
