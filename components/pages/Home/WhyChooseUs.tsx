@@ -105,7 +105,7 @@ const title = (
           <path d="M6.802 12l-3.4 5.89l3.598 -.233l1.598 3.232l3.4 -5.889" />
         </svg>
       </span>
-      <span>as Your Most Trusted Corporate Gifts Supplier in Dubai?</span>
+      <span>as Your Corporate Gifts Supplier in Dubai?</span>
     </span>
   </>
 );

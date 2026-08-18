@@ -22,20 +22,65 @@ import {
   candyWhiteButtonClasses,
 } from "@/components/ui/candy-button";
 import { cn } from "@/lib/utilts";
+import { ProductsApi } from "@/lib/api/endpoints";
 
 interface Props {
   products: Product[];
   videoUrl?: string;
 }
 
+async function fetchTopSaverProducts() {
+  try {
+    const randomProducts = await ProductsApi.random();
+    if (Array.isArray(randomProducts) && randomProducts.length > 0) {
+      return randomProducts;
+    }
+  } catch {
+    // Fall through to the shop listing, which works on Vercel in the browser.
+  }
+
+  const all = await ProductsApi.all({ page: 1, per_page: 18 });
+  return Array.isArray(all?.products) ? all.products : [];
+}
+
 export default function TopSaverClient({
   products,
   videoUrl = "/assets/video/GIFMaker_mezeeyand.webm",
 }: Props) {
-  const safeProducts = useMemo(
-    () => (Array.isArray(products) ? products : []),
-    [products]
+  const [resolvedProducts, setResolvedProducts] = useState<Product[]>(() =>
+    Array.isArray(products) ? products : [],
   );
+  const [isLoading, setIsLoading] = useState(resolvedProducts.length === 0);
+
+  useEffect(() => {
+    if (resolvedProducts.length > 0) return;
+
+    let cancelled = false;
+    setIsLoading(true);
+
+    fetchTopSaverProducts()
+      .then((nextProducts) => {
+        if (!cancelled) {
+          setResolvedProducts(nextProducts);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setResolvedProducts([]);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [resolvedProducts.length]);
+
+  const safeProducts = resolvedProducts;
   const { addToQuote, isInQuote } = useQuote();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const autoplayRef = useRef(
@@ -48,7 +93,7 @@ export default function TopSaverClient({
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       align: "start",
-      loop: true,
+      loop: safeProducts.length > 1,
     },
     [autoplayRef.current]
   );
@@ -93,7 +138,7 @@ export default function TopSaverClient({
       emblaApi.off("select", syncCarouselState);
       emblaApi.off("reInit", syncCarouselState);
     };
-  }, [emblaApi, syncCarouselState]);
+  }, [emblaApi, syncCarouselState, safeProducts.length]);
 
   const slideLabel = String(selectedIndex + 1).padStart(2, "0");
   const totalLabel = String(safeProducts.length).padStart(2, "0");
@@ -172,12 +217,17 @@ export default function TopSaverClient({
                 ref={emblaRef}
               >
                 <div className="-mx-2 flex items-stretch sm:-mx-2.5">
-                  {safeProducts.map((product) => (
+                  {isLoading && safeProducts.length === 0 ? (
+                    <div className="flex min-h-90 w-full items-center justify-center px-2 text-body-md text-muted sm:min-h-95">
+                      Loading products...
+                    </div>
+                  ) : (
+                    safeProducts.map((product) => (
                     <div
                       key={product.id}
                       className="flex h-auto flex-[0_0_100%] px-2 sm:flex-[0_0_50%] sm:px-2.5 lg:flex-[0_0_33.333%]"
                     >
-                      <article className="group relative flex h-full min-h-[360px] w-full flex-col overflow-hidden rounded-xl border border-hairline bg-canvas p-4 sm:min-h-[380px] sm:p-5">
+                      <article className="group relative flex h-full min-h-90 w-full flex-col overflow-hidden rounded-xl border border-hairline bg-canvas p-4 sm:min-h-95 sm:p-5">
                         <NoPrefetchLink
                           href={getProductUrl(product)}
                           className="block shrink-0"
@@ -199,7 +249,7 @@ export default function TopSaverClient({
                               {product.categories[0]}
                             </span>
                           ) : (
-                            <span className="mb-2 block h-[22px]" aria-hidden />
+                            <span className="mb-2 block h-5.5" aria-hidden />
                           )}
 
                           <NoPrefetchLink
@@ -240,17 +290,18 @@ export default function TopSaverClient({
                         </div>
                       </article>
                     </div>
-                  ))}
+                  ))
+                  )}
                 </div>
               </div>
             </div>
           </Reveal>
 
           {/* Video CTA panel */}
-          <Reveal animationNum={2} className="relative flex min-h-[420px] lg:col-span-3 lg:min-h-0">
+          <Reveal animationNum={2} className="relative flex min-h-105 lg:col-span-3 lg:min-h-0">
             <div
               ref={videoContainerRef}
-              className="relative flex h-full min-h-[420px] w-full flex-1 flex-col overflow-hidden border border-hairline bg-surface-dark lg:min-h-full"
+              className="relative flex h-full min-h-105 w-full flex-1 flex-col overflow-hidden border border-hairline bg-surface-dark lg:min-h-full"
             >
               <div className="absolute inset-0 overflow-hidden">
                 {isVideoVisible ? (
@@ -284,14 +335,14 @@ export default function TopSaverClient({
                 </h3>
 
                 <div className="flex w-full flex-col items-center pb-1">
-                  <p className="max-w-[220px] text-base font-medium leading-snug text-white/90 sm:text-lg">
+                  <p className="max-w-55 text-base font-medium leading-snug text-white/90 sm:text-lg">
                     Request a bulk quote today.
                   </p>
 
                   <NoPrefetchLink
                     href="/contact-us"
                     className={cn(
-                      candyWhiteButtonClasses("mt-4 w-full max-w-[220px]"),
+                      candyWhiteButtonClasses("mt-4 w-full max-w-55"),
                       "pointer-events-auto"
                     )}
                   >

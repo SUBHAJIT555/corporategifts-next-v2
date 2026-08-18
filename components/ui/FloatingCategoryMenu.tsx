@@ -117,7 +117,11 @@ export default function FloatingCategoryMenu({
         >
           <motion.div
             className={cn(
-              "pointer-events-auto relative flex flex-col justify-end overflow-hidden border border-hairline bg-canvas",
+              "pointer-events-auto relative flex flex-col justify-end overflow-hidden border border-hairline bg-surface-card",
+              "shadow-[0_10px_28px_-8px_rgba(0,0,0,0.28),0_2px_8px_-2px_rgba(0,0,0,0.12)]",
+              "ring-1 ring-black/10",
+              "dark:border-white/25 dark:ring-white/20",
+              "dark:shadow-[0_14px_36px_-10px_rgba(0,0,0,0.75),0_0_0_1px_rgba(255,255,255,0.12)]",
               isOpen ? "rounded-2xl" : "rounded-full"
             )}
             animate={{
@@ -132,7 +136,7 @@ export default function FloatingCategoryMenu({
                 isOpen ? "flex-1 px-4 pt-3 opacity-100" : "h-0 flex-none p-0 opacity-0"
               )}
             >
-              <div className="flex max-h-[320px] flex-col overflow-y-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div className="flex max-h-80 flex-col overflow-y-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {items.map((item) => (
                   <CategoryItem
                     key={item.label}
@@ -161,13 +165,13 @@ export default function FloatingCategoryMenu({
               <span className="relative flex h-5 w-5 shrink-0 items-center justify-center">
                 <span
                   className={cn(
-                    "absolute block h-0.5 w-[18px] rounded-full bg-ink transition-transform duration-300",
+                    "absolute block h-0.5 w-4.5 rounded-full bg-ink transition-transform duration-300",
                     isOpen ? "rotate-45" : "-translate-y-1"
                   )}
                 />
                 <span
                   className={cn(
-                    "absolute block h-0.5 w-[18px] rounded-full bg-ink transition-transform duration-300",
+                    "absolute block h-0.5 w-4.5 rounded-full bg-ink transition-transform duration-300",
                     isOpen ? "-rotate-45" : "translate-y-1"
                   )}
                 />

@@ -11,12 +11,14 @@ import { cn } from "@/lib/utilts";
 
 type ContainerScrollProps = {
   titleComponent: React.ReactNode;
+  desktopTitleComponent?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
 };
 
 export function ContainerScroll({
   titleComponent,
+  desktopTitleComponent,
   children,
   className,
 }: ContainerScrollProps) {
@@ -25,7 +27,10 @@ export function ContainerScroll({
       <MobileHeroLayout className={className} titleComponent={titleComponent}>
         {children}
       </MobileHeroLayout>
-      <DesktopScrollLayout className={className} titleComponent={titleComponent}>
+      <DesktopScrollLayout
+        className={className}
+        titleComponent={desktopTitleComponent ?? titleComponent}
+      >
         {children}
       </DesktopScrollLayout>
     </>

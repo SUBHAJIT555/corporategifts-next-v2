@@ -317,8 +317,7 @@ const ProductGridHome = () => {
             </span>
 
             <h2 className="mt-4 text-display-md text-ink">
-              Explore Corporate Gift Categories in Dubai for Every Business
-              Need.
+              Explore Corporate Gifts in Dubai for Every Business Need.
             </h2>
           </div>
 

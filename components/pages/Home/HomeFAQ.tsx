@@ -38,9 +38,9 @@ const homeFaqData = [
   {
     id: 5,
     question:
-      "How do I choose the right corporate gift from Baharnani Advertising?",
+      "How do I choose the best corporate gifts in Dubai for clients and employees?",
     answer:
-      "Our team will help you select gifts based on your budget, audience, and purpose, ensuring your gift aligns perfectly with your brand image.",
+      "Choose gifts based on the recipient, budget, quantity and occasion. Practical branded items work well for employees and events, while premium gift sets are better suited to key clients, partners and executive gifting.",
   },
   {
     id: 6,
@@ -106,9 +106,9 @@ const homeFaqData = [
   },
   {
     id: 16,
-    question: "How do I choose the right corporate gift for my company?",
+    question: "How much do customized corporate gifts in Dubai cost?",
     answer:
-      "Choose corporate gifts based on your audience, budget, purpose, quantity, branding style, and occasion. For example, smart corporate gifts work well for employees, luxury gifts work well for premium clients, and affordable promotional gifts work well for events and campaigns.",
+      "Pricing depends on the product, order quantity, branding method and packaging. Businesses can share their budget and quantity to receive suitable options and a bulk quote for customized or promotional corporate gifts in Dubai.",
   },
 ];
 

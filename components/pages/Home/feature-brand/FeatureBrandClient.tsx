@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { ArrowRight, Award, ChevronLeft, ChevronRight } from "lucide-react";
@@ -16,6 +16,7 @@ import {
   candyIconButtonClasses,
   candyNavIconClasses,
 } from "@/components/ui/candy-button";
+import { ProductsApi } from "@/lib/api/endpoints";
 
 const FeatureBrandCard = memo(function FeatureBrandCard({
   brand,
@@ -24,7 +25,7 @@ const FeatureBrandCard = memo(function FeatureBrandCard({
 }) {
   return (
     <NoPrefetchLink href={getProductUrl(brand)} className="block h-full">
-      <article className="group relative flex h-full min-h-[320px] w-full flex-col overflow-hidden rounded-xl border border-hairline bg-surface-card p-4 transition-colors duration-200 hover:bg-canvas sm:min-h-[340px] sm:p-5">
+      <article className="group relative flex h-full min-h-80 w-full flex-col overflow-hidden rounded-xl border border-hairline bg-surface-card p-4 transition-colors duration-200 hover:bg-canvas sm:min-h-85 sm:p-5">
         <div className="relative mb-4 flex aspect-4/3 w-full shrink-0 items-center justify-center overflow-hidden rounded-xl border border-hairline bg-surface-soft sm:mb-5">
           <Image
             src={brand.image}
@@ -41,7 +42,7 @@ const FeatureBrandCard = memo(function FeatureBrandCard({
               {brand.categories[0]}
             </span>
           ) : (
-            <span className="mb-2 block h-[22px]" aria-hidden />
+            <span className="mb-2 block h-5.5" aria-hidden />
           )}
 
           <h3 className="mb-4 line-clamp-2 min-h-11 text-base font-semibold leading-snug text-ink sm:min-h-12 sm:text-[17px]">
@@ -59,10 +60,48 @@ const FeatureBrandCard = memo(function FeatureBrandCard({
 });
 
 export default function FeatureBrandClient({ brands }: { brands: Product[] }) {
-  const safeBrands = useMemo(
-    () => (Array.isArray(brands) ? brands : []),
-    [brands]
+  const [resolvedBrands, setResolvedBrands] = useState<Product[]>(() =>
+    Array.isArray(brands) ? brands : [],
   );
+  const [isLoading, setIsLoading] = useState(resolvedBrands.length === 0);
+  const safeBrands = resolvedBrands;
+
+  useEffect(() => {
+    if (resolvedBrands.length > 0) return;
+
+    let cancelled = false;
+    setIsLoading(true);
+
+    ProductsApi.all({
+      query: { featured: 1, per_page: 48, page: 1 },
+    })
+      .then((data) => {
+        const featured = Array.isArray(data?.products) ? data.products : [];
+        if (featured.length > 0) return featured;
+        return ProductsApi.all({ page: 1, per_page: 48 }).then((all) =>
+          Array.isArray(all?.products) ? all.products : [],
+        );
+      })
+      .then((nextBrands) => {
+        if (!cancelled) {
+          setResolvedBrands(nextBrands);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setResolvedBrands([]);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [resolvedBrands.length]);
   const [shouldAutoplay, setShouldAutoplay] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const autoplayRef = useRef(
@@ -192,7 +231,7 @@ export default function FeatureBrandClient({ brands }: { brands: Product[] }) {
             </span>
 
             <h2 className="mt-4 text-display-md text-ink">
-              Premium Corporate Gift Brands with Branded Merchandise in Dubai.
+              Premium &amp; Branded Corporate Gifts in Dubai.
             </h2>
           </div>
 
@@ -253,14 +292,20 @@ export default function FeatureBrandClient({ brands }: { brands: Product[] }) {
               ref={emblaRef}
             >
               <div className="-mx-2 flex items-stretch sm:-mx-2.5">
-                {safeBrands.map((brand) => (
-                  <div
-                    key={brand.id}
-                    className="flex h-auto flex-[0_0_100%] px-2 sm:flex-[0_0_50%] sm:px-2.5 lg:flex-[0_0_33.333%] xl:flex-[0_0_25%]"
-                  >
-                    <FeatureBrandCard brand={brand} />
+                {isLoading && safeBrands.length === 0 ? (
+                  <div className="flex min-h-80 w-full items-center justify-center px-2 text-body-md text-muted sm:min-h-85">
+                    Loading products...
                   </div>
-                ))}
+                ) : (
+                  safeBrands.map((brand) => (
+                    <div
+                      key={brand.id}
+                      className="flex h-auto flex-[0_0_100%] px-2 sm:flex-[0_0_50%] sm:px-2.5 lg:flex-[0_0_33.333%] xl:flex-[0_0_25%]"
+                    >
+                      <FeatureBrandCard brand={brand} />
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>

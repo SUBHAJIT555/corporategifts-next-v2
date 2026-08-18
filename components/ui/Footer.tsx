@@ -6,23 +6,12 @@ import Image from "next/image";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import FooterLink from "./FooterLink";
 import footerLogo from "@/public/logo.svg";
-import {
-  FcGoogle,
-  FaFacebook,
-  FaInstagram,
-  FaLinkedinIn,
-  FaStar,
-} from "../icons";
 import { cn } from "@/lib/utilts";
 import {
   Reveal,
   RevealSection,
 } from "@/components/ui/timeline-animation";
-import {
-  candyDarkButtonClasses,
-  candyIconButtonClasses,
-  candySquareIconClasses,
-} from "@/components/ui/candy-button";
+import { candyDarkButtonClasses } from "@/components/ui/candy-button";
 
 function FooterSectionHeading({ children }: { children: React.ReactNode }) {
   return (
@@ -31,50 +20,6 @@ function FooterSectionHeading({ children }: { children: React.ReactNode }) {
     </h3>
   );
 }
-
-function SocialTooltip({
-  children,
-  align = "center",
-}: {
-  children: React.ReactNode;
-  align?: "left" | "center" | "right";
-}) {
-  const horizontalPosition =
-    align === "left"
-      ? "left-0"
-      : align === "right"
-        ? "right-0"
-        : "left-1/2 -translate-x-1/2";
-
-  const tailPosition =
-    align === "left"
-      ? "left-4"
-      : align === "right"
-        ? "right-4"
-        : "left-1/2 -translate-x-1/2";
-
-  return (
-    <div
-      className={cn(
-        "pointer-events-none absolute bottom-full z-50 mb-2 translate-y-1 opacity-0 invisible transition-all duration-200 ease-out",
-        "group-hover:visible group-hover:translate-y-0 group-hover:opacity-100",
-        horizontalPosition
-      )}
-    >
-      <div className="relative rounded-xl border border-hairline bg-surface-card px-3 py-2 text-sm text-ink shadow-[0_8px_24px_-8px_rgba(0,0,0,0.15)] dark:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.45)]">
-        {children}
-        <div className={cn("absolute -bottom-2", tailPosition)}>
-          <div className="h-4 w-4 rotate-45 border-b border-r border-hairline bg-surface-card" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const socialIconClasses = cn(
-  candyIconButtonClasses("white", "sm"),
-  "group relative hover:text-brand-accent"
-);
 
 const Footer = () => {
   const [message, setMessage] = useState("");
@@ -178,78 +123,6 @@ const Footer = () => {
                 <p className="mt-2 text-sm text-error">{errors.email.message}</p>
               )}
             </div>
-
-            <div className="relative mt-6 flex flex-wrap items-center gap-2.5">
-              <a
-                href="https://www.facebook.com/BAHARNANIADV"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={socialIconClasses}
-                aria-label="Follow us on Facebook"
-              >
-                <FaFacebook
-                  className={cn(
-                    candySquareIconClasses,
-                    "transition-colors group-hover:text-brand-accent"
-                  )}
-                />
-                <SocialTooltip align="left">
-                  Follow us on Facebook
-                </SocialTooltip>
-              </a>
-
-              <a
-                href="https://www.instagram.com/baharnaniadv/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={socialIconClasses}
-                aria-label="Follow us on Instagram"
-              >
-                <FaInstagram
-                  className={cn(
-                    candySquareIconClasses,
-                    "transition-colors group-hover:text-brand-accent"
-                  )}
-                />
-                <SocialTooltip>Follow us on Instagram</SocialTooltip>
-              </a>
-
-              <a
-                href="https://www.linkedin.com/company/baharnaniadvertisingdubai/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={socialIconClasses}
-                aria-label="Follow us on LinkedIn"
-              >
-                <FaLinkedinIn
-                  className={cn(
-                    candySquareIconClasses,
-                    "transition-colors group-hover:text-brand-accent"
-                  )}
-                />
-                <SocialTooltip>Follow us on LinkedIn</SocialTooltip>
-              </a>
-
-              <a
-                href="https://www.google.com/maps/place/Baharnani+Advertising+LLC+-+Corporate+gifts+Company+Dubai+%7C+Exhibition+stand+Contractors+Dubai/@25.1625624,55.2303193,16z/data=!4m16!1m7!3m6!1s0x3e5f69c4ae8eb43b:0x34670daac58a6f22!2sBaharnani+Advertising+LLC+-+Corporate+gifts+Company+Dubai+%7C+Exhibition+stand+Contractors+Dubai!8m2!3d25.1625188!4d55.2343055!16s%2Fg%2F11f66tl53w!3m7!1s0x3e5f69c4ae8eb43b:0x34670daac58a6f22!8m2!3d25.1625188!4d55.2343055!9m1!1b1!16s%2Fg%2F11f66tl53w?entry=ttu&g_ep=EgoyMDI2MDEwNy4wIKXMDSoASAFQAw%3D%3D"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(socialIconClasses, "hover:brightness-[1.03]")}
-                aria-label="Give your valuable feedback on Google"
-              >
-                <FcGoogle className="size-4 shrink-0" />
-                <SocialTooltip align="right">
-                  <div className="mb-1 flex items-center justify-center gap-1">
-                    <FaStar className="size-3.5 text-yellow-400" />
-                    <FaStar className="size-3.5 text-yellow-400" />
-                    <FaStar className="size-3.5 text-yellow-400" />
-                    <FaStar className="size-3.5 text-yellow-400" />
-                    <FaStar className="size-3.5 text-yellow-400" />
-                  </div>
-                  <div className="whitespace-nowrap">Give your valuable feedback</div>
-                </SocialTooltip>
-              </a>
-            </div>
           </Reveal>
 
           {/* Useful Links */}
@@ -300,7 +173,7 @@ const Footer = () => {
             </ul>
           </Reveal>
 
-          {/* Legals */}
+          {/* Legals + Social */}
           <Reveal animationNum={3} className="col-span-2 sm:col-span-1">
             <FooterSectionHeading>Legals</FooterSectionHeading>
             <ul className="mt-5 flex flex-col gap-2.5">
@@ -311,6 +184,36 @@ const Footer = () => {
               <FooterLink href="/cookie-policy">Cookie Policy</FooterLink>
               <FooterLink href="mailto:hemant@baharnani.com">Support</FooterLink>
             </ul>
+
+            <div className="mt-8">
+              <FooterSectionHeading>Social</FooterSectionHeading>
+              <ul className="mt-5 flex flex-col gap-2.5">
+                <FooterLink
+                  href="https://www.facebook.com/BAHARNANIADV"
+                  external
+                >
+                  Facebook
+                </FooterLink>
+                <FooterLink
+                  href="https://www.instagram.com/baharnaniadv/"
+                  external
+                >
+                  Instagram
+                </FooterLink>
+                <FooterLink
+                  href="https://www.linkedin.com/company/baharnaniadvertisingdubai/"
+                  external
+                >
+                  LinkedIn
+                </FooterLink>
+                <FooterLink
+                  href="https://www.google.com/maps/place/Baharnani+Advertising+LLC+-+Corporate+gifts+Company+Dubai+%7C+Exhibition+stand+Contractors+Dubai/@25.1625624,55.2303193,16z/data=!4m16!1m7!3m6!1s0x3e5f69c4ae8eb43b:0x34670daac58a6f22!2sBaharnani+Advertising+LLC+-+Corporate+gifts+Company+Dubai+%7C+Exhibition+stand+Contractors+Dubai!8m2!3d25.1625188!4d55.2343055!16s%2Fg%2F11f66tl53w!3m7!1s0x3e5f69c4ae8eb43b:0x34670daac58a6f22!8m2!3d25.1625188!4d55.2343055!9m1!1b1!16s%2Fg%2F11f66tl53w?entry=ttu&g_ep=EgoyMDI2MDEwNy4wIKXMDSoASAFQAw%3D%3D"
+                  external
+                >
+                  Google Reviews
+                </FooterLink>
+              </ul>
+            </div>
           </Reveal>
         </div>
 
