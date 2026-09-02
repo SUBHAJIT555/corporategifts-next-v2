@@ -182,11 +182,11 @@ function HeroCarousel({ activeIndex }: { activeIndex: number }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -6 }}
           transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-          className="absolute bottom-10 left-3 z-20 sm:bottom-11 sm:left-4"
+          className="absolute top-3 right-3 z-20 sm:top-4 sm:right-4"
         >
-          <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/40 bg-white/25 px-3 py-1.5 text-caption font-medium text-warning shadow-[0_2px_10px_rgba(0,0,0,0.12)] ring-1 ring-white/20 backdrop-blur-md dark:border-white/15 dark:bg-white/10">
+          <span className="inline-flex items-center gap-1.5 text-caption font-medium text-warning">
             <CategoryIcon className="h-3.5 w-3.5 shrink-0 text-warning" />|
-            {slide.title}
+            {" "}{slide.title}
           </span>
         </motion.div>
       </AnimatePresence>
