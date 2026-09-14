@@ -80,7 +80,7 @@ export const candyIconButtonClasses = (
     )
   );
 
-/** Square white candy — shared by carousel arrows and category/stat icons. */
+/** Square white candy — decorative icon holders only (stays light in dark mode). */
 export const candySquareClasses = (className?: string) =>
   candyIconButtonClasses(
     "white",
@@ -88,21 +88,32 @@ export const candySquareClasses = (className?: string) =>
     cn("pointer-events-none cursor-default active:scale-100", className)
   );
 
-/** Carousel prev/next — same white candy square as category icons. */
+/**
+ * Theme-aware square control for interactive icon buttons (carousel arrows,
+ * pagination, modal close). Readable in light & dark — not white candy.
+ */
+export const carouselNavButtonClasses = (
+  direction?: "prev" | "next",
+  className?: string
+) =>
+  cn(
+    "relative inline-flex size-9 shrink-0 cursor-pointer items-center justify-center",
+    "rounded-md border border-hairline bg-canvas text-ink",
+    "transition-colors duration-200",
+    "hover:bg-surface-soft",
+    "active:scale-[0.98]",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent/30",
+    "disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100",
+    direction === "prev" && "swiper-button-prev-product-grid",
+    direction === "next" && "swiper-button-next-product-grid",
+    className
+  );
+
+/** Carousel / pagination prev/next — theme-aware (not white candy). */
 export const candyCarouselNavClasses = (
   direction: "prev" | "next",
   className?: string
-) =>
-  candyIconButtonClasses(
-    "white",
-    "sm",
-    cn(
-      direction === "prev"
-        ? "swiper-button-prev-product-grid"
-        : "swiper-button-next-product-grid",
-      className
-    )
-  );
+) => carouselNavButtonClasses(direction, className);
 
 /** Text candy button — white variant. */
 export const candyWhiteButtonClasses = (className?: string) =>
@@ -142,12 +153,14 @@ export const candyWhatsAppButtonClasses = (className?: string) =>
 /** Category / stat icons inside candy holders — brand accent in light & dark. */
 export const candyAccentIconClasses = "h-4 w-4 shrink-0 text-brand-accent";
 
-/** Chevron / close icons on candy icon buttons. */
-export const candyNavIconClasses =
-  "h-4 w-4 shrink-0 text-ink dark:text-neutral-200";
+/** Chevron / close icons on theme-aware nav buttons (`text-ink` follows theme). */
+export const candyNavIconClasses = "h-4 w-4 shrink-0 text-ink";
 
-/** Alias — icons inside white candy squares (same as nav chevrons). */
-export const candySquareIconClasses = candyNavIconClasses;
+/**
+ * Icons on white candy decorative squares — always dark so they stay visible
+ * on the light candy surface in both themes.
+ */
+export const candySquareIconClasses = "h-4 w-4 shrink-0 text-[#111111]";
 
 export interface CandyButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {

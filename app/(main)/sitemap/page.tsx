@@ -14,6 +14,10 @@ const mainLinks: NavItem[] = [
   { label: "Products", href: "/products" },
   { label: "Shop", href: "/shop" },
   { label: "Contact", href: "/contact-us" },
+  {
+    label: "Gift sets",
+    href: "/personalised-corporate-gifts-boxes-dubai",
+  },
 ];
 
 const productLinks: NavItem[] = [

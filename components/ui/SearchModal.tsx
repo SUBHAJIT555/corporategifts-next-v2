@@ -4,7 +4,11 @@ import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } fr
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { LuSearch } from "@/components/icons";
-import { candyIconButtonClasses, candyNavIconClasses } from "./candy-button";
+import {
+  candyIconButtonClasses,
+  candyNavIconClasses,
+  carouselNavButtonClasses,
+} from "./candy-button";
 
 type SearchResult = {
   id: number | string;
@@ -212,7 +216,7 @@ export default function SearchModal({
             <button
               type="button"
               onClick={onClose}
-              className={candyIconButtonClasses("white", "sm")}
+              className={carouselNavButtonClasses()}
               aria-label="Close search"
             >
               <X className={candyNavIconClasses} strokeWidth={2.25} />

@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/timeline-animation";
 import PastelIconBox from "@/components/ui/PastelIconBox";
 import {
-  candyIconButtonClasses,
+  candyCarouselNavClasses,
   candyNavIconClasses,
 } from "@/components/ui/candy-button";
 
@@ -252,7 +252,7 @@ const ProductGridHomeCarousel = memo(function ProductGridHomeCarousel() {
           <button
             type="button"
             onClick={scrollPrev}
-            className={candyIconButtonClasses("white", "sm", "swiper-button-prev-product-grid")}
+            className={candyCarouselNavClasses("prev")}
             aria-label="Previous slide"
           >
             <ChevronLeft className={candyNavIconClasses} strokeWidth={2.25} />
@@ -260,7 +260,7 @@ const ProductGridHomeCarousel = memo(function ProductGridHomeCarousel() {
           <button
             type="button"
             onClick={scrollNext}
-            className={candyIconButtonClasses("white", "sm", "swiper-button-next-product-grid")}
+            className={candyCarouselNavClasses("next")}
             aria-label="Next slide"
           >
             <ChevronRight className={candyNavIconClasses} strokeWidth={2.25} />

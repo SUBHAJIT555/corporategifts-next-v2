@@ -18,6 +18,7 @@ import {
   candyAccentIconClasses,
   candyDarkButtonClasses,
   candyIconButtonClasses,
+  carouselNavButtonClasses,
 } from "@/components/ui/candy-button";
 import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 import { cn } from "@/lib/utilts";
@@ -445,8 +446,8 @@ const ContactDetails = () => {
                       rel="noopener noreferrer"
                       aria-label={label}
                       className={cn(
-                        candyIconButtonClasses("white", "sm"),
-                        "text-ink transition-colors hover:text-brand-accent",
+                        carouselNavButtonClasses(),
+                        "hover:text-brand-accent",
                       )}
                     >
                       <Icon className="size-4" />

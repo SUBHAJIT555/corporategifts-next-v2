@@ -19,7 +19,7 @@ import {
   candyAccentButtonClasses,
   candyCarouselNavClasses,
   candyContactButtonClasses,
-  candySquareIconClasses,
+  candyNavIconClasses,
 } from "@/components/ui/candy-button";
 import { cn } from "@/lib/utilts";
 import { ProductsApi } from "@/lib/api/endpoints";
@@ -193,7 +193,7 @@ export default function TopSaverClient({
                     aria-label="Previous slide"
                   >
                     <ChevronLeft
-                      className={candySquareIconClasses}
+                      className={candyNavIconClasses}
                       strokeWidth={2.25}
                     />
                   </button>
@@ -204,7 +204,7 @@ export default function TopSaverClient({
                     aria-label="Next slide"
                   >
                     <ChevronRight
-                      className={candySquareIconClasses}
+                      className={candyNavIconClasses}
                       strokeWidth={2.25}
                     />
                   </button>

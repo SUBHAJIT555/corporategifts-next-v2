@@ -198,7 +198,7 @@ export default function CategoryWhyChooseUs({
 
                   <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
                     <NoPrefetchLink
-                      href="/contact-us"
+                      href="/contact-us#get-free-quote"
                       className={cn(
                         candyContactButtonClasses("w-full sm:w-auto"),
                         "text-center",

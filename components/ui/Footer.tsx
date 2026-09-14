@@ -132,6 +132,9 @@ const Footer = () => {
               <FooterLink href="/">Home</FooterLink>
               <FooterLink href="/about-us">About</FooterLink>
               <FooterLink href="/products">Products</FooterLink>
+              <FooterLink href="/personalised-corporate-gifts-boxes-dubai">
+                Gift sets
+              </FooterLink>
               <FooterLink href="https://corporategiftsdubaii.ae/blog" external>
                 Blog
               </FooterLink>

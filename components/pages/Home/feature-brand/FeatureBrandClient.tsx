@@ -13,7 +13,7 @@ import {
   RevealSection,
 } from "@/components/ui/timeline-animation";
 import {
-  candyIconButtonClasses,
+  candyCarouselNavClasses,
   candyNavIconClasses,
 } from "@/components/ui/candy-button";
 import { ProductsApi } from "@/lib/api/endpoints";
@@ -262,11 +262,7 @@ export default function FeatureBrandClient({ brands }: { brands: Product[] }) {
                 <button
                   type="button"
                   onClick={handlePrev}
-                  className={candyIconButtonClasses(
-                    "white",
-                    "sm",
-                    "swiper-button-prev-product-grid"
-                  )}
+                  className={candyCarouselNavClasses("prev")}
                   aria-label="Previous slide"
                 >
                   <ChevronLeft className={candyNavIconClasses} strokeWidth={2.25} />
@@ -274,11 +270,7 @@ export default function FeatureBrandClient({ brands }: { brands: Product[] }) {
                 <button
                   type="button"
                   onClick={handleNext}
-                  className={candyIconButtonClasses(
-                    "white",
-                    "sm",
-                    "swiper-button-next-product-grid"
-                  )}
+                  className={candyCarouselNavClasses("next")}
                   aria-label="Next slide"
                 >
                   <ChevronRight className={candyNavIconClasses} strokeWidth={2.25} />

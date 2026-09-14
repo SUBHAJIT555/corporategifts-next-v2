@@ -56,6 +56,7 @@ const pathMatchesPrefix = (path: string, prefix: string) =>
  * - Home: exact `/` only
  * - Shop: `/shop` + nested
  * - Products: `/products` + nested
+ * - Gift sets: `/personalised-corporate-gifts-boxes-dubai` + nested
  * - About: `/about-us` + nested
  * - Blog: `/blog` + nested (pathname; external blog URL still links out)
  */
@@ -69,6 +70,11 @@ const isMenuItemActive = (name: string, pathname: string) => {
       return pathMatchesPrefix(path, "/shop");
     case "Products":
       return pathMatchesPrefix(path, "/products");
+    case "Gift sets":
+      return pathMatchesPrefix(
+        path,
+        "/personalised-corporate-gifts-boxes-dubai",
+      );
     case "About":
       return pathMatchesPrefix(path, "/about-us");
     case "Blog":
@@ -95,8 +101,13 @@ const MENU_ITEMS: MenuItem[] = [
   { key: 1, name: "Home", href: "/" },
   { key: 2, name: "Shop", href: "/shop" },
   { key: 3, name: "Products", href: "/products", hasDropdown: true },
-  { key: 4, name: "About", href: "/about-us" },
-  { key: 5, name: "Blog", href: buildSiteUrl("/blog") },
+  {
+    key: 4,
+    name: "Gift sets",
+    href: "/personalised-corporate-gifts-boxes-dubai",
+  },
+  { key: 5, name: "About", href: "/about-us" },
+  { key: 6, name: "Blog", href: buildSiteUrl("/blog") },
 ];
 
 const PRODUCT_CATEGORIES: NavbarProductCategory[] = [
