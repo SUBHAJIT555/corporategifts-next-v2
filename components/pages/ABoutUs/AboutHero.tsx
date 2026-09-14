@@ -4,7 +4,7 @@ import { Sparkles } from "lucide-react";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import {
   candyDarkButtonClasses,
-  candyWhiteButtonClasses,
+  candyContactButtonClasses,
 } from "@/components/ui/candy-button";
 import {
   Reveal,
@@ -75,7 +75,7 @@ export default function AboutHero() {
             </NoPrefetchLink>
             <NoPrefetchLink
               href="/contact-us"
-              className={candyWhiteButtonClasses("w-full sm:w-auto")}
+              className={candyContactButtonClasses("w-full sm:w-auto")}
             >
               Get in Touch
             </NoPrefetchLink>

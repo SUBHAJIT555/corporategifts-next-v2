@@ -91,7 +91,11 @@ const ShopContent = memo(function ShopContent({ initialPage }: ShopContentProps)
   return (
     <section className="relative w-full bg-canvas">
       <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-3 sm:px-6 sm:py-4 lg:py-4">
-        <div ref={gridRef} className="relative">
+        <div
+          ref={gridRef}
+          id="product-grid"
+          className="relative scroll-mt-20"
+        >
           <ShopToolbar categories={categories} />
           <ProductGrid
             products={products}

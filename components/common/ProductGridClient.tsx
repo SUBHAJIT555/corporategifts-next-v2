@@ -13,6 +13,7 @@ import {
   useProductCategories,
   useProducts,
 } from "@/hooks/useProducts";
+import { scrollToProductSection } from "@/lib/scrollToProductSection";
 
 interface ProductGridClientProps {
   productData: PaginatedProductsResponse;
@@ -91,13 +92,7 @@ const ProductGridClient = ({
   };
 
   useEffect(() => {
-    const el = document.getElementById(targetId);
-    if (!el) return;
-
-    el.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    scrollToProductSection(targetId);
   }, [pathname, targetId]);
 
   const isLoading =

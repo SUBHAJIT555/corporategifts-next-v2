@@ -18,8 +18,8 @@ import {
 import {
   candyAccentButtonClasses,
   candyCarouselNavClasses,
+  candyContactButtonClasses,
   candySquareIconClasses,
-  candyWhiteButtonClasses,
 } from "@/components/ui/candy-button";
 import { cn } from "@/lib/utilts";
 import { ProductsApi } from "@/lib/api/endpoints";
@@ -342,7 +342,7 @@ export default function TopSaverClient({
                   <NoPrefetchLink
                     href="/contact-us"
                     className={cn(
-                      candyWhiteButtonClasses("mt-4 w-full max-w-55"),
+                      candyContactButtonClasses("mt-4 w-full max-w-55"),
                       "pointer-events-auto"
                     )}
                   >

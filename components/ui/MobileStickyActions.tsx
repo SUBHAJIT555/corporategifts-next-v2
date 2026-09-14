@@ -5,7 +5,7 @@ import { IoLogoWhatsapp } from "@/components/icons";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import {
   candyDarkButtonClasses,
-  candyWhiteButtonClasses,
+  candyWhatsAppButtonClasses,
 } from "@/components/ui/candy-button";
 import { useQuote } from "@/contexts/QuoteContext";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
@@ -46,11 +46,11 @@ export default function MobileStickyActions() {
           href={getWhatsAppUrl()}
           target="_blank"
           rel="noopener noreferrer"
-          className={candyWhiteButtonClasses(stickyButtonClasses)}
+          className={candyWhatsAppButtonClasses(stickyButtonClasses)}
           aria-label="Contact us on WhatsApp"
         >
           <IoLogoWhatsapp
-            className="size-5 shrink-0 text-[#25D366]"
+            className="size-5 shrink-0 text-white"
             aria-hidden
           />
           <span>WhatsApp</span>

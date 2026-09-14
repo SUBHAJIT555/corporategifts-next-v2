@@ -8,8 +8,10 @@ import {
 } from "@/components/ui/timeline-animation";
 import {
   candyAccentButtonClasses,
+  candyContactButtonClasses,
   candyDarkButtonClasses,
   candyWhiteButtonClasses,
+  candyWhatsAppButtonClasses,
 } from "@/components/ui/candy-button";
 
 export interface CallToActionButton {
@@ -17,7 +19,7 @@ export interface CallToActionButton {
   className?: string;
   onClick?: () => void;
   link?: string;
-  variant?: "default" | "light" | "dark";
+  variant?: "default" | "light" | "dark" | "whatsapp" | "contact";
   target?: string;
   rel?: React.HTMLAttributes<HTMLAnchorElement>["rel"];
 }
@@ -41,6 +43,8 @@ interface CallToActionProps {
 function getButtonClasses(variant: CallToActionButton["variant"] = "default") {
   if (variant === "dark") return candyDarkButtonClasses();
   if (variant === "light") return candyWhiteButtonClasses();
+  if (variant === "whatsapp") return candyWhatsAppButtonClasses();
+  if (variant === "contact") return candyContactButtonClasses();
   return candyAccentButtonClasses();
 }
 
@@ -108,14 +112,14 @@ const CallToAction = ({
     {
       text: "Request Bulk Quote",
       link: "/contact-us",
-      variant: "dark",
+      variant: "contact",
     },
     {
       text: "WhatsApp for Gift Ideas",
       link: "https://wa.me/+971556545950",
       target: "_blank",
       rel: "noopener noreferrer",
-      variant: "light",
+      variant: "whatsapp",
     },
   ] as CallToActionButton[],
 }: CallToActionProps) => {

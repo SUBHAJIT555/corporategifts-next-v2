@@ -23,7 +23,7 @@ import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 import {
   candyDarkButtonClasses,
-  candyWhiteButtonClasses,
+  candyContactButtonClasses,
 } from "@/components/ui/candy-button";
 import GoogleRatingStatic from "@/components/ui/GoogleRatingStatic";
 import CursorCard from "@/components/ui/CursorCard";
@@ -287,7 +287,7 @@ function HeroActions() {
         </NoPrefetchLink>
         <NoPrefetchLink
           href="/contact-us"
-          className={candyWhiteButtonClasses("w-full sm:w-auto")}
+          className={candyContactButtonClasses("w-full sm:w-auto")}
         >
           Get Bulk Quote
         </NoPrefetchLink>

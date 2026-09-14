@@ -3,7 +3,7 @@
 import { Award, ArrowUpRight } from "lucide-react";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import {
-  candyDarkButtonClasses,
+  candyContactButtonClasses,
   candyWhiteButtonClasses,
 } from "@/components/ui/candy-button";
 import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
@@ -200,7 +200,7 @@ export default function CategoryWhyChooseUs({
                     <NoPrefetchLink
                       href="/contact-us"
                       className={cn(
-                        candyDarkButtonClasses("w-full sm:w-auto"),
+                        candyContactButtonClasses("w-full sm:w-auto"),
                         "text-center",
                       )}
                     >

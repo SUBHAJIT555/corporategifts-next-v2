@@ -18,6 +18,7 @@ type CategoriesDropdownProps = {
   categories: NavbarProductCategory[];
   onCloseMenu: () => void;
   label?: string;
+  isActive?: boolean;
 };
 
 const HOVER_DELAY_MS = 100;
@@ -26,6 +27,7 @@ const CategoriesDropdown = memo(function CategoriesDropdown({
   categories,
   onCloseMenu,
   label = "Categories",
+  isActive = false,
 }: CategoriesDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -96,7 +98,12 @@ const CategoriesDropdown = memo(function CategoriesDropdown({
         onClick={toggleDropdown}
         aria-expanded={isOpen}
         aria-haspopup="true"
-        className="inline-flex items-center gap-1 rounded-lg px-3.5 py-2 text-sm font-semibold text-ink transition-colors hover:bg-surface-soft"
+        aria-current={isActive ? "page" : undefined}
+        className={`inline-flex items-center gap-1 rounded-lg px-3.5 py-2 text-sm font-semibold text-ink transition-colors hover:bg-surface-soft${
+          isActive
+            ? " underline decoration-2 decoration-brand-accent underline-offset-[6px]"
+            : ""
+        }`}
       >
         {label}
         <span className="pointer-events-none text-muted">
@@ -115,7 +122,7 @@ const CategoriesDropdown = memo(function CategoriesDropdown({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.16 }}
-            className="absolute top-full left-1/2 z-50 mt-2 w-[640px] max-w-[calc(100vw-2rem)] -translate-x-1/2 overflow-hidden rounded-2xl border border-hairline bg-canvas shadow-[0_4px_24px_rgba(0,0,0,0.1)]"
+            className="absolute top-full left-1/2 z-50 mt-2 w-160 max-w-[calc(100vw-2rem)] -translate-x-1/2 overflow-hidden rounded-2xl border border-hairline bg-canvas shadow-[0_4px_24px_rgba(0,0,0,0.1)]"
           >
             <ul className="grid grid-cols-1 gap-1 p-2.5 sm:grid-cols-2">
               {categories.map((category) => (

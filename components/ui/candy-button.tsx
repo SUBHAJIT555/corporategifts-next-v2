@@ -1,84 +1,69 @@
 import React from "react";
 import { cn } from "@/lib/utilts";
 
-export type CandyButtonVariant = "dark" | "white" | "accent";
+export type CandyButtonVariant = "dark" | "white" | "accent" | "whatsapp";
 
 /**
- * Candy-button styling (no shadow), recoloured to the cal.com monochrome
- * palette. Two variants — `dark` (primary) and `white` (secondary) — both of
- * which invert appropriately in dark mode. Exported as a class helper so it can
- * be applied to <button>, <a>, or the project's <NoPrefetchLink>.
+ * Primary CTA styling — vertical gradient, inset highlight, inset ring + offset.
+ * Colors are fixed (not theme `primary`) so dark mode does not wash out to white.
  */
-/**
- * Glossy "candy" recipes (no outer glow — inset highlights only).
- * - DARK dome: near-black gradient, lit top edge, visible white micro-shine.
- * - LIGHT dome: white gradient with a bright inset top edge + soft bottom
- *   recess, so it still reads as candy on dark backgrounds.
- * Each variant inverts in dark mode so the button always sits on a
- * contrasting surface.
- */
-const DARK_DOME_LIGHT_THEME = cn(
-  "text-white border border-white/10",
-  "bg-[radial-gradient(100%_100%_at_50%_0%,#454545_0%,#1a1a1a_45%,#000000_100%)]",
-  "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),inset_0_-2px_4px_0_rgba(0,0,0,0.45)]",
-  "after:opacity-100 hover:brightness-115"
+const DARK_SURFACE = cn(
+  "bg-linear-to-b from-[#3f3f3f] to-[#111111] text-white",
+  "shadow-[0px_0px_10px_0px_rgba(255,255,255,0.2)_inset]",
+  "hover:shadow-[0px_0px_20px_0px_rgba(255,255,255,0.4)_inset]",
+  "ring ring-white/20 ring-inset ring-offset-2 ring-offset-[#111111]",
+  "hover:ring-white/40"
 );
 
-const LIGHT_DOME_LIGHT_THEME = cn(
-  "text-[#111111] border border-black/10",
-  "bg-[radial-gradient(100%_100%_at_50%_0%,#ffffff_0%,#ffffff_35%,#d4d4d4_100%)]",
-  "shadow-[inset_0_1px_1px_0_#ffffff,inset_0_-2px_4px_0_rgba(0,0,0,0.12)]",
-  "after:opacity-0 hover:brightness-[1.03]"
+/** Secondary / outline-style surface — light dome with matching ring treatment. */
+const LIGHT_SURFACE = cn(
+  "bg-linear-to-b from-white to-[#e5e5e5] text-[#111111]",
+  "shadow-[0px_0px_10px_0px_rgba(255,255,255,0.9)_inset]",
+  "hover:shadow-[0px_0px_16px_0px_rgba(255,255,255,1)_inset]",
+  "ring ring-black/10 ring-inset ring-offset-2 ring-offset-white",
+  "hover:ring-black/20",
+  "dark:from-[#f5f5f5] dark:to-[#d4d4d4] dark:text-[#111111]",
+  "dark:ring-white/25 dark:ring-offset-[#e5e5e5] dark:hover:ring-white/40"
 );
 
-const DARK_DOME_DARK_THEME = cn(
-  "dark:text-neutral-200 dark:border-white/10",
-  "dark:bg-[radial-gradient(100%_100%_at_50%_0%,#454545_0%,#1a1a1a_45%,#000000_100%)]",
-  "dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),inset_0_-2px_4px_0_rgba(0,0,0,0.45)]",
-  "dark:after:opacity-100 dark:hover:brightness-115"
+/** Brand accent surface — blue (Contact CTAs). */
+const ACCENT_SURFACE = cn(
+  "bg-linear-to-b from-[#60a5fa] to-[#2563eb] text-white",
+  "shadow-[0px_0px_10px_0px_rgba(255,255,255,0.25)_inset]",
+  "hover:shadow-[0px_0px_20px_0px_rgba(255,255,255,0.4)_inset]",
+  "ring ring-white/25 ring-inset ring-offset-2 ring-offset-[#2563eb]",
+  "hover:ring-white/45"
 );
 
-const LIGHT_DOME_DARK_THEME = cn(
-  "dark:text-[#111111] dark:border-black/10",
-  "dark:bg-[radial-gradient(100%_100%_at_50%_0%,#ffffff_0%,#ffffff_35%,#d4d4d4_100%)]",
-  "dark:shadow-[inset_0_1px_1px_0_#ffffff,inset_0_-2px_4px_0_rgba(0,0,0,0.12)]",
-  "dark:after:opacity-0 dark:hover:brightness-[1.03]"
-);
-
-/** Brand accent dome — #3b82f6 (--cal-brand-accent) with glossy candy highlights. */
-const ACCENT_DOME = cn(
-  "text-white border border-white/20",
-  "bg-[radial-gradient(100%_100%_at_50%_0%,#60a5fa_0%,#3b82f6_42%,#2563eb_100%)]",
-  "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35),inset_0_-2px_4px_0_rgba(29,78,216,0.4)]",
-  "after:opacity-100 hover:brightness-110",
-  "dark:border-white/15",
-  "dark:bg-[radial-gradient(100%_100%_at_50%_0%,#60a5fa_0%,#3b82f6_42%,#1d4ed8_100%)]",
-  "dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.28),inset_0_-2px_4px_0_rgba(0,0,0,0.35)]",
-  "dark:after:opacity-100 dark:hover:brightness-110"
+/** WhatsApp green surface. */
+const WHATSAPP_SURFACE = cn(
+  "bg-linear-to-b from-[#4ADE80] to-[#16A34A] text-white",
+  "shadow-[0px_0px_10px_0px_rgba(255,255,255,0.25)_inset]",
+  "hover:shadow-[0px_0px_20px_0px_rgba(255,255,255,0.4)_inset]",
+  "ring ring-white/25 ring-inset ring-offset-2 ring-offset-[#16A34A]",
+  "hover:ring-white/45"
 );
 
 const CANDY_BUTTON_BASE = cn(
-  "relative inline-flex items-center justify-center gap-1.5 cursor-pointer select-none",
-  "font-semibold text-sm leading-none tracking-[0.01em]",
-  "rounded-xl px-6 py-3 transition-all duration-200 ease-out",
-  "active:scale-95",
-  "after:absolute after:top-px after:right-[10%] after:h-px after:w-[60%]",
-  "after:bg-gradient-to-r after:from-transparent after:via-white/60 after:to-transparent"
+  "relative inline-flex cursor-pointer items-center justify-center gap-2 select-none",
+  "font-display font-semibold",
+  "rounded-md transition-all duration-200",
+  "active:scale-[0.98]",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent/30",
+  "disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100"
 );
+
+const SURFACE_BY_VARIANT: Record<CandyButtonVariant, string> = {
+  dark: DARK_SURFACE,
+  white: LIGHT_SURFACE,
+  accent: ACCENT_SURFACE,
+  whatsapp: WHATSAPP_SURFACE,
+};
 
 export const candyButtonClasses = (
   variant: CandyButtonVariant = "dark",
   className?: string
-) =>
-  cn(
-    CANDY_BUTTON_BASE,
-    variant === "dark"
-      ? cn(DARK_DOME_LIGHT_THEME, LIGHT_DOME_DARK_THEME)
-      : variant === "white"
-        ? cn(LIGHT_DOME_LIGHT_THEME, DARK_DOME_DARK_THEME)
-        : ACCENT_DOME,
-    className
-  );
+) => cn(CANDY_BUTTON_BASE, SURFACE_BY_VARIANT[variant], className);
 
 /** Square candy holder for icons — equal width/height, no default padding bleed. */
 export const candyIconButtonClasses = (
@@ -90,7 +75,7 @@ export const candyIconButtonClasses = (
     variant,
     cn(
       "box-border aspect-square shrink-0 gap-0 !p-0",
-      size === "sm" ? "size-9 rounded-lg" : "size-10 rounded-lg",
+      size === "sm" ? "size-9 rounded-md" : "size-10 rounded-md",
       className
     )
   );
@@ -119,29 +104,39 @@ export const candyCarouselNavClasses = (
     )
   );
 
-/** Text candy button — white variant, same glossy dome as icon buttons in light mode. */
+/** Text candy button — white variant. */
 export const candyWhiteButtonClasses = (className?: string) =>
   candyButtonClasses(
     "white",
-    cn("h-12 rounded-xl px-6 !py-0", className)
+    cn("h-12 rounded-md px-6 text-sm", className)
   );
 
-/** Text candy button — dark variant. */
+/** Text candy button — dark variant (primary CTA). */
 export const candyDarkButtonClasses = (className?: string) =>
   candyButtonClasses(
     "dark",
-    cn("h-12 rounded-xl px-6 !py-0", className)
+    cn("h-12 rounded-md px-6 text-sm", className)
   );
 
-/** Text candy button — brand accent blue (#3b82f6), glossy dome. */
+/** Text candy button — brand accent blue. */
 export const candyAccentButtonClasses = (className?: string) =>
   candyButtonClasses(
     "accent",
-    cn(
-      "h-11 overflow-hidden rounded-xl px-5 !py-0",
-      "disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:brightness-100",
-      className
-    )
+    cn("h-11 overflow-hidden rounded-md px-5 text-sm", className)
+  );
+
+/** Contact CTAs — same blue accent surface, standard text-button sizing. */
+export const candyContactButtonClasses = (className?: string) =>
+  candyButtonClasses(
+    "accent",
+    cn("h-12 rounded-md px-6 text-sm", className)
+  );
+
+/** WhatsApp CTAs — green. */
+export const candyWhatsAppButtonClasses = (className?: string) =>
+  candyButtonClasses(
+    "whatsapp",
+    cn("h-12 rounded-md px-6 text-sm", className)
   );
 
 /** Category / stat icons inside candy holders — brand accent in light & dark. */

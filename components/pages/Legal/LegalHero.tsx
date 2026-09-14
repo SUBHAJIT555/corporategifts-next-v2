@@ -2,7 +2,7 @@
 
 import { Scale } from "lucide-react";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
-import { candyDarkButtonClasses } from "@/components/ui/candy-button";
+import { candyContactButtonClasses } from "@/components/ui/candy-button";
 import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 import { cn } from "@/lib/utilts";
 
@@ -79,7 +79,7 @@ export default function LegalHero({
             <Reveal animationNum={3} className="mt-5 flex justify-center sm:mt-7">
               <NoPrefetchLink
                 href={ctaHref}
-                className={cn(candyDarkButtonClasses("w-full sm:w-auto"))}
+                className={cn(candyContactButtonClasses("w-full sm:w-auto"))}
               >
                 {ctaLabel}
               </NoPrefetchLink>

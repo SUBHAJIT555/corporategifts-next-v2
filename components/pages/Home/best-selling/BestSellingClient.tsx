@@ -11,8 +11,8 @@ import {
   RevealSection,
 } from "@/components/ui/timeline-animation";
 import {
-  candyDarkButtonClasses,
-  candyWhiteButtonClasses,
+  candyContactButtonClasses,
+  candyWhatsAppButtonClasses,
 } from "@/components/ui/candy-button";
 import { cn } from "@/lib/utilts";
 import {
@@ -21,6 +21,7 @@ import {
   useProductCategories,
   useProducts,
 } from "@/hooks/useProducts";
+import { scrollToProductSection } from "@/lib/scrollToProductSection";
 
 const PER_PAGE = 12;
 
@@ -75,7 +76,7 @@ function BestSellingHelpCta() {
             <div className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:justify-end">
               <NoPrefetchLink
                 href="/contact-us"
-                className={cn(candyDarkButtonClasses("w-full sm:w-auto"), "shrink-0")}
+                className={cn(candyContactButtonClasses("w-full sm:w-auto"), "shrink-0")}
               >
                 Contact Us Now
               </NoPrefetchLink>
@@ -83,7 +84,7 @@ function BestSellingHelpCta() {
                 href="https://wa.me/+971556545950"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={cn(candyWhiteButtonClasses("w-full sm:w-auto"), "shrink-0")}
+                className={cn(candyWhatsAppButtonClasses("w-full sm:w-auto"), "shrink-0")}
               >
                 WhatsApp for Gift Ideas
               </NoPrefetchLink>
@@ -147,6 +148,8 @@ export default function BestSellingClient({
   const setCategory = useCallback((slug: string | null) => {
     setSelectedCategory(slug);
     setCurrentPage(1);
+    // Floating filter / inline category change: keep filtered results in view
+    scrollToProductSection(gridRef.current);
   }, []);
 
   useEffect(() => {
@@ -240,7 +243,11 @@ export default function BestSellingClient({
         </Reveal>
 
         <Reveal animationNum={1}>
-          <div ref={gridRef} className="relative pb-8 sm:pb-10">
+          <div
+            ref={gridRef}
+            id="product-grid"
+            className="relative scroll-mt-20 pb-8 sm:pb-10"
+          >
             <ProductGrid
               variant="home"
               productData={productData}

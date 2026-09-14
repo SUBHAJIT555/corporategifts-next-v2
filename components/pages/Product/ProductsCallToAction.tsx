@@ -19,7 +19,7 @@ export default function ProductsCallToAction() {
         {
           text: "Get Quote",
           link: "/contact-us",
-          variant: "dark",
+          variant: "contact",
         },
         {
           text: "View Products",

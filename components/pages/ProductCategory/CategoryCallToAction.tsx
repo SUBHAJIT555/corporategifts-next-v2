@@ -28,7 +28,7 @@ export default function CategoryCallToAction({
         {
           text: primaryLabel,
           link: primaryHref,
-          variant: "dark",
+          variant: "contact",
         },
         {
           text: secondaryLabel,

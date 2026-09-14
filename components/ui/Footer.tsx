@@ -11,7 +11,7 @@ import {
   Reveal,
   RevealSection,
 } from "@/components/ui/timeline-animation";
-import { candyDarkButtonClasses } from "@/components/ui/candy-button";
+import { candyContactButtonClasses } from "@/components/ui/candy-button";
 
 function FooterSectionHeading({ children }: { children: React.ReactNode }) {
   return (
@@ -106,7 +106,7 @@ const Footer = () => {
                   type="submit"
                   disabled={isSubmitting}
                   className={cn(
-                    candyDarkButtonClasses(
+                    candyContactButtonClasses(
                       "w-full cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
                     ),
                     "font-semibold text-sm"

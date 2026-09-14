@@ -2,6 +2,10 @@
 
 import { useCallback, useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  PRODUCT_GRID_ID,
+  scrollToProductSection,
+} from "@/lib/scrollToProductSection";
 import { useShopStore } from "@/stores/useShopStore";
 
 type UseShopRouterSyncArgs = {
@@ -134,6 +138,8 @@ export const useShopNavigation = () => {
       setSelectedCategory(category);
       setCurrentPage(1);
       router.replace(nextUrl, { scroll: false });
+      // After filter apply (floating menu, modal, sidebar), show results under sticky nav
+      scrollToProductSection(PRODUCT_GRID_ID);
     },
     [currentPage, router, selectedCategory, setCurrentPage, setSelectedCategory],
   );
@@ -148,7 +154,7 @@ export const useShopNavigation = () => {
       pendingShopUrl = nextUrl;
       setCurrentPage(safePage);
       router.replace(nextUrl, { scroll: false });
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      scrollToProductSection(PRODUCT_GRID_ID);
     },
     [currentPage, router, selectedCategory, setCurrentPage],
   );

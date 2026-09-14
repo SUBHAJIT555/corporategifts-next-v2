@@ -67,7 +67,7 @@ const ProductCardList = ({
               {product.categories[0]}
             </p>
           ) : (
-            <span className="mb-2 block h-[15px]" aria-hidden />
+            <span className="mb-2 block h-3.75" aria-hidden />
           )}
 
           <NoPrefetchLink
@@ -80,7 +80,7 @@ const ProductCardList = ({
           </NoPrefetchLink>
         </div>
 
-        <div className="flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:min-w-[220px]">
+        <div className="flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:min-w-55">
           <QuantitySelector
             quantity={quantity}
             onQuantityChange={setQuantity}
@@ -145,7 +145,7 @@ const ProductGrid = memo(function ProductGrid({
 
   if (error && products.length === 0) {
     return (
-      <div className="flex min-h-[280px] items-center justify-center rounded-xl border border-hairline bg-canvas px-4">
+      <div className="flex min-h-70 items-center justify-center rounded-xl border border-hairline bg-canvas px-4">
         <p className="text-body-md text-body">
           <span className="font-semibold text-ink">Error:</span> {error.message}
         </p>
@@ -155,7 +155,7 @@ const ProductGrid = memo(function ProductGrid({
 
   if (products.length === 0 && isLoading) {
     return (
-      <div className="flex min-h-[320px] items-center justify-center rounded-xl border border-hairline bg-canvas">
+      <div className="flex min-h-80 items-center justify-center rounded-xl border border-hairline bg-canvas">
         <Loading size="md" message="Loading products..." />
       </div>
     );
@@ -172,7 +172,7 @@ const ProductGrid = memo(function ProductGrid({
   return (
     <div className="relative">
       {isLoading ? (
-        <div className="absolute inset-0 z-10 flex min-h-[320px] items-center justify-center rounded-xl bg-canvas/80">
+        <div className="absolute inset-0 z-10 flex min-h-80 items-center justify-center rounded-xl bg-canvas/80">
           <Loading size="md" message="Loading products..." />
         </div>
       ) : null}

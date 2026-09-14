@@ -174,19 +174,6 @@ const ProductGrid = ({
   const handleSelectCategory = useCallback(
     (slug: string | null) => {
       setSelectedCategory?.(slug);
-
-      if (self.innerWidth < 1024) {
-        // setIsBottomSheetOpen(false);
-        setTimeout(() => {
-          const el = sectionRef.current;
-          if (el) {
-            self.scrollTo({
-              top: el.offsetTop - 20,
-              behavior: "smooth",
-            });
-          }
-        }, 300);
-      }
     },
     [setSelectedCategory]
   );
@@ -254,7 +241,7 @@ const ProductGrid = ({
 
   if (isCategory) {
     return (
-      <section ref={sectionRef} id={id} className="w-full bg-canvas">
+      <section ref={sectionRef} id={id} className="w-full scroll-mt-20 bg-canvas">
         <RevealSection className="mx-auto max-w-7xl border-x border-hairline px-5 py-3 sm:px-6 sm:py-4 lg:py-6">
           <Reveal animationNum={0}>
             <h2 className="text-display-md text-ink">{title}</h2>
@@ -284,7 +271,7 @@ const ProductGrid = ({
 
           <Reveal animationNum={3}>
             {isLoading ? (
-              <div className="flex min-h-[420px] items-center justify-center">
+              <div className="flex min-h-105 items-center justify-center">
                 <Loading size="md" message="Loading products..." />
               </div>
             ) : (
@@ -338,10 +325,14 @@ const ProductGrid = ({
 
   if (isHome) {
     return (
-      <div ref={sectionRef as React.RefObject<HTMLDivElement>} id={id}>
+      <div
+        ref={sectionRef as React.RefObject<HTMLDivElement>}
+        id={id}
+        className="scroll-mt-20"
+      >
         <div className="overflow-hidden rounded-2xl border border-hairline bg-canvas">
           {isLoading ? (
-            <div className="flex min-h-[420px] items-center justify-center p-6">
+            <div className="flex min-h-105 items-center justify-center p-6">
               <Loading size="md" message="Loading products..." />
             </div>
           ) : (
@@ -398,8 +389,12 @@ const ProductGrid = ({
   // RENDER
   // ─────────────────────────────────────
   return (
-    <section ref={sectionRef} id={id} className="relative w-full py-6 sm:py-8 md:py-12 lg:py-16">
-      <RevealSection className="w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 max-w-[1920px] mx-auto">
+    <section
+      ref={sectionRef}
+      id={id}
+      className="relative w-full scroll-mt-20 py-6 sm:py-8 md:py-12 lg:py-16"
+    >
+      <RevealSection className="w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 max-w-480 mx-auto">
 
         <Reveal animationNum={0}>
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-sentient text-textcolor font-semibold mb-4">
@@ -442,7 +437,7 @@ const ProductGrid = ({
         {/* PRODUCT LIST OR LOADING */}
         <Reveal animationNum={3}>
         {isLoading ? (
-          <div className="min-h-[550px] flex items-center justify-center">
+          <div className="min-h-137.5 flex items-center justify-center">
             <Loading size="md" message="Loading products..." />
           </div>
         ) : (

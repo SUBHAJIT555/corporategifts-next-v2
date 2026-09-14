@@ -3,7 +3,7 @@
 import { memo } from "react";
 import Image from "next/image";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
-import { candyDarkButtonClasses } from "@/components/ui/candy-button";
+import { candyContactButtonClasses } from "@/components/ui/candy-button";
 import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 import { cn } from "@/lib/utilts";
 
@@ -248,7 +248,7 @@ const CategoryCard = memo(function CategoryCard({
         isEven ? "lg:flex-row" : "lg:flex-row-reverse",
       )}
     >
-      <div className="relative h-[250px] w-full overflow-hidden rounded-2xl border border-hairline bg-surface-soft sm:h-[280px] md:h-[320px] lg:h-[380px] lg:w-[38%] lg:shrink-0">
+      <div className="relative h-62.5 w-full overflow-hidden rounded-2xl border border-hairline bg-surface-soft sm:h-70 md:h-80 lg:h-95 lg:w-[38%] lg:shrink-0">
         <Image
           width={640}
           height={480}
@@ -305,7 +305,7 @@ const CategoryCard = memo(function CategoryCard({
         <div className="pt-1 sm:pt-2">
           <NoPrefetchLink
             href={category.buttonLink}
-            className={candyDarkButtonClasses("w-full sm:w-auto")}
+            className={candyContactButtonClasses("w-full sm:w-auto")}
           >
             {category.buttonText}
           </NoPrefetchLink>

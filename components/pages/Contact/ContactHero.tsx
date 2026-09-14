@@ -2,7 +2,7 @@
 
 import { MessageCircle } from "lucide-react";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
-import { candyDarkButtonClasses } from "@/components/ui/candy-button";
+import { candyContactButtonClasses } from "@/components/ui/candy-button";
 import { Reveal, RevealSection } from "@/components/ui/timeline-animation";
 
 export default function ContactHero() {
@@ -56,7 +56,7 @@ export default function ContactHero() {
           <Reveal animationNum={3} className="mt-5 flex justify-center sm:mt-7">
             <NoPrefetchLink
               href="#get-free-quote"
-              className={candyDarkButtonClasses("w-full sm:w-auto")}
+              className={candyContactButtonClasses("w-full sm:w-auto")}
             >
               Get in touch with us
             </NoPrefetchLink>

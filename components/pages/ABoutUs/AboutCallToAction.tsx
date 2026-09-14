@@ -24,7 +24,7 @@ export default function AboutCallToAction() {
         {
           text: "Contact Us Now",
           link: "/contact-us",
-          variant: "dark",
+          variant: "contact",
         },
         {
           text: "Explore Products",
