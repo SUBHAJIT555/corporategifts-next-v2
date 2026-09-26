@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/timeline-animation";
 import { candyContactButtonClasses } from "@/components/ui/candy-button";
 
+const NEWSLETTER_URL = "https://corporategiftsdubaii.ae/api/v1/contact/create";
+
 function FooterSectionHeading({ children }: { children: React.ReactNode }) {
   return (
     <h3 className="inline-flex items-center rounded-lg border border-dashed border-hairline bg-surface-card px-3 py-1 text-caption font-medium text-body">
@@ -23,6 +25,7 @@ function FooterSectionHeading({ children }: { children: React.ReactNode }) {
 
 const Footer = () => {
   const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const {
     register,
@@ -36,26 +39,35 @@ const Footer = () => {
   const onSubmit = async (data: FieldValues) => {
     console.log(data);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/contact/create`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: data.email,
-            formType: "NEWSLETTER",
-          }),
-        }
-      );
+      const res = await fetch(NEWSLETTER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: data.email,
+          formType: "NEWSLETTER",
+        }),
+      });
 
-      const json = await res.json();
-      if (!json.status) throw new Error(json.message);
+      const raw = await res.text();
+      let json: { status?: boolean; message?: string } = {};
+      try {
+        json = raw ? JSON.parse(raw) : {};
+      } catch {
+        throw new Error("Newsletter service is unavailable. Please try again later.");
+      }
+      if (!res.ok || !json.status) {
+        throw new Error(json.message || "Could not subscribe. Please try again.");
+      }
 
-      setMessage(json.message);
+      setIsError(false);
+      setMessage(json.message || "You are subscribed.");
       setTimeout(() => setMessage(""), 3000);
       reset();
     } catch (err) {
-      if (err instanceof Error) setMessage(err.message);
+      setIsError(true);
+      setMessage(
+        err instanceof Error ? err.message : "Could not subscribe. Please try again."
+      );
     }
   };
 
@@ -117,7 +129,9 @@ const Footer = () => {
               </form>
 
               {message && (
-                <p className="mt-2 text-sm text-success">{message}</p>
+                <p className={cn("mt-2 text-sm", isError ? "text-error" : "text-success")}>
+                  {message}
+                </p>
               )}
               {errors.email && (
                 <p className="mt-2 text-sm text-error">{errors.email.message}</p>

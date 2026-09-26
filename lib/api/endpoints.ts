@@ -86,14 +86,13 @@ export const ProductsApi = {
  */
 export const ContactApi = {
   submit: (payload: ContactFormData) => {
-    const base = process.env.NEXT_PUBLIC_API_URL;
-    if (!base) {
-      throw new Error("NEXT_PUBLIC_API_URL is not set");
-    }
-    return apiFetch<ContactFormResponse>(`${base}/api/v1/contact/create`, {
-      method: "POST",
-      body: payload,
-    });
+    return apiFetch<ContactFormResponse>(
+      "https://corporategiftsdubaii.ae/api/v1/contact/create",
+      {
+        method: "POST",
+        body: payload,
+      }
+    );
   },
 };
 
