@@ -37,7 +37,7 @@ RedirectMatch 301 ^/blog/checkout/?$ /
 # 2b. SHOP MULTI-CATEGORY REDIRECTS (auto-generated)
 # -------------------------------------------------
 # SHOP_MULTI_CATEGORY_REDIRECTS_START
-# Generated 2026-07-11T11:02:13.123Z — 306 redirect(s)
+# Generated 2026-09-26T10:18:03.675Z — 308 redirect(s)
 RewriteRule ^shop/office-and-stationary/blace-change-zero-recycled-pu-15w-wireless-mousepad-desk-organizer/?$ /shop/technology-and-accessories/blace-change-zero-recycled-pu-15w-wireless-mousepad-desk-organizer/ [R=301,L]
 RewriteRule ^shop/premium-gift-sets/cork-drinkware-gift-sets-in-a-cardboard-gift-box-gs-10/?$ /shop/eco-friendly/cork-drinkware-gift-sets-in-a-cardboard-gift-box-gs-10/ [R=301,L]
 RewriteRule ^shop/office-and-stationary/bamboo-ballpoint-pen/?$ /shop/eco-friendly/bamboo-ballpoint-pen/ [R=301,L]
@@ -61,7 +61,6 @@ RewriteRule ^shop/technology-and-accessories/magnet-set-lirix/?$ /shop/eco-frien
 RewriteRule ^shop/technology-and-accessories/charging-cable-desak/?$ /shop/eco-friendly/charging-cable-desak/ [R=301,L]
 RewriteRule ^shop/sports-and-recreation/multitool-tape-measure-wilco-1m/?$ /shop/eco-friendly/multitool-tape-measure-wilco-1m/ [R=301,L]
 RewriteRule ^shop/office-and-stationary/sticky-notepad-mabur/?$ /shop/eco-friendly/sticky-notepad-mabur/ [R=301,L]
-RewriteRule ^shop/luxury-corporate-gifts-dubai/tape-measure-axler-1m/?$ /shop/eco-friendly/tape-measure-axler-1m/ [R=301,L]
 RewriteRule ^shop/office-and-stationary/scented-pencils-sets/?$ /shop/eco-friendly/scented-pencils-sets/ [R=301,L]
 RewriteRule ^shop/office-and-stationary/plantable-a-pencils-set/?$ /shop/eco-friendly/plantable-a-pencils-set/ [R=301,L]
 RewriteRule ^shop/technology-and-accessories/bamboo-wireless-fast-charging-pads-15w-output/?$ /shop/eco-friendly/bamboo-wireless-fast-charging-pads-15w-output/ [R=301,L]
@@ -190,6 +189,7 @@ RewriteRule ^shop/eco-friendly/dellach-borosilicate-glass-bottle-with-cork-lid-1
 RewriteRule ^shop/eco-friendly/pama-set-of-2-expresso-cup-with-bamboo-coaster/?$ /shop/eating-and-drinking/pama-set-of-2-expresso-cup-with-bamboo-coaster/ [R=301,L]
 RewriteRule ^shop/office-and-stationary/zabki-giftology-rpet-laptop-organizer-black/?$ /shop/bags-and-travel/zabki-giftology-rpet-laptop-organizer-black/ [R=301,L]
 RewriteRule ^shop/office-and-stationary/fulda-change-collection-rpet-laptop-case-workstation-black/?$ /shop/bags-and-travel/fulda-change-collection-rpet-laptop-case-workstation-black/ [R=301,L]
+RewriteRule ^shop/luxury-corporate-gifts-dubai/skross-world-travel-adapter-muv-usb-ac-usb-type-c-ports/?$ /shop/bags-and-travel/skross-world-travel-adapter-muv-usb-ac-usb-type-c-ports/ [R=301,L]
 RewriteRule ^shop/technology-and-accessories/skross-world-travel-adapter-muv-usb-ac-usb-type-c-ports/?$ /shop/bags-and-travel/skross-world-travel-adapter-muv-usb-ac-usb-type-c-ports/ [R=301,L]
 RewriteRule ^shop/luxury-corporate-gifts-dubai/goris-giftology-luggage-tag-black/?$ /shop/bags-and-travel/goris-giftology-luggage-tag-black/ [R=301,L]
 RewriteRule ^shop/technology-and-accessories/oslo-memorii-recycled-15w-wireless-charger-multi-cable-set-white/?$ /shop/luxury-corporate-gifts-dubai/oslo-memorii-recycled-15w-wireless-charger-multi-cable-set-white/ [R=301,L]
@@ -202,13 +202,15 @@ RewriteRule ^shop/technology-and-accessories/nibe-floating-waterproof-phone-pouc
 RewriteRule ^shop/sports-and-recreation/kola-tower-game/?$ /shop/eco-friendly/kola-tower-game/ [R=301,L]
 RewriteRule ^shop/technology-and-accessories/skara-giftology-aluminum-laptop-stand/?$ /shop/office-and-stationary/skara-giftology-aluminum-laptop-stand/ [R=301,L]
 RewriteRule ^shop/technology-and-accessories/vardo-giftology-phone-pop-grip-with-bamboo-surface/?$ /shop/eco-friendly/vardo-giftology-phone-pop-grip-with-bamboo-surface/ [R=301,L]
+RewriteRule ^shop/technology-and-accessories/freiburg-memorii-rcs-recycled-solar-magnetic-powerbank/?$ /shop/luxury-corporate-gifts-dubai/freiburg-memorii-rcs-recycled-solar-magnetic-powerbank/ [R=301,L]
 RewriteRule ^shop/technology-and-accessories/domitz-15w-square-bamboo-magsafe-wireless-charger/?$ /shop/eco-friendly/domitz-15w-square-bamboo-magsafe-wireless-charger/ [R=301,L]
 RewriteRule ^shop/technology-and-accessories/turda-bamboo-usb-flash-drive-32gb/?$ /shop/eco-friendly/turda-bamboo-usb-flash-drive-32gb/ [R=301,L]
 RewriteRule ^shop/sports-and-recreation/xanthi-cotton-jumping-rope-in-a-cotton-pouch/?$ /shop/eco-friendly/xanthi-cotton-jumping-rope-in-a-cotton-pouch/ [R=301,L]
 RewriteRule ^shop/technology-and-accessories/koper-memorii-recycled-6-in-1-charging-cable-white/?$ /shop/eco-friendly/koper-memorii-recycled-6-in-1-charging-cable-white/ [R=301,L]
 RewriteRule ^shop/eco-friendly/monclova-jute-bag-with-canvas-pocket/?$ /shop/bags-and-travel/monclova-jute-bag-with-canvas-pocket/ [R=301,L]
 RewriteRule ^shop/eco-friendly/eco-friendly-cotton-shopping-bag-with-gusset-natural/?$ /shop/bags-and-travel/eco-friendly-cotton-shopping-bag-with-gusset-natural/ [R=301,L]
-RewriteRule ^shop/technology-and-accessories/soden-memorii-10w-wireless-charger-writeable-mouse-pad-black/?$ /shop/office-and-stationary/soden-memorii-10w-wireless-charger-writeable-mouse-pad-black/ [R=301,L]
+RewriteRule ^shop/office-and-stationary/soden-memorii-10w-wireless-charger-writeable-mouse-pad-black/?$ /shop/luxury-corporate-gifts-dubai/soden-memorii-10w-wireless-charger-writeable-mouse-pad-black/ [R=301,L]
+RewriteRule ^shop/technology-and-accessories/soden-memorii-10w-wireless-charger-writeable-mouse-pad-black/?$ /shop/luxury-corporate-gifts-dubai/soden-memorii-10w-wireless-charger-writeable-mouse-pad-black/ [R=301,L]
 RewriteRule ^shop/technology-and-accessories/debno-giftology-cork-mouse-pad-with-15w-wireless-charger/?$ /shop/office-and-stationary/debno-giftology-cork-mouse-pad-with-15w-wireless-charger/ [R=301,L]
 RewriteRule ^shop/technology-and-accessories/riga-memorii-recycled-laptop-stand-white/?$ /shop/office-and-stationary/riga-memorii-recycled-laptop-stand-white/ [R=301,L]
 RewriteRule ^shop/technology-and-accessories/riga-memorii-recycled-laptop-stand-black/?$ /shop/office-and-stationary/riga-memorii-recycled-laptop-stand-black/ [R=301,L]
@@ -345,6 +347,7 @@ RewriteRule ^shop/eco-friendly/eco-friendly-jute-bags-with-white-handles/?$ /sho
 RewriteRule ^shop/eco-friendly/sustainable-glass-bottles-with-bamboo-lid-and-eco-sleeve/?$ /shop/eating-and-drinking/sustainable-glass-bottles-with-bamboo-lid-and-eco-sleeve/ [R=301,L]
 RewriteRule ^shop/sports-and-recreation/atm-24-sport-water-bottle/?$ /shop/eating-and-drinking/atm-24-sport-water-bottle/ [R=301,L]
 # SHOP_MULTI_CATEGORY_REDIRECTS_END
+
 
 
 # FORCE uploads to blog uploads

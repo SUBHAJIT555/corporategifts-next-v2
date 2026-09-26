@@ -245,12 +245,12 @@ const Footer = () => {
               </svg>
               &nbsp;by&nbsp;
               <a
-                href="https://subhajit-dhali.vercel.app/"
+                href="https://codecobble.com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-ink hover:underline"
               >
-                subhajit
+                CodeCobble
               </a>{" "}
               |{" "}
               <NoPrefetchLink href="/sitemap" className="text-ink hover:underline">
