@@ -106,7 +106,10 @@ export default function FloatingCategoryMenu({
         <motion.div
           ref={containerRef}
           className={cn(
-            "pointer-events-none fixed bottom-8 left-1/2 z-100 sm:bottom-10",
+            // Clear MobileStickyActions on small screens; default offset from md up
+            "pointer-events-none fixed left-1/2 z-100",
+            "bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px)+0.75rem)]",
+            "md:bottom-8",
             className
           )}
           style={{ x: "-50%" }}

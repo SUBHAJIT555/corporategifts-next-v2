@@ -11,11 +11,8 @@ import {
   Laptop,
   Leaf,
   NotebookPen,
-  Package,
   Shirt,
   Sparkles,
-  Sticker,
-  Truck,
   type LucideIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -26,7 +23,6 @@ import {
   candyContactButtonClasses,
 } from "@/components/ui/candy-button";
 import GoogleRatingStatic from "@/components/ui/GoogleRatingStatic";
-import CursorCard from "@/components/ui/CursorCard";
 
 const SLIDES: {
   image: string;
@@ -235,37 +231,9 @@ function HeroCopy({ headingAs }: { headingAs: "h1" | "p" }) {
       <HeroTitle as={headingAs} />
 
       <p className="mx-auto mt-4 max-w-2xl text-body-md text-muted sm:mt-6 sm:text-[17px] sm:leading-7">
-        Baharnani Advertising helps UAE businesses choose{" "}
-        <CursorCard
-          icon={<Gift className="size-9" strokeWidth={1.6} />}
-          description="Custom and promotional corporate gifts tailored for clients, employees, and brand campaigns across Dubai & the UAE."
-        >
-          custom and promotional corporate gifts in Dubai
-        </CursorCard>{" "}
-        for clients, employees, events, and brand campaigns. We provide a
-        wide range of smart corporate gifts, premium hampers, affordable
-        corporate gifts, branded stationery, bags, drinkware, and apparel.
-        Practical gifts with{" "}
-        <CursorCard
-          icon={<Sticker className="size-9" strokeWidth={1.6} />}
-          description="All kinds of branding: t-shirts, bags, keychains, bottles, pens, notebooks & more-customized for your brand."
-        >
-          logo branding
-        </CursorCard>
-        ,{" "}
-        <CursorCard
-          icon={<Package className="size-9" strokeWidth={1.6} />}
-          description="Thoughtful packaging and presentation that elevates every gift - ready for events and client handovers."
-        >
-          packaging
-        </CursorCard>{" "}
-        and{" "}
-        <CursorCard
-          icon={<Truck className="size-9" strokeWidth={1.6} />}
-          description="Bulk delivery support across Dubai and the UAE - timelines, quantities, and logistics handled with you."
-        >
-          bulk delivery support in Dubai and the UAE.
-        </CursorCard>
+        Custom corporate gifts in Dubai for clients, employees, and events.
+        Built for bulk orders with logo branding, packaging, and UAE-wide
+        delivery.
       </p>
     </>
   );
@@ -278,16 +246,16 @@ function HeroActions() {
         <GoogleRatingStatic />
       </div>
 
-      <div className="mt-5 flex w-full flex-col gap-2.5 sm:mt-7 sm:flex-row sm:items-center sm:justify-center sm:gap-3">
+      <div className="mt-5 flex w-full flex-col gap-3 sm:mt-7 sm:flex-row sm:items-center sm:justify-center sm:gap-3">
         <NoPrefetchLink
           href="/products"
-          className={candyDarkButtonClasses("w-full sm:w-auto")}
+          className={candyDarkButtonClasses("min-h-12 w-full sm:w-auto")}
         >
           Explore Corporate Gifts
         </NoPrefetchLink>
         <NoPrefetchLink
           href="/contact-us"
-          className={candyContactButtonClasses("w-full sm:w-auto")}
+          className={candyContactButtonClasses("min-h-12 w-full sm:w-auto")}
         >
           Get Bulk Quote
         </NoPrefetchLink>

@@ -336,7 +336,7 @@ const ProductGrid = ({
               <Loading size="md" message="Loading products..." />
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-4 bg-surface-soft p-4 sm:gap-4 sm:p-5 md:grid-cols-3 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 bg-surface-soft p-3 sm:gap-4 sm:p-5 md:grid-cols-3 lg:grid-cols-4">
               {productList}
             </div>
           )}

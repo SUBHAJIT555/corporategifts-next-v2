@@ -35,7 +35,7 @@ type FormData = {
 };
 
 const inputClassName = cn(
-  "w-full rounded-lg border border-hairline bg-canvas px-4 py-2.5 text-sm text-ink",
+  "w-full min-h-11 rounded-lg border border-hairline bg-canvas px-4 py-2.5 text-sm text-ink",
   "placeholder:text-muted",
   "transition-colors focus:border-brand-accent/40 focus:outline-none focus:ring-2 focus:ring-brand-accent/20",
 );

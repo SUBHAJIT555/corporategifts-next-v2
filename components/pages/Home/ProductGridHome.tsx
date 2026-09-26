@@ -283,19 +283,23 @@ const ProductGridHomeCarousel = memo(function ProductGridHomeCarousel() {
       </div>
 
       {/* Dots */}
-      <div className="flex items-center justify-center gap-1.5 border-t border-hairline px-4 py-4">
+      <div className="flex items-center justify-center gap-0.5 border-t border-hairline px-2 py-2 sm:gap-1.5 sm:px-4 sm:py-4">
         {scrollSnaps.map((_, index) => (
           <button
             type="button"
             key={index}
             onClick={() => scrollTo(index)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              selectedIndex === index
-                ? "w-5 bg-ink"
-                : "w-1.5 bg-surface-strong hover:bg-muted"
-            }`}
+            className="flex size-11 items-center justify-center sm:size-auto sm:p-0"
             aria-label={`Go to slide ${index + 1}`}
-          />
+          >
+            <span
+              className={`block h-1.5 rounded-full transition-all duration-300 ${
+                selectedIndex === index
+                  ? "w-5 bg-ink"
+                  : "w-1.5 bg-surface-strong"
+              }`}
+            />
+          </button>
         ))}
       </div>
     </div>

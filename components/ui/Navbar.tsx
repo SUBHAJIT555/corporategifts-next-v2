@@ -3,7 +3,6 @@ import {
   X,
   ChevronDown,
   ChevronUp,
-  ArrowRight,
   Gift,
   Gem,
   Shirt,
@@ -16,7 +15,7 @@ import {
 } from "lucide-react";
 import logo from "@/public/logo.svg"
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useCallback, Fragment } from "react";
+import { useState, useEffect, useCallback, Fragment, type SVGProps } from "react";
 import { usePathname } from "next/navigation";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import Image from "next/image";
@@ -31,6 +30,29 @@ import {
   candyContactButtonClasses,
 } from "./candy-button";
 import { cn } from "@/lib/utilts";
+
+/** Tabler-style message/chat icon for Contact CTAs */
+const MessageIcon = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    aria-hidden="true"
+    {...props}
+  >
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M8 9h8" />
+    <path d="M8 13h6" />
+    <path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12" />
+  </svg>
+);
 
 type MenuItem = {
   key: number;
@@ -323,7 +345,7 @@ const Navbar = () => {
               className={candyContactButtonClasses("group h-10 gap-2 px-4")}
             >
               Contact
-              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+              <MessageIcon className="w-3.5 h-3.5" />
             </NoPrefetchLink>
             <ThemeToggle variant="subtle" />
           </div>
@@ -476,7 +498,7 @@ const Navbar = () => {
             className={candyContactButtonClasses("mt-6 h-12 w-full text-base")}
           >
             Contact
-            <ArrowRight className="w-4 h-4" />
+            <MessageIcon className="w-4 h-4" />
           </NoPrefetchLink>
 
           <div className="mt-6 flex items-center justify-between border-t border-hairline pt-4">

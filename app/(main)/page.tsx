@@ -21,13 +21,13 @@ export default function Home() {
         <SectionDivider />
         <Stats />
         <SectionDivider />
-        <ProductGridHome />
+        <BestSelling />
         <SectionDivider />
         <FeatureBrand />
         <SectionDivider />
         <TopSaver />
         <SectionDivider />
-        <BestSelling />
+        <ProductGridHome />
         <SectionDivider />
         <HomeWhyChooseUs />
         <SectionDivider />
