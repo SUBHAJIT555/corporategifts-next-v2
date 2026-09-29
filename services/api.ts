@@ -2,6 +2,7 @@ import {
   WP_CUSTOM_API_BASE_URL,
   WP_FLUENTFORM_FORM3_URL,
 } from "@/lib/config/site";
+import { saveToSheetNonBlocking } from "@/lib/api/save-to-sheet";
 
 // API Base URL
 const API_BASE_URL = WP_CUSTOM_API_BASE_URL;
@@ -242,6 +243,16 @@ export const submitContactForm = async (
       ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/contact/create`
       : `${API_BASE_URL}/contact`);
 
+  const name = [data.firstName, data.lastName].filter(Boolean).join(" ").trim();
+  const rawType = (data.formType || "contact").toLowerCase();
+  saveToSheetNonBlocking({
+    formType: rawType === "newsletter" ? "contact" : rawType,
+    name,
+    email: data.email,
+    phone: data.phone ?? "",
+    message: data.message ?? "",
+  });
+
   const response = await fetch(contactEndpoint, {
     method: "POST",
     headers: {
@@ -274,6 +285,20 @@ export const submitContactForm = async (
 export const submitFluentForm = async (
   data: FluentFormPayload,
 ): Promise<FluentFormResponse> => {
+  const form = data.data;
+  const name = [form.names?.first_name, form.names?.last_name]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+
+  saveToSheetNonBlocking({
+    formType: "contact",
+    name,
+    email: form.email,
+    phone: form.phone,
+    message: form.message,
+  });
+
   const response = await fetch(WP_FLUENTFORM_FORM3_URL, {
     method: "POST",
     headers: {
@@ -297,6 +322,15 @@ export const submitFluentForm = async (
 export const submitQuote = async (
   data: QuoteRequestPayload,
 ): Promise<QuoteResponse> => {
+  const billing = data.billing;
+  saveToSheetNonBlocking({
+    formType: "order",
+    name: [billing.first_name, billing.last_name].filter(Boolean).join(" ").trim(),
+    email: billing.email,
+    phone: billing.phone,
+    note: data.note ?? "",
+  });
+
   const response = await fetch(`${API_BASE_URL}/quote`, {
     method: "POST",
     headers: {

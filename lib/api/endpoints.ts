@@ -1,5 +1,6 @@
 import { API_BASE_URL, FLUENTFORM_FORM3_URL } from "./config";
 import { apiFetch } from "./http";
+import { saveToSheetNonBlocking } from "./save-to-sheet";
 import type {
   ContactFormData,
   ContactFormResponse,
@@ -72,6 +73,15 @@ export const ProductsApi = {
   },
 
   quote: (payload: QuoteRequestPayload) => {
+    const billing = payload.billing;
+    saveToSheetNonBlocking({
+      formType: "order",
+      name: [billing.first_name, billing.last_name].filter(Boolean).join(" ").trim(),
+      email: billing.email,
+      phone: billing.phone,
+      note: payload.note ?? "",
+    });
+
     return apiFetch<QuoteResponse>(`${API_BASE_URL}/quote`, {
       method: "POST",
       body: payload,
@@ -86,6 +96,20 @@ export const ProductsApi = {
  */
 export const ContactApi = {
   submit: (payload: ContactFormData) => {
+    const name = [payload.firstName, payload.lastName]
+      .filter(Boolean)
+      .join(" ")
+      .trim();
+    const rawType = (payload.formType || "contact").toLowerCase();
+
+    saveToSheetNonBlocking({
+      formType: rawType === "newsletter" ? "contact" : rawType,
+      name,
+      email: payload.email,
+      phone: payload.phone ?? "",
+      message: payload.message ?? "",
+    });
+
     return apiFetch<ContactFormResponse>(
       "https://corporategiftsdubaii.ae/api/v1/contact/create",
       {
@@ -101,6 +125,20 @@ export const ContactApi = {
  */
 export const FluentFormApi = {
   submitForm3: (payload: FluentFormPayload) => {
+    const data = payload.data;
+    const name = [data.names?.first_name, data.names?.last_name]
+      .filter(Boolean)
+      .join(" ")
+      .trim();
+
+    saveToSheetNonBlocking({
+      formType: "contact",
+      name,
+      email: data.email,
+      phone: data.phone,
+      message: data.message,
+    });
+
     return apiFetch<FluentFormResponse>(FLUENTFORM_FORM3_URL, {
       method: "POST",
       body: payload,

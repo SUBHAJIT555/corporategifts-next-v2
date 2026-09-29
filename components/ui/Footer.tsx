@@ -12,6 +12,7 @@ import {
   RevealSection,
 } from "@/components/ui/timeline-animation";
 import { candyContactButtonClasses } from "@/components/ui/candy-button";
+import { saveToSheetNonBlocking } from "@/lib/api/save-to-sheet";
 
 const NEWSLETTER_URL = "https://corporategiftsdubaii.ae/api/v1/contact/create";
 
@@ -39,6 +40,11 @@ const Footer = () => {
   const onSubmit = async (data: FieldValues) => {
     console.log(data);
     try {
+      saveToSheetNonBlocking({
+        formType: "contact",
+        email: data.email,
+      });
+
       const res = await fetch(NEWSLETTER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
