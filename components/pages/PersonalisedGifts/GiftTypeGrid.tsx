@@ -91,18 +91,18 @@ export default function GiftTypeGrid() {
               key={card.id}
               animationNum={2 + (index % 8)}
               as="article"
-              className="group flex h-full flex-col overflow-hidden rounded-xl border border-hairline bg-canvas transition-colors duration-300"
+              className="group flex h-full flex-col rounded-xl border border-hairline bg-canvas p-1 transition-colors duration-300 sm:p-1.5"
             >
-              <div className="relative aspect-square w-full overflow-hidden border-b border-hairline bg-surface-card">
+              <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-surface-card">
                 <Image
                   src={card.image}
                   alt={card.imageAlt}
                   fill
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]" 
                 />
               </div>
-              <div className="flex flex-1 flex-col p-3 sm:p-4">
+              <div className="flex flex-1 flex-col px-1 pt-3 pb-1 sm:px-1.5 sm:pt-4">
                 <h3 className="line-clamp-2 min-h-10 text-sm font-semibold leading-snug text-ink sm:min-h-11 sm:text-[15px]">
                   {card.title}
                 </h3>

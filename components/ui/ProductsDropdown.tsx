@@ -12,6 +12,9 @@ export type NavbarProductCategory = {
   description?: string;
   iconColor: string;
   Icon: LucideIcon;
+  /** Plain anchor for off-site links such as the blog and WhatsApp. */
+  external?: boolean;
+  newTab?: boolean;
 };
 
 type CategoriesDropdownProps = {
@@ -99,7 +102,7 @@ const CategoriesDropdown = memo(function CategoriesDropdown({
         aria-expanded={isOpen}
         aria-haspopup="true"
         aria-current={isActive ? "page" : undefined}
-        className={`inline-flex items-center gap-1 rounded-lg px-3.5 py-2 text-sm font-semibold text-ink transition-colors hover:bg-surface-soft${
+        className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-semibold text-ink transition-colors hover:bg-surface-soft${
           isActive
             ? " underline decoration-2 decoration-brand-accent underline-offset-[6px]"
             : ""
@@ -125,13 +128,11 @@ const CategoriesDropdown = memo(function CategoriesDropdown({
             className="absolute top-full left-1/2 z-50 mt-2 w-160 max-w-[calc(100vw-2rem)] -translate-x-1/2 overflow-hidden rounded-2xl border border-hairline bg-canvas shadow-[0_4px_24px_rgba(0,0,0,0.1)]"
           >
             <ul className="grid grid-cols-1 gap-1 p-2.5 sm:grid-cols-2">
-              {categories.map((category) => (
-                <li key={category.id}>
-                  <NoPrefetchLink
-                    href={category.link}
-                    className="group/item flex items-center gap-3 rounded-xl p-2.5 transition-colors hover:bg-surface-card"
-                    onClick={handleCategoryClick}
-                  >
+              {categories.map((category) => {
+                const itemClassName =
+                  "group/item flex items-center gap-3 rounded-xl p-2.5 transition-colors hover:bg-surface-card";
+                const itemContent = (
+                  <>
                     <PastelIconBox color={category.iconColor} size="sm">
                       <category.Icon className="h-4 w-4" strokeWidth={2} />
                     </PastelIconBox>
@@ -145,9 +146,34 @@ const CategoriesDropdown = memo(function CategoriesDropdown({
                         </span>
                       ) : null}
                     </span>
-                  </NoPrefetchLink>
-                </li>
-              ))}
+                  </>
+                );
+
+                return (
+                  <li key={category.id}>
+                    {category.external ? (
+                      <a
+                        href={category.link}
+                        className={itemClassName}
+                        onClick={handleCategoryClick}
+                        {...(category.newTab
+                          ? { target: "_blank", rel: "noopener noreferrer" }
+                          : {})}
+                      >
+                        {itemContent}
+                      </a>
+                    ) : (
+                      <NoPrefetchLink
+                        href={category.link}
+                        className={itemClassName}
+                        onClick={handleCategoryClick}
+                      >
+                        {itemContent}
+                      </NoPrefetchLink>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </motion.div>
         )}

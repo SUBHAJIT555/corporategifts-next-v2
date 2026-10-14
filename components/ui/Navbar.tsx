@@ -12,10 +12,16 @@ import {
   CupSoda,
   Dumbbell,
   Leaf,
+  House,
+  Package,
+  Building2,
+  Newspaper,
+  Mail,
+  Phone,
 } from "lucide-react";
 import logo from "@/public/logo.svg"
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useCallback, Fragment, type SVGProps } from "react";
+import { useState, useEffect, useCallback, type SVGProps } from "react";
 import { usePathname } from "next/navigation";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import Image from "next/image";
@@ -29,6 +35,7 @@ import ThemeToggle from "./ThemeToggle";
 import {
   candyContactButtonClasses,
 } from "./candy-button";
+import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { cn } from "@/lib/utilts";
 
 /** Tabler-style message/chat icon for Contact CTAs */
@@ -58,7 +65,6 @@ type MenuItem = {
   key: number;
   name: string;
   href: string;
-  hasDropdown?: boolean;
 };
 
 /** Strip trailing slash except for root. */
@@ -74,33 +80,18 @@ const pathMatchesPrefix = (path: string, prefix: string) =>
   path === prefix || path.startsWith(`${prefix}/`);
 
 /**
- * Active matching:
- * - Home: exact `/` only
+ * Active matching for the top-level links:
  * - Shop: `/shop` + nested
  * - Products: `/products` + nested
- * - Gift sets: `/personalised-corporate-gifts-boxes-dubai` + nested
- * - About: `/about-us` + nested
- * - Blog: `/blog` + nested (pathname; external blog URL still links out)
  */
 const isMenuItemActive = (name: string, pathname: string) => {
   const path = normalizePath(pathname);
 
   switch (name) {
-    case "Home":
-      return path === "/";
     case "Shop":
       return pathMatchesPrefix(path, "/shop");
     case "Products":
       return pathMatchesPrefix(path, "/products");
-    case "Gift sets":
-      return pathMatchesPrefix(
-        path,
-        "/personalised-corporate-gifts-boxes-dubai",
-      );
-    case "About":
-      return pathMatchesPrefix(path, "/about-us");
-    case "Blog":
-      return pathMatchesPrefix(path, "/blog");
     default:
       return false;
   }
@@ -110,8 +101,22 @@ const isMenuItemActive = (name: string, pathname: string) => {
 const isCategoriesActive = (pathname: string) =>
   pathMatchesPrefix(normalizePath(pathname), "/product-category");
 
+/** Company dropdown is current on any page listed inside it. */
+const isCompanyActive = (pathname: string) => {
+  const path = normalizePath(pathname);
+
+  return (
+    path === "/" ||
+    pathMatchesPrefix(path, "/personalised-corporate-gifts-boxes-dubai") ||
+    pathMatchesPrefix(path, "/welcome-kits-dubai") ||
+    pathMatchesPrefix(path, "/about-us") ||
+    pathMatchesPrefix(path, "/blog") ||
+    pathMatchesPrefix(path, "/contact-us")
+  );
+};
+
 const DESKTOP_NAV_LINK_CLASSES =
-  "inline-flex items-center rounded-lg px-3.5 py-2 text-sm font-semibold text-ink transition-colors hover:bg-surface-soft";
+  "inline-flex shrink-0 items-center whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-semibold text-ink transition-colors hover:bg-surface-soft";
 
 const ACTIVE_UNDERLINE_CLASSES =
   "underline decoration-2 decoration-brand-accent underline-offset-[6px]";
@@ -120,16 +125,70 @@ const MOBILE_NAV_LINK_CLASSES =
   "block py-4 text-lg font-medium text-ink transition-colors active:text-muted";
 
 const MENU_ITEMS: MenuItem[] = [
-  { key: 1, name: "Home", href: "/" },
-  { key: 2, name: "Shop", href: "/shop" },
-  { key: 3, name: "Products", href: "/products", hasDropdown: true },
+  { key: 1, name: "Shop", href: "/shop" },
+  { key: 2, name: "Products", href: "/products" },
+];
+
+const COMPANY_LINKS: NavbarProductCategory[] = [
   {
-    key: 4,
-    name: "Gift sets",
-    href: "/personalised-corporate-gifts-boxes-dubai",
+    id: "home",
+    title: "Home",
+    link: "/",
+    description: "Corporate gifts in Dubai",
+    iconColor: "#C1D8FD",
+    Icon: House,
   },
-  { key: 5, name: "About", href: "/about-us" },
-  { key: 6, name: "Blog", href: buildSiteUrl("/blog") },
+  {
+    id: "gift-sets",
+    title: "Gift sets",
+    link: "/personalised-corporate-gifts-boxes-dubai",
+    description: "Personalised boxes and sets",
+    iconColor: "#FFD6F8",
+    Icon: Gift,
+  },
+  {
+    id: "welcome-kits",
+    title: "Welcome Kits",
+    link: "/welcome-kits-dubai",
+    description: "Custom onboarding kits",
+    iconColor: "#FFF8E1",
+    Icon: Package,
+  },
+  {
+    id: "about",
+    title: "About",
+    link: "/about-us",
+    description: "About Baharnani",
+    iconColor: "#EDE7F6",
+    Icon: Building2,
+  },
+  {
+    id: "blog",
+    title: "Blog",
+    link: buildSiteUrl("/blog"),
+    description: "Guides and updates",
+    iconColor: "#FFE5EC",
+    Icon: Newspaper,
+    external: true,
+  },
+  {
+    id: "contact",
+    title: "Contact",
+    link: "/contact-us",
+    description: "Send an enquiry",
+    iconColor: "#E0F7FA",
+    Icon: Mail,
+  },
+  {
+    id: "whatsapp",
+    title: "WhatsApp",
+    link: getWhatsAppUrl(),
+    description: "Message the team",
+    iconColor: "#B6E9C8",
+    Icon: Phone,
+    external: true,
+    newTab: true,
+  },
 ];
 
 const PRODUCT_CATEGORIES: NavbarProductCategory[] = [
@@ -214,8 +273,10 @@ const SEARCH_TRIGGER_CLASSES =
 const Navbar = () => {
   const pathname = usePathname() ?? "/";
   const categoriesActive = isCategoriesActive(pathname);
+  const companyActive = isCompanyActive(pathname);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileProductsOpen, setIsMobileProductsOpen] = useState(false);
+  const [isMobileCompanyOpen, setIsMobileCompanyOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
@@ -228,6 +289,7 @@ const Navbar = () => {
       // Reset mobile dropdown when menu closes
       setTimeout(() => {
         setIsMobileProductsOpen(false);
+        setIsMobileCompanyOpen(false);
       }, 100);
     }
 
@@ -248,8 +310,13 @@ const Navbar = () => {
     setIsMobileProductsOpen((prev) => !prev);
   }, []);
 
+  const toggleMobileCompany = useCallback(() => {
+    setIsMobileCompanyOpen((prev) => !prev);
+  }, []);
+
   const handleMobileCategoryClick = useCallback(() => {
     setIsMobileProductsOpen(false);
+    setIsMobileCompanyOpen(false);
     setIsMenuOpen(false);
   }, []);
 
@@ -258,7 +325,7 @@ const Navbar = () => {
       {/* Top navigation — cal.com style: white/translucent canvas, hairline border */}
       <nav className="fixed top-0 inset-x-0 z-30 w-full max-w-full border-b border-hairline bg-canvas/80 backdrop-blur-md supports-backdrop-filter:bg-canvas/70">
         <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-5 sm:px-6">
-          <div className="mr-auto">
+          <div className="mr-auto shrink-0">
             <NoPrefetchLink href="/">
               <Image
                 width={160}
@@ -270,49 +337,25 @@ const Navbar = () => {
             </NoPrefetchLink>
           </div>
 
-          <ul className="hidden lg:flex items-center gap-0.5 list-none">
+          <ul className="hidden shrink-0 list-none items-center gap-0.5 lg:flex">
             {MENU_ITEMS.map((item) => {
               const itemActive = isMenuItemActive(item.name, pathname);
 
-              return item.hasDropdown ? (
-                <Fragment key={item.key}>
-                  <li className="relative">
+              return (
+                <li
+                  key={item.key}
+                  className={cn(
+                    "relative",
+                    item.name === "Products" && "flex items-center gap-0.5",
+                  )}
+                >
+                  {item.name === "Products" ? (
                     <CategoriesDropdown
                       categories={PRODUCT_CATEGORIES}
                       onCloseMenu={closeMenu}
                       isActive={categoriesActive}
                     />
-                  </li>
-                  <li className="relative">
-                    <NoPrefetchLink
-                      href={item.href}
-                      onClick={closeMenu}
-                      aria-current={itemActive ? "page" : undefined}
-                      className={cn(
-                        DESKTOP_NAV_LINK_CLASSES,
-                        itemActive && ACTIVE_UNDERLINE_CLASSES,
-                      )}
-                    >
-                      {item.name}
-                    </NoPrefetchLink>
-                  </li>
-                </Fragment>
-              ) : item.name === "Blog" ? (
-                <li key={item.key} className="relative">
-                  <a
-                    href={item.href}
-                    onClick={closeMenu}
-                    aria-current={itemActive ? "page" : undefined}
-                    className={cn(
-                      DESKTOP_NAV_LINK_CLASSES,
-                      itemActive && ACTIVE_UNDERLINE_CLASSES,
-                    )}
-                  >
-                    {item.name}
-                  </a>
-                </li>
-              ) : (
-                <li key={item.key} className="relative">
+                  ) : null}
                   <NoPrefetchLink
                     href={item.href}
                     onClick={closeMenu}
@@ -327,17 +370,28 @@ const Navbar = () => {
                 </li>
               );
             })}
+            <li className="relative">
+              <CategoriesDropdown
+                label="Company"
+                categories={COMPANY_LINKS}
+                onCloseMenu={closeMenu}
+                isActive={companyActive}
+              />
+            </li>
           </ul>
 
-          <div className="hidden lg:flex items-center gap-2.5 ml-5">
+          <div className="ml-3 hidden items-center gap-2 lg:flex xl:ml-5 xl:gap-2.5">
             <button
               type="button"
               onClick={() => setIsSearchOpen(true)}
-              className={cn(SEARCH_TRIGGER_CLASSES, "min-w-55")}
+              className={cn(
+                SEARCH_TRIGGER_CLASSES,
+                "size-10 justify-center px-0 xl:h-10 xl:w-auto xl:min-w-55 xl:justify-start xl:px-3",
+              )}
               aria-label="Open search"
             >
               <LuSearch className="size-4 shrink-0 text-muted" />
-              <span className="truncate">Search products...</span>
+              <span className="hidden truncate xl:inline">Search products...</span>
             </button>
             <NoPrefetchLink
               href="/contact-us"
@@ -393,103 +447,144 @@ const Navbar = () => {
 
         <div className="cal-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-10 pt-2">
           <ul className="flex flex-col divide-y divide-hairline">
-            {MENU_ITEMS.map((item) => {
-              const itemActive = isMenuItemActive(item.name, pathname);
-
-              return item.hasDropdown ? (
-                <Fragment key={item.key}>
-                  <li key={`${item.key}-categories`} className="w-full">
-                    <button
-                      type="button"
-                      onClick={toggleMobileProducts}
-                      aria-expanded={isMobileProductsOpen}
-                      aria-controls="mobile-product-categories"
-                      aria-current={categoriesActive ? "page" : undefined}
-                      className="flex w-full items-center justify-between gap-3 py-4 text-left transition-colors active:text-muted"
-                    >
-                      <span
-                        className={cn(
-                          "text-lg font-medium text-ink",
-                          categoriesActive && ACTIVE_UNDERLINE_CLASSES,
-                        )}
-                      >
-                        Categories
-                      </span>
-                      {isMobileProductsOpen ? (
-                        <ChevronUp className="size-5 shrink-0 text-muted" />
-                      ) : (
-                        <ChevronDown className="size-5 shrink-0 text-muted" />
-                      )}
-                    </button>
-                    <AnimatePresence>
-                      {isMobileProductsOpen && (
-                        <motion.ul
-                          id="mobile-product-categories"
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.25 }}
-                          className="overflow-hidden pb-3"
-                        >
-                          {PRODUCT_CATEGORIES.map((category) => (
-                            <li key={category.id}>
-                              <NoPrefetchLink
-                                href={category.link}
-                                onClick={handleMobileCategoryClick}
-                                className="block rounded-lg px-3 py-2.5 text-base font-medium text-body transition-colors hover:bg-surface-card hover:text-ink"
-                              >
-                                {category.title}
-                              </NoPrefetchLink>
-                            </li>
-                          ))}
-                        </motion.ul>
-                      )}
-                    </AnimatePresence>
-                  </li>
-                  <li key={`${item.key}-link`} className="w-full">
-                    <NoPrefetchLink
-                      href={item.href}
-                      onClick={closeMenu}
-                      aria-current={itemActive ? "page" : undefined}
-                      className={cn(
-                        MOBILE_NAV_LINK_CLASSES,
-                        itemActive && ACTIVE_UNDERLINE_CLASSES,
-                      )}
-                    >
-                      {item.name}
-                    </NoPrefetchLink>
-                  </li>
-                </Fragment>
-              ) : (
-                <li key={item.key} className="w-full">
-                  {item.name === "Blog" ? (
-                    <a
-                      href={item.href}
-                      onClick={closeMenu}
-                      aria-current={itemActive ? "page" : undefined}
-                      className={cn(
-                        MOBILE_NAV_LINK_CLASSES,
-                        itemActive && ACTIVE_UNDERLINE_CLASSES,
-                      )}
-                    >
-                      {item.name}
-                    </a>
-                  ) : (
-                    <NoPrefetchLink
-                      href={item.href}
-                      onClick={closeMenu}
-                      aria-current={itemActive ? "page" : undefined}
-                      className={cn(
-                        MOBILE_NAV_LINK_CLASSES,
-                        itemActive && ACTIVE_UNDERLINE_CLASSES,
-                      )}
-                    >
-                      {item.name}
-                    </NoPrefetchLink>
+            <li className="w-full">
+              <NoPrefetchLink
+                href="/shop"
+                onClick={closeMenu}
+                aria-current={isMenuItemActive("Shop", pathname) ? "page" : undefined}
+                className={cn(
+                  MOBILE_NAV_LINK_CLASSES,
+                  isMenuItemActive("Shop", pathname) && ACTIVE_UNDERLINE_CLASSES,
+                )}
+              >
+                Shop
+              </NoPrefetchLink>
+            </li>
+            <li className="w-full">
+              <button
+                type="button"
+                onClick={toggleMobileProducts}
+                aria-expanded={isMobileProductsOpen}
+                aria-controls="mobile-product-categories"
+                aria-current={categoriesActive ? "page" : undefined}
+                className="flex w-full items-center justify-between gap-3 py-4 text-left transition-colors active:text-muted"
+              >
+                <span
+                  className={cn(
+                    "text-lg font-medium text-ink",
+                    categoriesActive && ACTIVE_UNDERLINE_CLASSES,
                   )}
-                </li>
-              );
-            })}
+                >
+                  Categories
+                </span>
+                {isMobileProductsOpen ? (
+                  <ChevronUp className="size-5 shrink-0 text-muted" />
+                ) : (
+                  <ChevronDown className="size-5 shrink-0 text-muted" />
+                )}
+              </button>
+              <AnimatePresence>
+                {isMobileProductsOpen && (
+                  <motion.ul
+                    id="mobile-product-categories"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="overflow-hidden pb-3"
+                  >
+                    {PRODUCT_CATEGORIES.map((category) => (
+                      <li key={category.id}>
+                        <NoPrefetchLink
+                          href={category.link}
+                          onClick={handleMobileCategoryClick}
+                          className="block rounded-lg px-3 py-2.5 text-base font-medium text-body transition-colors hover:bg-surface-card hover:text-ink"
+                        >
+                          {category.title}
+                        </NoPrefetchLink>
+                      </li>
+                    ))}
+                  </motion.ul>
+                )}
+              </AnimatePresence>
+            </li>
+            <li className="w-full">
+              <NoPrefetchLink
+                href="/products"
+                onClick={closeMenu}
+                aria-current={
+                  isMenuItemActive("Products", pathname) ? "page" : undefined
+                }
+                className={cn(
+                  MOBILE_NAV_LINK_CLASSES,
+                  isMenuItemActive("Products", pathname) &&
+                    ACTIVE_UNDERLINE_CLASSES,
+                )}
+              >
+                Products
+              </NoPrefetchLink>
+            </li>
+            <li className="w-full">
+              <button
+                type="button"
+                onClick={toggleMobileCompany}
+                aria-expanded={isMobileCompanyOpen}
+                aria-controls="mobile-company-links"
+                aria-current={companyActive ? "page" : undefined}
+                className="flex w-full items-center justify-between gap-3 py-4 text-left transition-colors active:text-muted"
+              >
+                <span
+                  className={cn(
+                    "text-lg font-medium text-ink",
+                    companyActive && ACTIVE_UNDERLINE_CLASSES,
+                  )}
+                >
+                  Company
+                </span>
+                {isMobileCompanyOpen ? (
+                  <ChevronUp className="size-5 shrink-0 text-muted" />
+                ) : (
+                  <ChevronDown className="size-5 shrink-0 text-muted" />
+                )}
+              </button>
+              <AnimatePresence>
+                {isMobileCompanyOpen && (
+                  <motion.ul
+                    id="mobile-company-links"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="overflow-hidden pb-3"
+                  >
+                    {COMPANY_LINKS.map((item) => (
+                      <li key={item.id}>
+                        {item.external ? (
+                          <a
+                            href={item.link}
+                            onClick={handleMobileCategoryClick}
+                            {...(item.newTab
+                              ? { target: "_blank", rel: "noopener noreferrer" }
+                              : {})}
+                            className="block rounded-lg px-3 py-2.5 text-base font-medium text-body transition-colors hover:bg-surface-card hover:text-ink"
+                          >
+                            {item.title}
+                          </a>
+                        ) : (
+                          <NoPrefetchLink
+                            href={item.link}
+                            onClick={handleMobileCategoryClick}
+                            className="block rounded-lg px-3 py-2.5 text-base font-medium text-body transition-colors hover:bg-surface-card hover:text-ink"
+                          >
+                            {item.title}
+                          </NoPrefetchLink>
+                        )}
+                      </li>
+                    ))}
+                  </motion.ul>
+                )}
+              </AnimatePresence>
+            </li>
           </ul>
 
           <NoPrefetchLink

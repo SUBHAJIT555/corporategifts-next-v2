@@ -1,7 +1,5 @@
 import { memo, type ReactNode } from "react";
-import { ArrowUpRight } from "lucide-react";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
-import { cn } from "@/lib/utilts";
 
 type FooterLinkProps = {
   href: string;
@@ -9,27 +7,14 @@ type FooterLinkProps = {
   external?: boolean;
 };
 
+const itemClassName =
+  "text-sm leading-6 text-muted transition-colors duration-200 hover:text-ink";
+
 const FooterLink = memo(function FooterLink({
   href,
   children,
   external,
 }: FooterLinkProps) {
-  const itemClassName = cn(
-    "group flex items-center gap-1.5 text-body-md text-muted transition-colors duration-200",
-    "hover:text-ink"
-  );
-
-  const content = (
-    <>
-      <span>{children}</span>
-      <ArrowUpRight
-        className="h-3.5 w-3.5 shrink-0 text-brand-accent opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
-        strokeWidth={2.25}
-        aria-hidden="true"
-      />
-    </>
-  );
-
   if (external) {
     return (
       <li>
@@ -39,7 +24,7 @@ const FooterLink = memo(function FooterLink({
           rel="noopener noreferrer"
           className={itemClassName}
         >
-          {content}
+          {children}
         </a>
       </li>
     );
@@ -48,7 +33,7 @@ const FooterLink = memo(function FooterLink({
   return (
     <li>
       <NoPrefetchLink href={href} className={itemClassName}>
-        {content}
+        {children}
       </NoPrefetchLink>
     </li>
   );

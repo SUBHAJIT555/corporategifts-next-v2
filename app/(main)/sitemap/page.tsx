@@ -18,6 +18,10 @@ const mainLinks: NavItem[] = [
     label: "Gift sets",
     href: "/personalised-corporate-gifts-boxes-dubai",
   },
+  {
+    label: "Welcome Kits in Dubai",
+    href: "/welcome-kits-dubai",
+  },
 ];
 
 const productLinks: NavItem[] = [
