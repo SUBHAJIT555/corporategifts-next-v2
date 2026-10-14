@@ -16,6 +16,11 @@ export const WP_FLUENTFORM_FORM3_URL =
   process.env.NEXT_PUBLIC_FLUENTFORM_FORM3_URL ??
   `${WP_ORIGIN}/wp-json/fluentform/v1/form3`;
 
+/** Marketing lead popup — Fluent Form ID 7 */
+export const WP_FLUENTFORM_LEAD_FORM_URL =
+  process.env.NEXT_PUBLIC_FLUENTFORM_LEAD_FORM_URL ??
+  `${WP_ORIGIN}/wp-json/fluentform/v1/form7`;
+
 export const IMAGE_REMOTE_HOSTNAME = new URL(WP_ORIGIN).hostname;
 
 export const buildSiteUrl = (path = "/") => {

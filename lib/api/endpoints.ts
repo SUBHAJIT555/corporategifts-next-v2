@@ -1,4 +1,8 @@
-import { API_BASE_URL, FLUENTFORM_FORM3_URL } from "./config";
+import {
+  API_BASE_URL,
+  FLUENTFORM_FORM3_URL,
+  FLUENTFORM_LEAD_FORM_URL,
+} from "./config";
 import { apiFetch } from "./http";
 import { saveToSheetNonBlocking } from "./save-to-sheet";
 import type {
@@ -6,6 +10,7 @@ import type {
   ContactFormResponse,
   FluentFormPayload,
   FluentFormResponse,
+  FluentLeadFormPayload,
   PaginatedProductsResponse,
   Product,
   ProductCategory,
@@ -140,6 +145,26 @@ export const FluentFormApi = {
     });
 
     return apiFetch<FluentFormResponse>(FLUENTFORM_FORM3_URL, {
+      method: "POST",
+      body: payload,
+    });
+  },
+
+  /** Marketing lead popup → Fluent Form ID 7 */
+  submitLeadForm: (payload: FluentLeadFormPayload) => {
+    const data = payload.data;
+
+    saveToSheetNonBlocking({
+      formType: "marketing-modal",
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      company_name: data.company,
+      message: data.requirement,
+      requirements: data.requirement,
+    });
+
+    return apiFetch<FluentFormResponse>(FLUENTFORM_LEAD_FORM_URL, {
       method: "POST",
       body: payload,
     });

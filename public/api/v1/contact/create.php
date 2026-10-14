@@ -22,6 +22,7 @@ if (!is_array($data)) {
 $email = trim((string) ($data['email'] ?? ''));
 $formType = trim((string) ($data['formType'] ?? 'CONTACT'));
 $name = trim((string) ($data['name'] ?? $data['firstName'] ?? ''));
+$phone = trim((string) ($data['phone'] ?? $data['mobile'] ?? ''));
 $messageBody = trim((string) ($data['message'] ?? ''));
 
 if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -45,6 +46,9 @@ $lines = [
 ];
 if ($name !== '') {
     $lines[] = 'Name: ' . $name;
+}
+if ($phone !== '') {
+    $lines[] = 'Phone: ' . $phone;
 }
 if ($messageBody !== '') {
     $lines[] = '';

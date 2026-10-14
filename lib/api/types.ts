@@ -75,6 +75,17 @@ export interface FluentFormPayload {
   };
 }
 
+/** Fluent Form ID 7 — Lead Form (marketing popup) */
+export interface FluentLeadFormPayload {
+  data: {
+    name: string;
+    email: string;
+    company: string;
+    phone: string;
+    requirement: string;
+  };
+}
+
 export interface FluentFormResponse {
   message: string;
   [key: string]: unknown;

@@ -257,10 +257,14 @@ try {
             break;
 
         case 'marketing-modal':
+            $row[2] = inputString($input, 'company_name');
             $row[3] = inputString($input, 'name');
             $row[4] = $email;
             $row[5] = $phone;
             $message = inputString($input, 'message');
+            if ($message === '') {
+                $message = inputString($input, 'requirements');
+            }
             if ($message !== '') {
                 $row[6] = $message;
             }

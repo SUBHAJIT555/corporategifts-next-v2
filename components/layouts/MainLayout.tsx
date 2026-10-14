@@ -6,6 +6,7 @@ import WhatsAppButton from "@/components/ui/WhatAppButton";
 import FloatingCartButton from "@/components/ui/FloatingCartButton";
 import MobileStickyActions from "@/components/ui/MobileStickyActions";
 import Footer from "@/components/ui/Footer";
+import MarketingLeadModal from "@/components/ui/MarketingLeadModal";
 // import Loading from "@/components/ui/Loading";
 import LenisProvider from "../providers/LenisProvider";
 import ScrollToTopButton from "@/components/ui/ScrollToTopButton";
@@ -37,6 +38,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
       <FloatingCartButton />
       <WhatsAppButton />
       <MobileStickyActions />
+      <MarketingLeadModal />
     </div>
   );
 }
