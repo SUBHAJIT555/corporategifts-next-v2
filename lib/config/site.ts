@@ -21,6 +21,11 @@ export const WP_FLUENTFORM_LEAD_FORM_URL =
   process.env.NEXT_PUBLIC_FLUENTFORM_LEAD_FORM_URL ??
   `${WP_ORIGIN}/wp-json/fluentform/v1/form7`;
 
+/** Welcome kits quote — Fluent Form ID 8 */
+export const WP_FLUENTFORM_WELCOME_KIT_FORM_URL =
+  process.env.NEXT_PUBLIC_FLUENTFORM_WELCOME_KIT_FORM_URL ??
+  `${WP_ORIGIN}/wp-json/fluentform/v1/form8`;
+
 export const IMAGE_REMOTE_HOSTNAME = new URL(WP_ORIGIN).hostname;
 
 export const buildSiteUrl = (path = "/") => {

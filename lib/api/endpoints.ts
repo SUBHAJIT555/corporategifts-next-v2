@@ -2,6 +2,7 @@ import {
   API_BASE_URL,
   FLUENTFORM_FORM3_URL,
   FLUENTFORM_LEAD_FORM_URL,
+  FLUENTFORM_WELCOME_KIT_FORM_URL,
 } from "./config";
 import { apiFetch } from "./http";
 import { saveToSheetNonBlocking } from "./save-to-sheet";
@@ -11,6 +12,7 @@ import type {
   FluentFormPayload,
   FluentFormResponse,
   FluentLeadFormPayload,
+  FluentWelcomeKitFormPayload,
   PaginatedProductsResponse,
   Product,
   ProductCategory,
@@ -165,6 +167,38 @@ export const FluentFormApi = {
     });
 
     return apiFetch<FluentFormResponse>(FLUENTFORM_LEAD_FORM_URL, {
+      method: "POST",
+      body: payload,
+    });
+  },
+
+  /** Welcome kits quote → Fluent Form ID 8 */
+  submitWelcomeKitForm: (payload: FluentWelcomeKitFormPayload) => {
+    const data = payload.data;
+    const sheetMessage = [
+      "Welcome kit enquiry",
+      `Delivery location: ${data.location}`,
+      `Quantity: ${data.quantity}`,
+      `Required delivery date: ${data.delivery_date}`,
+      data.budget ? `Budget per kit: ${data.budget}` : "",
+      data.products ? `Interested products: ${data.products}` : "",
+      data.products_note ? `Other products: ${data.products_note}` : "",
+      data.comments ? `Comments: ${data.comments}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    saveToSheetNonBlocking({
+      formType: "quote",
+      company_name: data.company,
+      contact_person: data.name,
+      email: data.email,
+      phone: data.phone,
+      message: sheetMessage,
+      requirements: sheetMessage,
+    });
+
+    return apiFetch<FluentFormResponse>(FLUENTFORM_WELCOME_KIT_FORM_URL, {
       method: "POST",
       body: payload,
     });

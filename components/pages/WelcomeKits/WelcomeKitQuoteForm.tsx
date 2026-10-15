@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { CheckCircle2 } from "lucide-react";
 import Loading from "@/components/ui/Loading";
 import { candyContactButtonClasses } from "@/components/ui/candy-button";
 import { FluentFormApi } from "@/lib/api/endpoints";
-import type { FluentLeadFormPayload } from "@/lib/api/types";
+import type { FluentWelcomeKitFormPayload } from "@/lib/api/types";
 import { cn } from "@/lib/utilts";
 import { CLOSING, DELIVERY_LOCATIONS, PRODUCT_OPTIONS } from "./data";
 
@@ -35,18 +35,15 @@ const inputClassName = cn(
 const labelClassName = "mb-1.5 block text-sm font-medium text-ink";
 
 export default function WelcomeKitQuoteForm() {
-  const [submitStatus, setSubmitStatus] = useState<null | "error" | "success">(
-    null,
-  );
+  const router = useRouter();
+  const [submitStatus, setSubmitStatus] = useState<null | "error">(null);
   const [statusMessage, setStatusMessage] = useState("");
   const [isSubmittingApi, setIsSubmittingApi] = useState(false);
-  const [logoName, setLogoName] = useState("");
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
   } = useForm<FormValues>({
     defaultValues: {
       name: "",
@@ -69,54 +66,47 @@ export default function WelcomeKitQuoteForm() {
     setSubmitStatus(null);
 
     if (data.website) {
-      setSubmitStatus("success");
-      setStatusMessage(
-        "Thanks — we've received your welcome kit enquiry and will be in touch shortly.",
-      );
       return;
     }
 
-    const productList = [
-      ...(data.products ?? []),
-      data.productsNote.trim(),
-    ].filter(Boolean);
+    if (!data.consent) {
+      setSubmitStatus("error");
+      setStatusMessage("Please acknowledge the privacy notice.");
+      return;
+    }
 
-    const requirement = [
-      "Welcome kit enquiry",
-      `Delivery location: ${data.location}`,
-      `Quantity: ${data.quantity}`,
-      `Required delivery date: ${data.deliveryDate}`,
-      data.budget.trim() ? `Budget per kit: ${data.budget.trim()}` : "",
-      productList.length
-        ? `Interested products: ${productList.join(", ")}`
-        : "",
-      logoName ? `Logo file name: ${logoName}` : "",
-      data.comments.trim() ? `Comments: ${data.comments.trim()}` : "",
-      "Privacy notice acknowledged",
+    const selectedProducts = data.products ?? [];
+    // Fluent Form uses a single dropdown for products; extra selections go to other products.
+    const primaryProduct = selectedProducts[0] ?? "";
+    const productsNote = [
+      ...selectedProducts.slice(1),
+      data.productsNote.trim(),
     ]
       .filter(Boolean)
-      .join("\n");
+      .join(", ");
 
-    const payload: FluentLeadFormPayload = {
+    const payload: FluentWelcomeKitFormPayload = {
       data: {
         name: data.name,
-        email: data.email,
         company: data.company,
         phone: data.phone,
-        requirement,
+        email: data.email,
+        location: data.location,
+        quantity: String(data.quantity),
+        delivery_date: data.deliveryDate,
+        budget: data.budget.trim() || undefined,
+        products: primaryProduct || undefined,
+        products_note: productsNote || undefined,
+        comments: data.comments.trim() || undefined,
+        consent: "yes",
       },
     };
 
     try {
       setIsSubmittingApi(true);
-      const response = await FluentFormApi.submitLeadForm(payload);
-      setSubmitStatus("success");
-      setStatusMessage(
-        response.message ||
-          "Thanks — we've received your welcome kit enquiry and will be in touch shortly.",
-      );
-      reset();
-      setLogoName("");
+      // Sheets sync fires first inside submitWelcomeKitForm (non-blocking), then Fluent Form 8.
+      await FluentFormApi.submitWelcomeKitForm(payload);
+      router.push("/thank-you");
     } catch (error) {
       setSubmitStatus("error");
       setStatusMessage(
@@ -130,16 +120,6 @@ export default function WelcomeKitQuoteForm() {
   };
 
   const isBusy = isSubmittingApi || isSubmitting;
-
-  if (submitStatus === "success") {
-    return (
-      <div className="flex flex-col items-center gap-3 rounded-xl border border-hairline bg-surface-soft px-5 py-10 text-center">
-        <CheckCircle2 className="h-10 w-10 text-brand-accent" aria-hidden />
-        <p className="text-base font-semibold text-ink">Enquiry sent</p>
-        <p className="max-w-md text-sm text-muted">{statusMessage}</p>
-      </div>
-    );
-  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
@@ -328,29 +308,6 @@ export default function WelcomeKitQuoteForm() {
           className={cn(inputClassName, "mt-3")}
         />
       </fieldset>
-
-      <div>
-        <label htmlFor="wk-logo" className={labelClassName}>
-          Logo upload
-        </label>
-        <label className="flex cursor-pointer items-center gap-3 rounded-lg bg-canvas px-3.5 py-2.5 text-sm text-ink">
-          <span className="rounded-md bg-surface-strong px-3 py-1.5 text-sm font-medium text-ink">
-            Choose file
-          </span>
-          <span className="min-w-0 truncate text-muted">
-            {logoName || "No file chosen"}
-          </span>
-          <input
-            id="wk-logo"
-            type="file"
-            accept="image/*,.pdf,.ai,.eps,.svg"
-            onChange={(event) => {
-              setLogoName(event.target.files?.[0]?.name ?? "");
-            }}
-            className="sr-only"
-          />
-        </label>
-      </div>
 
       <div>
         <label htmlFor="wk-comments" className={labelClassName}>

@@ -86,6 +86,24 @@ export interface FluentLeadFormPayload {
   };
 }
 
+/** Fluent Form ID 8 — Welcome Kit quote form */
+export interface FluentWelcomeKitFormPayload {
+  data: {
+    name: string;
+    company: string;
+    phone: string;
+    email: string;
+    location: string;
+    quantity: string;
+    delivery_date: string;
+    budget?: string;
+    products?: string;
+    products_note?: string;
+    comments?: string;
+    consent?: string;
+  };
+}
+
 export interface FluentFormResponse {
   message: string;
   [key: string]: unknown;
