@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { CheckCircle2, Clock3, Package, X } from "lucide-react";
+import { Clock3, Package, X } from "lucide-react";
 import Loading from "@/components/ui/Loading";
 import { candyContactButtonClasses } from "@/components/ui/candy-button";
 import { FluentFormApi } from "@/lib/api/endpoints";
@@ -46,12 +47,11 @@ function markDismissedThisSession(): void {
 }
 
 export default function MarketingLeadModal() {
+  const router = useRouter();
   const titleId = useId();
   const firstFieldRef = useRef<HTMLInputElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<null | "error" | "success">(
-    null,
-  );
+  const [submitStatus, setSubmitStatus] = useState<null | "error">(null);
   const [statusMessage, setStatusMessage] = useState("");
   const [isSubmittingApi, setIsSubmittingApi] = useState(false);
 
@@ -157,14 +157,11 @@ export default function MarketingLeadModal() {
       setIsSubmittingApi(true);
 
       // Sheets sync fires first inside submitLeadForm (non-blocking), then Fluent Form 7.
-      const response = await FluentFormApi.submitLeadForm(payload);
+      await FluentFormApi.submitLeadForm(payload);
 
-      setSubmitStatus("success");
-      setStatusMessage(
-        response.message ||
-          "Thanks — we've received your enquiry and will be in touch shortly.",
-      );
       markDismissedThisSession();
+      setIsOpen(false);
+      router.push("/thank-you");
     } catch (error) {
       setSubmitStatus("error");
       setStatusMessage(
@@ -243,36 +240,17 @@ export default function MarketingLeadModal() {
             </ul>
           </div>
 
-          {submitStatus === "success" ? (
-            <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4 overflow-y-auto px-4 py-10 text-center sm:px-6">
-              <CheckCircle2
-                className="h-10 w-10 text-brand-accent"
-                aria-hidden
-              />
-              <div>
-                <p className="text-base font-semibold text-ink">Enquiry sent</p>
-                <p className="mt-2 text-sm text-muted">{statusMessage}</p>
-              </div>
-              <button
-                type="button"
-                onClick={closeModal}
-                className={candyContactButtonClasses("w-full sm:w-auto")}
-              >
-                Close
-              </button>
-            </div>
-          ) : (
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              noValidate
-              className="flex min-h-0 flex-1 flex-col"
-            >
-              <div className="flex min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-4 py-4 sm:gap-4 sm:px-6 sm:py-5">
-                {submitStatus === "error" ? (
-                  <div className="rounded-lg border border-error/30 bg-error/5 px-4 py-3 text-sm text-error">
-                    {statusMessage}
-                  </div>
-                ) : null}
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+            className="flex min-h-0 flex-1 flex-col"
+          >
+            <div className="flex min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-4 py-4 sm:gap-4 sm:px-6 sm:py-5">
+              {submitStatus === "error" ? (
+                <div className="rounded-lg border border-error/30 bg-error/5 px-4 py-3 text-sm text-error">
+                  {statusMessage}
+                </div>
+              ) : null}
 
                 <div className="grid gap-3.5 sm:grid-cols-2 sm:gap-4">
                   <div>
@@ -435,7 +413,6 @@ export default function MarketingLeadModal() {
                 </button>
               </div>
             </form>
-          )}
         </div>
       </div>
     </div>
