@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 // Self-hosted Geist (Vercel's default font) — bundled locally, no network fetch.
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
@@ -42,6 +43,17 @@ export default function RootLayout({
       className={`${GeistSans.variable} ${GeistMono.variable} ${GeistSans.className}`}
     >
       <head>
+        <Script
+          src="https://www.googletagmanager.com/gtm.js?id=GTM-KQ7T6TWQ"
+          strategy="beforeInteractive"
+        />
+        <Script id="gtag-init" strategy="beforeInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+          `}
+        </Script>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body suppressHydrationWarning className="font-sans antialiased">
